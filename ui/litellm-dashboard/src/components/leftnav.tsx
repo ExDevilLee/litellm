@@ -4,6 +4,7 @@ import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { useHealthReadinessDetails } from "@/app/(dashboard)/hooks/healthReadiness/useHealthReadinessDetails";
 import { useLogout } from "@/app/(dashboard)/hooks/useLogout";
 import { getProxyBaseUrl } from "@/components/networking";
+import { t, useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,6 +100,8 @@ interface MenuItem {
   key: string;
   page: string;
   label: string | React.ReactNode;
+  /** English text for JSX labels (badge labels); used for translation. */
+  labelTextKey?: string;
   roles?: string[];
   children?: MenuItem[];
   icon?: React.ReactNode;
@@ -199,6 +202,7 @@ const menuGroups: MenuGroup[] = [
             Cost Optimization <BetaBadge />
           </span>
         ),
+        labelTextKey: "Cost Optimization",
       },
       { key: "logs", page: "logs", label: "Logs", icon: <Activity {...ICON} /> },
       {
@@ -222,6 +226,7 @@ const menuGroups: MenuGroup[] = [
             Projects <BetaBadge />
           </span>
         ),
+        labelTextKey: "Projects",
         icon: <Folder {...ICON} />,
         roles: all_admin_roles,
       },
@@ -300,6 +305,7 @@ const menuGroups: MenuGroup[] = [
             Settings <NewBadge />
           </span>
         ),
+        labelTextKey: "Settings",
         icon: <SettingsIcon {...ICON} />,
         roles: all_admin_roles,
         children: [
@@ -328,6 +334,7 @@ const menuGroups: MenuGroup[] = [
                 </NewBadge>
               </span>
             ),
+            labelTextKey: "Admin Settings",
             icon: <SettingsIcon {...ICON} />,
             roles: all_admin_roles,
           },
@@ -379,20 +386,32 @@ const prettify = (key: string): string =>
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 
-const labelText = (item: MenuItem): string => (typeof item.label === "string" ? item.label : prettify(item.key));
+const labelText = (item: MenuItem): string =>
+  t(item.labelTextKey ?? (typeof item.label === "string" ? item.label : prettify(item.key)));
+
+/** Translate a menu label for rendering; JSX labels with a labelTextKey use it. */
+const renderLabel = (item: MenuItem): React.ReactNode =>
+  item.labelTextKey ? t(item.labelTextKey) : typeof item.label === "string" ? t(item.label) : item.label;
 
 // Breadcrumb ("Section" / "Page") for the top bar, derived from the same nav config.
 export const getBreadcrumb = (page: string): { section: string | null; title: string } => {
   for (const group of menuGroups) {
     for (const item of group.items) {
-      const section = SECTION_DISPLAY[group.groupLabel] ?? group.groupLabel;
+      const section = t(SECTION_DISPLAY[group.groupLabel] ?? group.groupLabel);
       if (item.page === page)
-        return { section, title: typeof item.label === "string" ? item.label : prettify(item.key) };
+        return {
+          section,
+          title: t(item.labelTextKey ?? (typeof item.label === "string" ? item.label : prettify(item.key))),
+        };
       const child = item.children?.find((c) => c.page === page);
-      if (child) return { section, title: typeof child.label === "string" ? child.label : prettify(child.key) };
+      if (child)
+        return {
+          section,
+          title: t(child.labelTextKey ?? (typeof child.label === "string" ? child.label : prettify(child.key))),
+        };
     }
   }
-  return { section: null, title: prettify(page) };
+  return { section: null, title: t(prettify(page)) };
 };
 
 const Sidebar_: React.FC<SidebarProps> = ({
@@ -508,11 +527,14 @@ const Sidebar_: React.FC<SidebarProps> = ({
     e.preventDefault();
     setPage(item.page);
   };
+  const { lang: uiLang } = useLanguage();
 
   const renderLeaf = (item: MenuItem, isChild: boolean) => {
     const active = selectedKey === item.key;
     const size = isChild ? "sub" : "default";
-    const label = <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>;
+    const label = (
+      <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{renderLabel(item)}</span>
+    );
 
     if (item.external_url) {
       return (
@@ -564,7 +586,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
           title={collapsed ? labelText(item) : undefined}
         >
           {item.icon}
-          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{item.label}</span>
+          <span className="flex-1 truncate group-data-[collapsed=true]/sidebar:hidden">{renderLabel(item)}</span>
           <ChevronRight
             className={cn(
               "size-4 shrink-0 transition-transform group-data-[collapsed=true]/sidebar:hidden",
@@ -612,7 +634,7 @@ const Sidebar_: React.FC<SidebarProps> = ({
               variant="ghost"
               size="icon-sm"
               onClick={onToggleCollapsed}
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-label={collapsed ? t("Expand sidebar") : t("Collapse sidebar")}
               className="flex-none text-muted-foreground"
             >
               {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
@@ -622,11 +644,11 @@ const Sidebar_: React.FC<SidebarProps> = ({
       </SidebarHeader>
 
       <ScrollArea className="min-h-0 flex-1">
-        <nav className="flex flex-col gap-0.5 px-3 pb-3">
+        <nav data-ui-lang={uiLang} className="flex flex-col gap-0.5 px-3 pb-3">
           {visibleGroups.map((group, gi) => (
             <SidebarGroup key={group.groupLabel}>
               {gi > 0 && <SidebarSeparator className="hidden group-data-[collapsed=true]/sidebar:block" />}
-              <SidebarGroupLabel>{group.groupLabel}</SidebarGroupLabel>
+              <SidebarGroupLabel>{t(group.groupLabel)}</SidebarGroupLabel>
               <SidebarMenu>{group.items.map((item) => renderItem(item))}</SidebarMenu>
             </SidebarGroup>
           ))}

@@ -5,6 +5,7 @@ import { useWorker } from "@/hooks/useWorker";
 import { getProxyBaseUrl } from "@/components/networking";
 import { migratedHref } from "@/utils/migratedPages";
 import { useTheme } from "@/contexts/ThemeContext";
+import { t, useLanguage } from "@/contexts/LanguageContext";
 import { clearTokenCookies } from "@/utils/cookieUtils";
 import { clearStoredReturnUrl, getLoginUrl } from "@/utils/returnUrlUtils";
 import useProxySettings from "@/app/(dashboard)/hooks/proxySettings/useProxySettings";
@@ -14,6 +15,7 @@ import Link from "next/link";
 import React from "react";
 import { BlogDropdown } from "./Navbar/BlogDropdown/BlogDropdown";
 import { CommunityEngagementButtons } from "./Navbar/CommunityEngagementButtons/CommunityEngagementButtons";
+import LanguageSwitcher from "./Navbar/LanguageSwitcher";
 import { NAV_PRODUCT_LINK_CLASS } from "./Navbar/navProductLinkClass";
 import { NotificationsBell } from "./Navbar/NotificationsBell/NotificationsBell";
 import UserDropdown from "./Navbar/UserDropdown/UserDropdown";
@@ -36,6 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({
   const baseUrl = getProxyBaseUrl();
   const proxySettings = useProxySettings(accessToken);
   const { logoUrl } = useTheme();
+  const { lang: uiLang } = useLanguage();
   const { data: healthData } = useHealthReadinessDetails(accessToken);
   const version = healthData?.litellm_version;
   const disableBouncingIcon = useDisableBouncingIcon();
@@ -61,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+    <nav data-ui-lang={uiLang} className="sticky top-0 z-10 border-b border-gray-200 bg-white">
       <div className="w-full">
         <div className="flex h-14 items-center px-4">
           <div className="flex shrink-0 items-center">
@@ -69,7 +72,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={onToggleSidebar}
                 className="mr-2 flex h-9 w-9 items-center justify-center rounded-md text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                title={sidebarCollapsed ? t("Expand sidebar") : t("Collapse sidebar")}
               >
                 <span className="text-lg">{sidebarCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}</span>
               </button>
@@ -93,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     <span
                       className="absolute -left-2 -top-1 animate-bounce text-lg"
                       style={{ animationDuration: "2s" }}
-                      title="Thanks for using LiteLLM!"
+                      title={t("Thanks for using LiteLLM!")}
                     >
                       🌑
                     </span>
@@ -136,7 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 rel="noopener noreferrer"
                 className={NAV_PRODUCT_LINK_CLASS}
               >
-                Docs
+                {t("Docs")}
                 {/* Layout parity with Blog chevron — intentional single-level link */}
                 <DownOutlined className="pointer-events-none text-[10px] opacity-0" aria-hidden />
               </a>
@@ -148,6 +151,10 @@ const Navbar: React.FC<NavbarProps> = ({
                 <CommunityEngagementButtons />
               </div>
             )}
+
+            <div className="flex shrink-0 items-center border-l border-gray-200 pl-4">
+              <LanguageSwitcher />
+            </div>
 
             {!isPublicPage && (
               <div className="flex shrink-0 items-center border-l border-gray-200 pl-4">

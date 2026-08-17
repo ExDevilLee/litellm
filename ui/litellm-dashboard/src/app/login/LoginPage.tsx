@@ -12,6 +12,8 @@ import { Alert, Button, Card, Form, Input, Popover, Select, Space, Typography } 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useWorker } from "@/hooks/useWorker";
+import { t, useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/Navbar/LanguageSwitcher";
 
 function LoginPageContent() {
   const [username, setUsername] = useState("");
@@ -22,6 +24,7 @@ function LoginPageContent() {
   const router = useRouter();
   const { workers, selectWorker } = useWorker();
   const [selectedWorkerId, setSelectedWorkerId] = useState<string | null>(null);
+  const { lang: uiLang } = useLanguage();
 
   // Pre-select worker from URL param (e.g. /ui/login?worker=team-b)
   useEffect(() => {
@@ -154,12 +157,13 @@ function LoginPageContent() {
             </div>
 
             <Alert
-              message="Admin UI Disabled"
+              message={t("Admin UI Disabled")}
               description={
                 <>
                   <Paragraph className="text-sm">
-                    The Admin UI has been disabled by the administrator. To re-enable it, please update the following
-                    environment variable:
+                    {t(
+                      "The Admin UI has been disabled by the administrator. To re-enable it, please update the following environment variable:",
+                    )}
                   </Paragraph>
                   <Paragraph className="text-sm">
                     <code className="bg-gray-100 px-1 py-0.5 rounded-sm text-xs">DISABLE_ADMIN_UI=False</code>
@@ -176,7 +180,10 @@ function LoginPageContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div data-ui-lang={uiLang} className="relative min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="absolute right-4 top-4 z-10">
+        <LanguageSwitcher />
+      </div>
       <Card className="w-full max-w-lg shadow-md">
         <Space direction="vertical" size="middle" className="w-full">
           <div className="text-center">
@@ -184,24 +191,24 @@ function LoginPageContent() {
           </div>
 
           <div className="text-center">
-            <Title level={3}>Login</Title>
-            <Text type="secondary">Access your LiteLLM Admin UI.</Text>
+            <Title level={3}>{t("Login")}</Title>
+            <Text type="secondary">{t("Access your LiteLLM Admin UI.")}</Text>
           </div>
 
           {!uiConfig?.hide_default_credentials_hint && (
             <Alert
-              message="Default Credentials"
+              message={t("Default Credentials")}
               description={
                 <>
                   <Paragraph className="text-sm">
-                    By default, Username is <code className="bg-gray-100 px-1 py-0.5 rounded-sm text-xs">admin</code>{" "}
-                    and Password is your set LiteLLM Proxy
+                    {t("By default, Username is")} <code className="bg-gray-100 px-1 py-0.5 rounded-sm text-xs">admin</code>{" "}
+                    {t("and Password is your set LiteLLM Proxy")}
                     <code className="bg-gray-100 px-1 py-0.5 rounded-sm text-xs">MASTER_KEY</code>.
                   </Paragraph>
                   <Paragraph className="text-sm">
-                    Need to set UI credentials or SSO?{" "}
+                    {t("Need to set UI credentials or SSO?")}{" "}
                     <a href="https://docs.litellm.ai/docs/proxy/ui" target="_blank" rel="noopener noreferrer">
-                      Check the documentation
+                      {t("Check the documentation")}
                     </a>
                     .
                   </Paragraph>
@@ -217,11 +224,11 @@ function LoginPageContent() {
 
           <Form onFinish={handleSubmit} layout="vertical" requiredMark={false}>
             {uiConfig?.is_control_plane && workers.length > 0 && (
-              <Form.Item label="Worker" style={{ marginBottom: 16 }}>
+              <Form.Item label={t("Worker")} style={{ marginBottom: 16 }}>
                 <Select
                   value={selectedWorkerId || undefined}
                   onChange={(value) => setSelectedWorkerId(value)}
-                  placeholder="Choose a worker to connect to"
+                  placeholder={t("Choose a worker to connect to")}
                   size="large"
                   suffixIcon={<CloudServerOutlined />}
                   options={workers.map((w) => ({
@@ -233,13 +240,12 @@ function LoginPageContent() {
             )}
 
             <Form.Item
-              label="Username"
+              label={t("Username")}
               name="username"
-              rules={[{ required: true, message: "Please enter your username" }]}
+              rules={[{ required: true, message: t("Please enter your username") }]}
             >
               <Input
-                placeholder="Enter your username"
-                autoComplete="username"
+                placeholder={t("Enter your username")}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoginLoading}
@@ -249,13 +255,12 @@ function LoginPageContent() {
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label={t("Password")}
               name="password"
-              rules={[{ required: true, message: "Please enter your password" }]}
+              rules={[{ required: true, message: t("Please enter your password") }]}
             >
               <Input.Password
-                placeholder="Enter your password"
-                autoComplete="current-password"
+                placeholder={t("Enter your password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoginLoading}
@@ -272,14 +277,14 @@ function LoginPageContent() {
                 block
                 size="large"
               >
-                {isLoginLoading ? "Logging in..." : "Login"}
+                {isLoginLoading ? t("Logging in...") : t("Login")}
               </Button>
             </Form.Item>
             <Form.Item>
               {!uiConfig?.sso_configured ? (
-                <Popover content="Please configure SSO to log in with SSO." trigger="hover">
+                <Popover content={t("Please configure SSO to log in with SSO.")} trigger="hover">
                   <Button disabled block size="large">
-                    Login with SSO
+                    {t("Login with SSO")}
                   </Button>
                 </Popover>
               ) : (
@@ -301,7 +306,7 @@ function LoginPageContent() {
                   block
                   size="large"
                 >
-                  Login with SSO
+                  {t("Login with SSO")}
                 </Button>
               )}
             </Form.Item>
@@ -314,9 +319,11 @@ function LoginPageContent() {
             closable
             message={
               <Text>
-                Single Sign-On (SSO) is enabled. LiteLLM no longer automatically redirects to the SSO login flow upon
-                loading this page. To re-enable auto-redirect-to-SSO, set{" "}
-                <Text code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</Text> in your environment configuration.
+                {t(
+                  "Single Sign-On (SSO) is enabled. LiteLLM no longer automatically redirects to the SSO login flow upon loading this page. To re-enable auto-redirect-to-SSO, set",
+                )}{" "}
+                <Text code>AUTO_REDIRECT_UI_LOGIN_TO_SSO=true</Text>{" "}
+                {t("in your environment configuration.")}
               </Text>
             }
           />

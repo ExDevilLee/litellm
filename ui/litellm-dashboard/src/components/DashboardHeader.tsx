@@ -9,6 +9,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { ToolbarSeparator } from "@/components/shared/ToolbarSeparator";
+import { t, useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/Navbar/LanguageSwitcher";
 import { getBreadcrumb } from "@/components/leftnav";
 import { BlogDropdown } from "@/components/Navbar/BlogDropdown/BlogDropdown";
 import { CommunityEngagementButtons } from "@/components/Navbar/CommunityEngagementButtons/CommunityEngagementButtons";
@@ -30,6 +32,7 @@ export function DashboardHeader({ page }: DashboardHeaderProps) {
   const { title } = getBreadcrumb(page);
   const { isControlPlane, selectedWorker } = useWorker();
   const showWorkerSwitch = isControlPlane && selectedWorker !== null;
+  const { lang: uiLang } = useLanguage();
   const hideCommunityLinks = useDisableShowPrompts();
 
   const handleWorkerSwitch = (workerId: string) => {
@@ -41,7 +44,7 @@ export function DashboardHeader({ page }: DashboardHeaderProps) {
   };
 
   return (
-    <header className="flex h-14 flex-none items-center justify-between gap-4 border-b border-border bg-background px-4">
+    <header data-ui-lang={uiLang} className="flex h-14 flex-none items-center justify-between gap-4 border-b border-border bg-background px-4">
       <Breadcrumb className="min-w-0">
         <BreadcrumbList className="flex-nowrap">
           <BreadcrumbItem className="flex-none">
@@ -68,10 +71,12 @@ export function DashboardHeader({ page }: DashboardHeaderProps) {
           render={<a href="https://docs.litellm.ai/docs/" target="_blank" rel="noopener noreferrer" />}
           className="text-muted-foreground"
         >
-          Docs
+          {t("Docs")}
         </Button>
         <BlogDropdown />
         {!hideCommunityLinks && <CommunityEngagementButtons />}
+        <ToolbarSeparator />
+        <LanguageSwitcher />
         <ToolbarSeparator />
         <NotificationsBell />
       </div>

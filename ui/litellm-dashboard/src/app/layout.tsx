@@ -6,8 +6,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import AntdGlobalProvider from "@/contexts/AntdGlobalProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import ReactQueryProvider from "@/contexts/ReactQueryProvider";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +27,9 @@ export default function RootLayout({
         <NuqsAdapter>
           <ReactQueryProvider>
             <AntdGlobalProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <LanguageProvider>{children}</LanguageProvider>
+              </AuthProvider>
             </AntdGlobalProvider>
           </ReactQueryProvider>
         </NuqsAdapter>
