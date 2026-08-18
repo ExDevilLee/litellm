@@ -28,6 +28,7 @@ import {
   userCreateCall,
 } from "./networking";
 import OnboardingModal, { InvitationLink } from "./onboarding_link";
+import { t } from "@/contexts/LanguageContext";
 const { Option } = Select;
 const { Text, Link } = Typography;
 // Helper function to generate UUID compatible across all environments
@@ -247,7 +248,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
   return (
     <div className="flex gap-2">
       <Button type="primary" className="mb-0" onClick={() => setIsModalVisible(true)}>
-        + Invite User
+        + {t("Invite User")}
       </Button>
       <BulkCreateUsers accessToken={accessToken} teams={teams} possibleUIRoles={possibleUIRoles} />
       <Modal
@@ -378,7 +379,7 @@ export const CreateUserButton: React.FC<CreateuserProps> = ({
 
           <div style={{ textAlign: "right", marginTop: "10px" }}>
             <Button type="primary" icon={<UserAddOutlined />} htmlType="submit">
-              Invite User
+              {t("Invite User")}
             </Button>
           </div>
         </Form>

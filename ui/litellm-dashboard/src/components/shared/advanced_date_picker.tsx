@@ -2,6 +2,7 @@ import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Button, DateRangePickerValue, Text } from "@tremor/react";
 import moment from "moment";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 
 interface AdvancedDatePickerProps {
   value: DateRangePickerValue;
@@ -66,7 +67,7 @@ const relativeTimeOptions: RelativeTimeOption[] = [
 const AdvancedDatePicker: React.FC<AdvancedDatePickerProps> = ({
   value,
   onValueChange,
-  label = "Select Time Range",
+  label = t("Select Time Range"),
   showTimeRange = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);

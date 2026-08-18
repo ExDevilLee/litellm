@@ -4,6 +4,7 @@ import { SortingState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 import { AutoRouterIcon } from "@/components/shared/table_cells";
 
 import { getAutoRoutersTableColumns } from "./AutoRoutersTableColumns";
@@ -25,11 +26,11 @@ function EmptyState({ canModify }: { canModify: boolean }) {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <AutoRouterIcon size={20} className="text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No auto routers yet</div>
+      <div className="text-sm font-medium text-foreground">{t("No auto routers yet")}</div>
       <div className="text-sm text-muted-foreground">
         {canModify
-          ? "Create an auto router to pick the right model per request instead of pinning one."
-          : "An auto router picks the right model per request instead of pinning one."}
+          ? t("Create an auto router to pick the right model per request instead of pinning one.")
+          : t("An auto router picks the right model per request instead of pinning one.")}
       </div>
     </div>
   );
@@ -60,7 +61,7 @@ export function AutoRoutersTable({
       paginationMode="client"
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       isLoading={isLoading}
-      loadingMessage="Loading auto routers…"
+      loadingMessage={t("Loading auto routers…")}
       noDataMessage={<EmptyState canModify={canModify} />}
       size="compact"
     />

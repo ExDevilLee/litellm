@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import {
   BankOutlined,
   BarChartOutlined,
@@ -141,8 +142,8 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
       }
       return {
         value: option.value,
-        label,
-        description: desc,
+        label: t(label),
+        description: t(desc),
         icon: option.icon,
         badgeText: option.badgeText,
       };
@@ -157,8 +158,8 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
             <BarChartOutlined style={{ fontSize: "32px" }} />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-semibold text-gray-900 mb-0.5 leading-tight">{title}</h3>
-            <p className="text-xs text-gray-600 leading-tight">{description}</p>
+            <h3 className="text-sm font-semibold text-gray-900 mb-0.5 leading-tight">{t(title)}</h3>
+            <p className="text-xs text-gray-600 leading-tight">{t(description)}</p>
           </div>
         </div>
         <div className="shrink-0">

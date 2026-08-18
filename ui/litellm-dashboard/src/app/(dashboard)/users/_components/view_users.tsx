@@ -35,6 +35,7 @@ import { UsersTable } from "./view_users/UsersTable";
 import UserInfoView from "./view_users/user_info_view";
 import { UserInfo } from "@/components/networking";
 import { Skeleton } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 interface ViewUserDashboardProps {
   accessToken: string | null;
@@ -376,7 +377,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   className="flex items-center"
                   data-testid="toggle-user-selection"
                 >
-                  {selectionMode ? "Cancel Selection" : "Select Users"}
+                  {selectionMode ? t("Cancel Selection") : t("Select Users")}
                 </Button>
               )}
 
@@ -399,8 +400,8 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
       {isProxyAdmin ? (
         <TabGroup defaultIndex={0}>
           <TabList className="mb-4">
-            <Tab>Users</Tab>
-            <Tab>Default User Settings</Tab>
+            <Tab>{t("Users")}</Tab>
+            <Tab>{t("Default User Settings")}</Tab>
           </TabList>
 
           <TabPanels>

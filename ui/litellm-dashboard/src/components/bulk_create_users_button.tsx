@@ -14,6 +14,7 @@ import Papa from "papaparse";
 import { CheckCircleIcon, XCircleIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import NotificationsManager from "./molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 interface BulkCreateUsersProps {
   accessToken: string;
@@ -518,7 +519,7 @@ const BulkCreateUsersButton: React.FC<BulkCreateUsersProps> = ({
   return (
     <>
       <Button type="primary" className="mb-0" onClick={() => setIsModalVisible(true)}>
-        + Bulk Invite Users
+        + {t("Bulk Invite Users")}
       </Button>
 
       <Modal

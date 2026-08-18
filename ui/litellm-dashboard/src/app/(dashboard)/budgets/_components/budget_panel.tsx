@@ -19,6 +19,7 @@ import EditBudgetModal from "./edit_budget_modal";
 import { CREATE_END_USER_CURL_COMMAND, CHAT_COMPLETIONS_CURL_COMMAND, OPENAI_SDK_PYTHON_CODE } from "./constants";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { isProxyAdminRole } from "@/utils/roles";
+import { t } from "@/contexts/LanguageContext";
 
 interface BudgetSettingsPageProps {
   accessToken: string | null;
@@ -82,8 +83,8 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
     <div className="flex h-full flex-col gap-4 p-6 px-12">
       <PageHeader
         icon={<Wallet className="size-5" />}
-        title="Budgets"
-        subtitle="Spend, TPM and RPM limits you can assign to customers."
+        title={t("Budgets")}
+        subtitle={t("Spend, TPM and RPM limits you can assign to customers.")}
       />
       <Tabs defaultValue="budgets" className="min-h-0 flex-1 gap-0">
         <div className="flex items-center gap-4 border-b border-border">
@@ -91,7 +92,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
             <>
               <Button onClick={() => setIsCreateModelVisible(true)}>
                 <Plus className="size-4" />
-                Create Budget
+                {t("Create Budget")}
               </Button>
               <ToolbarSeparator className="h-6" />
             </>
@@ -101,7 +102,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
               Budgets
             </TabsTrigger>
             <TabsTrigger value="examples" className="flex-none px-4">
-              Examples
+              {t("Examples")}
             </TabsTrigger>
           </TabsList>
         </div>

@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import React from "react";
 import { Table, Progress } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -38,13 +39,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
 
   const columns: ColumnsType<EndpointRow> = [
     {
-      title: "Endpoint",
+      title: t("Endpoint"),
       dataIndex: "endpoint",
       key: "endpoint",
       render: (text: string) => <span className="font-medium">{text}</span>,
     },
     {
-      title: "Successful / Failed",
+      title: t("Successful / Failed"),
       key: "requests",
       render: (_: any, record: EndpointRow) => {
         const successPercentage =
@@ -76,13 +77,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      title: "Total Request",
+      title: t("Total Request"),
       dataIndex: "api_requests",
       key: "api_requests",
       render: (value: number) => value.toLocaleString(),
     },
     {
-      title: "Success Rate",
+      title: t("Success Rate"),
       dataIndex: "successRate",
       key: "successRate",
       render: (value: number) => {
@@ -103,13 +104,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      title: "Total Tokens",
+      title: t("Total Tokens"),
       dataIndex: "total_tokens",
       key: "total_tokens",
       render: (value: number) => value.toLocaleString(),
     },
     {
-      title: "Spend",
+      title: t("Spend"),
       dataIndex: "spend",
       key: "spend",
       render: (value: number) => <MoneyCell value={value} decimals={2} />,

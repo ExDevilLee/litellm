@@ -25,13 +25,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NuqsAdapter>
-          <ReactQueryProvider>
-            <AntdGlobalProvider>
-              <AuthProvider>
-                <LanguageProvider>{children}</LanguageProvider>
-              </AuthProvider>
-            </AntdGlobalProvider>
-          </ReactQueryProvider>
+          <LanguageProvider>
+            <ReactQueryProvider>
+              <AntdGlobalProvider>
+                <AuthProvider>{children}</AuthProvider>
+              </AntdGlobalProvider>
+            </ReactQueryProvider>
+          </LanguageProvider>
         </NuqsAdapter>
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
+import { t } from "@/contexts/LanguageContext";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, IdCell, MoneyCell, StatusBadge } from "@/components/shared/table_cells";
 import { getSpendString } from "@/utils/dataUtils";
@@ -43,14 +44,14 @@ export const getRequestLogsTableColumns = ({
   {
     id: "startTime",
     accessorKey: "startTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Time" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Time")} variant="dropdown-tristate" />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.startTime} />,
   },
   {
     id: "type",
-    header: "Type",
+    header: t("Type"),
     size: 90,
     enableSorting: false,
     meta: { skeleton: "badge" },
@@ -87,29 +88,29 @@ export const getRequestLogsTableColumns = ({
       );
 
       const tooltipParts = [
-        sessionLlmCount > 0 && `${sessionLlmCount} LLM`,
-        sessionAgentCount > 0 && `${sessionAgentCount} Agent`,
-        sessionMcpCount > 0 && `${sessionMcpCount} MCP`,
+        sessionLlmCount > 0 && t("{0} LLM", sessionLlmCount),
+        sessionAgentCount > 0 && t("{0} Agent", sessionAgentCount),
+        sessionMcpCount > 0 && t("{0} MCP", sessionMcpCount),
       ].filter(Boolean);
       return <CellTooltip content={tooltipParts.join(" • ")} trigger={sessionTypeBadge} />;
     },
   },
   {
     id: "status",
-    header: "Status",
+    header: t("Status"),
     size: 100,
     enableSorting: false,
     meta: { skeleton: "badge" },
     cell: ({ row }) => {
       const status = readMetaString(row.original.metadata, "status") ?? "Success";
       const isSuccess = status.toLowerCase() !== "failure";
-      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? "Success" : "Failure"} />;
+      return <StatusBadge tone={isSuccess ? "success" : "error"} label={isSuccess ? t("Success") : t("Failure")} />;
     },
   },
   {
     id: "session_id",
     accessorKey: "session_id",
-    header: "Session ID",
+    header: t("Session ID"),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.session_id} onClick={onSessionClick} />,
@@ -117,14 +118,14 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_id",
     accessorKey: "request_id",
-    header: "Request ID",
+    header: t("Request ID"),
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.request_id} variant="plain" />,
   },
   {
     id: "spend",
     accessorKey: "spend",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Cost" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Cost")} variant="dropdown-tristate" />,
     size: 110,
     enableSorting: true,
     meta: { numeric: true, skeleton: "twoLine" },
@@ -143,10 +144,10 @@ export const getRequestLogsTableColumns = ({
       return (
         <div className="flex flex-col items-end">
           {spend ? <CellTooltip content={`$${String(spend)}`} trigger={money} /> : money}
-          {isMultiCallSession && <span className="text-[10px] text-gray-400">session total</span>}
+          {isMultiCallSession && <span className="text-[10px] text-gray-400">{t("session total")}</span>}
           {mcpCount > 0 && mcpSpend > 0 && (
             <span className="text-[10px] text-amber-600">
-              incl. {getSpendString(mcpSpend)} from {mcpCount} MCP
+              {t("incl. {0} from {1} MCP", getSpendString(mcpSpend), mcpCount)}
             </span>
           )}
         </div>
@@ -156,7 +157,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_duration_ms",
     accessorKey: "request_duration_ms",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Duration (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Duration (s)")} variant="dropdown-tristate" />,
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -173,7 +174,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "ttft_ms",
     accessorKey: "completionStartTime",
-    header: ({ column }) => <DataTableSortHeader column={column} title="TTFT (s)" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("TTFT (s)")} variant="dropdown-tristate" />,
     enableSorting: true,
     meta: { numeric: true },
     cell: ({ row }) => {
@@ -193,14 +194,14 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "team_alias",
-    header: "Team Name",
+    header: t("Team Name"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_team_alias")} />,
   },
   {
     id: "key_hash",
-    header: "Key Hash",
+    header: t("Key Hash"),
     size: 110,
     enableSorting: false,
     cell: ({ row }) => (
@@ -209,7 +210,7 @@ export const getRequestLogsTableColumns = ({
   },
   {
     id: "key_alias",
-    header: "Key Alias",
+    header: t("Key Alias"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={readMetaString(row.original.metadata, "user_api_key_alias")} />,
@@ -217,7 +218,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "model",
     accessorKey: "model",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Model" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Model")} variant="dropdown-tristate" />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -244,7 +245,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "total_tokens",
     accessorKey: "total_tokens",
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tokens" variant="dropdown-tristate" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Tokens")} variant="dropdown-tristate" />,
     size: 140,
     enableSorting: true,
     meta: { numeric: true },
@@ -263,7 +264,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "user",
     accessorKey: "user",
-    header: "Internal User",
+    header: t("Internal User"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.user} />,
@@ -271,7 +272,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "end_user",
     accessorKey: "end_user",
-    header: "End User",
+    header: t("End User"),
     size: 140,
     enableSorting: false,
     cell: ({ row }) => <TruncatedText value={row.original.end_user} />,
@@ -279,7 +280,7 @@ export const getRequestLogsTableColumns = ({
   {
     id: "request_tags",
     accessorKey: "request_tags",
-    header: "Tags",
+    header: t("Tags"),
     size: 150,
     enableSorting: false,
     meta: { skeleton: "chips" },

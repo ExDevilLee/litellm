@@ -24,6 +24,7 @@ import { useLogDetailRouting } from "./logDetailRouting";
 import { LogDetailsDrawer } from "./LogDetailsDrawer";
 import { LiveTailBanner, LogsTableToolbar } from "./LogsTableToolbar";
 import { RequestLogsTable } from "./RequestLogsTable";
+import { t } from "@/contexts/LanguageContext";
 
 const PAGE_SIZE = 50;
 const DEFAULT_INTERVAL = { value: 24, unit: "hours" };
@@ -273,7 +274,7 @@ export default function RequestLogsPanel({ accessToken, token, userRole, userID,
         keyData={selectedKeyInfo}
         teams={allTeams ?? []}
         onClose={() => setSelectedKeyIdInfoView(null)}
-        backButtonText="Back to Logs"
+        backButtonText={t("Back to Logs")}
       />
     );
   }
@@ -281,7 +282,7 @@ export default function RequestLogsPanel({ accessToken, token, userRole, userID,
   return (
     <AutoRouterModelGroupsProvider>
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold">Request Logs</h1>
+        <h1 className="text-xl font-semibold">{t("Request Logs")}</h1>
       </div>
 
       {isLiveTail && pagination.pageIndex === 0 && <LiveTailBanner onStop={() => setIsLiveTail(false)} />}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
+import { t } from "@/contexts/LanguageContext";
 import DeletedKeysPage from "../DeletedKeysPage/DeletedKeysPage";
 import DeletedTeamsPage from "../DeletedTeamsPage/DeletedTeamsPage";
 import AuditLogsPanel from "./AuditLogsPanel";
@@ -29,10 +30,10 @@ export default function SpendLogsTable({ accessToken, token, userRole, userID, p
     <div className="w-full p-6 overflow-x-hidden box-border">
       <TabGroup defaultIndex={0} onIndexChange={(index) => setActiveTab(index === 0 ? "request logs" : "audit logs")}>
         <TabList>
-          <Tab>Request Logs</Tab>
-          <Tab>Audit Logs</Tab>
-          <Tab>Deleted Keys</Tab>
-          <Tab>Deleted Teams</Tab>
+          <Tab>{t("Request Logs")}</Tab>
+          <Tab>{t("Audit Logs")}</Tab>
+          <Tab>{t("Deleted Keys")}</Tab>
+          <Tab>{t("Deleted Teams")}</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>

@@ -5,6 +5,7 @@ import { Tabs } from "antd";
 import { RefreshIcon } from "@heroicons/react/outline";
 import { useQueryClient } from "@tanstack/react-query";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { t } from "@/contexts/LanguageContext";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
 import { all_admin_roles, internalUserRoles } from "@/utils/roles";
@@ -107,18 +108,18 @@ export default function ModelsAndEndpointsPage() {
     [canCreate, isAdmin],
   );
 
-  const allModelsLabel = isAdmin ? "All Models" : "Your Models";
+  const allModelsLabel = isAdmin ? t("All Models") : t("Your Models");
   // Auto-Routers carries a Beta badge; BetaBadge honours the admin setting that hides these.
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
     if (!slug) return allModelsLabel;
     if (slug === "auto-routers") {
       return (
         <span className="flex items-center gap-2">
-          {TAB_LABELS[slug]} <BetaBadge />
+          {t(TAB_LABELS[slug])} <BetaBadge />
         </span>
       );
     }
-    return TAB_LABELS[slug];
+    return t(TAB_LABELS[slug]);
   };
 
   const tabItems = visibleSlugs.map((slug) => {
@@ -160,11 +161,11 @@ export default function ModelsAndEndpointsPage() {
       <div className="flex flex-col gap-2 p-8 w-full mt-2">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h2 className="text-lg font-semibold">Model Management</h2>
+            <h2 className="text-lg font-semibold">{t("Model Management")}</h2>
             {isAdmin ? (
-              <p className="text-sm text-gray-600">Add and manage models for the proxy</p>
+              <p className="text-sm text-gray-600">{t("Add and manage models for the proxy")}</p>
             ) : (
-              <p className="text-sm text-gray-600">Add models for teams you are an admin for.</p>
+              <p className="text-sm text-gray-600">{t("Add models for teams you are an admin for.")}</p>
             )}
           </div>
         </div>
@@ -189,11 +190,13 @@ export default function ModelsAndEndpointsPage() {
             tabBarExtraContent={{
               right: (
                 <div className="flex items-center space-x-2 self-center">
-                  {lastRefreshed && <span className="text-xs text-gray-500">Last Refreshed: {lastRefreshed}</span>}
+                  {lastRefreshed && (
+                    <span className="text-xs text-gray-500">{t("Last Refreshed: {0}", lastRefreshed)}</span>
+                  )}
                   <button
                     type="button"
                     onClick={handleRefreshClick}
-                    aria-label="Refresh models"
+                    aria-label={t("Refresh models")}
                     className="cursor-pointer"
                   >
                     <RefreshIcon className="h-4 w-4 text-gray-500" />

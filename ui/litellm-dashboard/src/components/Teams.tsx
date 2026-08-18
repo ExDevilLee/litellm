@@ -44,6 +44,7 @@ import DeleteResourceModal from "./common_components/DeleteResourceModal";
 import { teamCreateCall } from "./networking";
 import { normalizeTeamModelSelection } from "./team/teamModelAccess";
 import { ModelSelect } from "./ModelSelect/ModelSelect";
+import { t } from "@/contexts/LanguageContext";
 
 const canCreateOrManageTeams = (
   userRole: string | null,
@@ -388,7 +389,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
   const tabItems = [
     {
       key: "your-teams",
-      label: "Your Teams",
+      label: t("Your Teams"),
       children: (
         <>
           <TeamsTable
@@ -437,14 +438,14 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
     },
     {
       key: "available-teams",
-      label: "Available Teams",
+      label: t("Available Teams"),
       children: <AvailableTeamsPanel accessToken={accessToken} userID={userID} />,
     },
     ...(isProxyAdminRole(userRole || "")
       ? [
           {
             key: "default-settings",
-            label: "Default Team Settings",
+            label: t("Default Team Settings"),
             children: <TeamSSOSettings accessToken={accessToken} userID={userID || ""} userRole={userRole || ""} />,
           },
         ]
@@ -476,8 +477,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
           <div className="mb-4">
             <PageHeader
               icon={<Users className="size-5" />}
-              title="Teams"
-              subtitle="Manage teams, members, and their access to models and budgets"
+              title={t("Teams")}
+              subtitle={t("Manage teams, members, and their access to models and budgets")}
             />
           </div>
 
@@ -488,7 +489,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                 <div className="flex items-center gap-4 pr-4">
                   <UIButton onClick={() => setIsTeamModalVisible(true)} data-testid="create-team-button">
                     <Plus className="size-4" />
-                    Create Team
+                    {t("Create Team")}
                   </UIButton>
                   <div className="h-6 w-px bg-gray-200" />
                 </div>
@@ -500,7 +501,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
       {canCreateOrManageTeams(userRole, userID, organizations) && (
         <Modal
-          title="Create Team"
+          title={t("Create Team")}
           open={isTeamModalVisible}
           width={1000}
           footer={null}
@@ -1046,7 +1047,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
             </>
             <div style={{ textAlign: "right", marginTop: "10px" }}>
               <Button htmlType="submit" data-testid="create-team-submit">
-                Create Team
+                {t("Create Team")}
               </Button>
             </div>
           </Form>

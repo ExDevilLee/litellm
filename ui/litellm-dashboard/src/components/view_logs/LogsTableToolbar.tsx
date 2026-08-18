@@ -4,6 +4,7 @@ import moment from "moment";
 import { CalendarDays } from "lucide-react";
 import { useState } from "react";
 
+import { t } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -59,7 +60,9 @@ export function LogsTableToolbar({
   const selectedOption = QUICK_SELECT_OPTIONS.find(
     (option) => option.value === selectedTimeInterval.value && option.unit === selectedTimeInterval.unit,
   );
-  const displayLabel = isCustomDate ? getTimeRangeDisplay(isCustomDate, startTime, endTime) : selectedOption?.label;
+  const displayLabel = isCustomDate ? getTimeRangeDisplay(isCustomDate, startTime, endTime) : selectedOption?.label
+    ? t(selectedOption.label)
+    : "";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -81,7 +84,7 @@ export function LogsTableToolbar({
                 className="w-full justify-start font-normal"
                 onClick={() => applyQuickSelect(option)}
               >
-                {option.label}
+                {t(option.label)}
               </Button>
             ))}
             <div className="my-2 border-t" />
@@ -90,7 +93,7 @@ export function LogsTableToolbar({
               className="w-full justify-start font-normal"
               onClick={() => onIsCustomDateChange(!isCustomDate)}
             >
-              Custom Range
+              {t("Custom Range")}
             </Button>
           </div>
         </PopoverContent>
@@ -107,7 +110,7 @@ export function LogsTableToolbar({
               onResetToFirstPage();
             }}
           />
-          <span className="text-sm text-muted-foreground">to</span>
+          <span className="text-sm text-muted-foreground">{t("to")}</span>
           <Input
             type="datetime-local"
             className="w-auto"
@@ -121,12 +124,12 @@ export function LogsTableToolbar({
       )}
 
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Live Tail</span>
-        <Switch checked={isLiveTail} onCheckedChange={onIsLiveTailChange} aria-label="Live Tail" />
+        <span className="text-sm font-medium">{t("Live Tail")}</span>
+        <Switch checked={isLiveTail} onCheckedChange={onIsLiveTailChange} aria-label={t("Live Tail")} />
       </div>
 
       <Button variant="outline" size="sm" onClick={onResetFilters}>
-        Reset Filters
+        {t("Reset Filters")}
       </Button>
     </div>
   );
@@ -135,9 +138,9 @@ export function LogsTableToolbar({
 export function LiveTailBanner({ onStop }: { onStop: () => void }) {
   return (
     <div className="mb-4 flex items-center justify-between rounded-md border border-green-200 bg-green-50 px-4 py-2">
-      <span className="text-sm text-green-700">Auto-refreshing every 15 seconds</span>
+      <span className="text-sm text-green-700">{t("Auto-refreshing every 15 seconds")}</span>
       <button type="button" onClick={onStop} className="text-sm text-green-600 hover:text-green-800">
-        Stop
+        {t("Stop")}
       </button>
     </div>
   );

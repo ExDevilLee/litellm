@@ -1,3 +1,5 @@
+import { t } from "@/contexts/LanguageContext";
+
 export type ModelViewType = "groups" | "individual";
 
 const MODEL_VIEW_OPTIONS: readonly { value: ModelViewType; label: string }[] = [
@@ -21,7 +23,7 @@ export default function ModelViewToggle({ value, onChange }: ModelViewToggleProp
           }`}
           onClick={() => onChange(option.value)}
         >
-          {option.label}
+          {t(option.label)}
         </button>
       ))}
     </div>

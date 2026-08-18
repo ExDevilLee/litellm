@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 import { DateCell, IdentityCell } from "@/components/shared/table_cells";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -22,7 +23,7 @@ import { fitPills } from "./fitPills";
 function TypeCell({ row }: { row: AutoRouterRow }) {
   return (
     <Badge variant="secondary" className="font-normal">
-      {row.typeLabel}
+      {t(row.typeLabel)}
     </Badge>
   );
 }
@@ -57,7 +58,7 @@ function TargetsCell({ targets }: { targets: string[] }) {
       ))}
       {overflow > 0 && (
         <span className="shrink-0 text-xs text-muted-foreground" title={targets.join(", ")}>
-          +{overflow}
+          {t("+{0}", overflow)}
         </span>
       )}
     </div>
@@ -74,7 +75,7 @@ function AutoRouterRowActions({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`Open actions for ${row.name}`}
+        aria-label={t("Open actions for {0}", row.name)}
         data-testid={`auto-router-actions-${row.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -87,7 +88,7 @@ function AutoRouterRowActions({
           onClick={() => onDeleteClick(row)}
         >
           <Trash2 />
-          Delete auto router
+          {t("Delete auto router")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -108,8 +109,8 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: t("Name") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Name")} />,
     size: 260,
     enableSorting: true,
     cell: ({ row }) => <IdentityCell title={row.original.name || "-"} onClick={() => onRouterClick(row.original)} />,
@@ -117,16 +118,16 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "kind",
     accessorKey: "kind",
-    meta: { title: "Type" },
-    header: "Type",
+    meta: { title: t("Type") },
+    header: t("Type"),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <TypeCell row={row.original} />,
   },
   {
     id: "targets",
-    meta: { title: "Routes to" },
-    header: "Routes to",
+    meta: { title: t("Routes to") },
+    header: t("Routes to"),
     size: 320,
     enableSorting: false,
     cell: ({ row }) => <TargetsCell targets={row.original.targets} />,
@@ -134,8 +135,8 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "defaultModel",
     accessorKey: "defaultModel",
-    meta: { title: "Default model" },
-    header: "Default model",
+    meta: { title: t("Default model") },
+    header: t("Default model"),
     size: 200,
     enableSorting: false,
     cell: ({ row }) =>
@@ -150,8 +151,8 @@ export const getAutoRoutersTableColumns = ({
   {
     id: "createdAt",
     accessorKey: "createdAt",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: t("Created") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created")} />,
     size: 150,
     enableSorting: true,
     sortingFn: "datetime",

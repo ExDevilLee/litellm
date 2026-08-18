@@ -5,6 +5,7 @@ import type { Table } from "@tanstack/react-table";
 import { Check, Columns3 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { t } from "@/contexts/LanguageContext";
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -12,7 +13,7 @@ interface DataTableViewOptionsProps<TData> {
   className?: string;
 }
 
-export function DataTableViewOptions<TData>({ table, label = "View", className }: DataTableViewOptionsProps<TData>) {
+export function DataTableViewOptions<TData>({ table, label = t("View"), className }: DataTableViewOptionsProps<TData>) {
   const hideableColumns = table.getAllLeafColumns().filter((column) => column.getCanHide());
 
   if (hideableColumns.length === 0) {

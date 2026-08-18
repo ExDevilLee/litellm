@@ -4,6 +4,7 @@ import { useKeyInfo } from "@/app/(dashboard)/hooks/keys/useKeyInfo";
 import { useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { useOrganizations } from "@/app/(dashboard)/hooks/organizations/useOrganizations";
 import { useAllTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
+import { t } from "@/contexts/LanguageContext";
 import { DEBOUNCE_WAIT_MS } from "@/utils/debounceConstants";
 import {
   DataTable,
@@ -37,10 +38,10 @@ const toSortOrder = (sorting: SortingState): "asc" | "desc" | undefined => {
 };
 
 const FILTER_LABELS: Record<string, string> = {
-  team_id: "Team",
-  org_id: "Organization",
-  user_id: "User ID",
-  key_hash: "Key ID",
+  team_id: t("Team"),
+  org_id: t("Organization"),
+  user_id: t("User ID"),
+  key_hash: t("Key ID"),
 };
 
 export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
@@ -155,7 +156,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
 
   if (selectedKeyId) {
     if (!selectedKey && !selectedKeyLoadFailed) {
-      return <div className="p-4 text-sm text-muted-foreground">Loading key...</div>;
+      return <div className="p-4 text-sm text-muted-foreground">{t("Loading key...")}</div>;
     }
     return (
       <div className="w-full h-full overflow-hidden">
@@ -174,8 +175,8 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
     <div className="flex h-full flex-col gap-4 overflow-hidden py-2">
       <PageHeader
         icon={<KeyRound className="size-5" />}
-        title="Virtual Keys"
-        subtitle="Every key that authenticates requests to the gateway."
+        title={t("Virtual Keys")}
+        subtitle={t("Every key that authenticates requests to the gateway.")}
       />
       {headerActions}
       <DataTable
@@ -196,8 +197,8 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
         enableColumnResizing
         columnResizeMode="onChange"
         isLoading={isLoading}
-        loadingMessage="Loading keys..."
-        noDataMessage="No keys found"
+        loadingMessage={t("Loading keys...")}
+        noDataMessage={t("No keys found")}
         maxBodyHeight="calc(75vh - 210px)"
         size="compact"
         toolbar={(table) => (
@@ -206,7 +207,7 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
               table={table}
               searchValue={searchInput}
               onSearchChange={handleSearchChange}
-              searchPlaceholder="Search by key alias…"
+              searchPlaceholder={t("Search by key alias…")}
               onRefresh={() => refetch?.()}
               isRefreshing={isFetching}
               onOpenFilters={() => setFiltersOpen(true)}
@@ -217,41 +218,41 @@ export function VirtualKeysTable({ headerActions }: VirtualKeysTableProps) {
               table={table}
               open={filtersOpen}
               onOpenChange={setFiltersOpen}
-              title="Filters"
-              description="Narrow down virtual keys"
+              title={t("Filters")}
+              description={t("Narrow down virtual keys")}
             >
               {({ get, set }) => (
                 <>
-                  <DataTableFilterField label="Team">
+                  <DataTableFilterField label={t("Team")}>
                     <SearchSelect
                       options={teamOptions}
                       value={(get("team_id") as string) || undefined}
                       onValueChange={(value) => set("team_id", value)}
-                      placeholder="Select a team…"
-                      emptyText="No teams found"
+                      placeholder={t("Select a team…")}
+                      emptyText={t("No teams found")}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="Organization">
+                  <DataTableFilterField label={t("Organization")}>
                     <SearchSelect
                       options={orgOptions}
                       value={(get("org_id") as string) || undefined}
                       onValueChange={(value) => set("org_id", value)}
-                      placeholder="Select an organization…"
-                      emptyText="No organizations found"
+                      placeholder={t("Select an organization…")}
+                      emptyText={t("No organizations found")}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="User ID">
+                  <DataTableFilterField label={t("User ID")}>
                     <Input
                       value={(get("user_id") as string) ?? ""}
                       onChange={(event) => set("user_id", event.target.value)}
-                      placeholder="Enter User ID…"
+                      placeholder={t("Enter User ID…")}
                     />
                   </DataTableFilterField>
-                  <DataTableFilterField label="Key ID">
+                  <DataTableFilterField label={t("Key ID")}>
                     <Input
                       value={(get("key_hash") as string) ?? ""}
                       onChange={(event) => set("key_hash", event.target.value)}
-                      placeholder="Enter Key ID…"
+                      placeholder={t("Enter Key ID…")}
                     />
                   </DataTableFilterField>
                 </>

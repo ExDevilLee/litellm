@@ -10,6 +10,7 @@ import { keyInfoV1Call } from "../../../networking";
 import KeyInfoView from "../../../templates/key_info_view";
 import { DataTable } from "../../../view_logs/table";
 import { TagUsage } from "../../types";
+import { t } from "@/contexts/LanguageContext";
 
 interface TopKeyViewProps {
   topKeys: any[];
@@ -82,12 +83,12 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
   // Define columns for the table view
   const baseColumns = [
     {
-      header: "Key ID",
+      header: t("Key ID"),
       accessorKey: "api_key",
       cell: (info: any) => <IdCell value={info.getValue()} onClick={() => handleKeyClick(info.row.original)} />,
     },
     {
-      header: "Key Alias",
+      header: t("Key Alias"),
       accessorKey: "key_alias",
       cell: (info: any) => info.getValue() || "-",
     },
@@ -214,11 +215,11 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({ topKeys, teams, showTags = fals
                 <div className="relative z-50 p-3 bg-black/90 shadow-lg rounded-lg text-white max-w-xs">
                   <div className="space-y-1.5">
                     <div className="text-sm">
-                      <span className="text-gray-300">Key Alias: </span>
+                      <span className="text-gray-300">{t("Key Alias")}: </span>
                       <span className="font-mono text-gray-100 break-all">{item?.key_alias}</span>
                     </div>
                     <div className="text-sm">
-                      <span className="text-gray-300">Key ID: </span>
+                      <span className="text-gray-300">{t("Key ID")}: </span>
                       <span className="font-mono text-gray-100 break-all">{item?.api_key}</span>
                     </div>
                     <div className="text-sm">

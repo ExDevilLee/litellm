@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { t } from "@/contexts/LanguageContext";
 import {
   Card,
   Table,
@@ -92,7 +93,7 @@ const SettingValueEditor: React.FC<{
       <AntdSelect
         allowClear
         style={{ minWidth: "8rem" }}
-        placeholder="Default"
+        placeholder={t("Default")}
         value={setting.field_value || undefined}
         options={(setting.field_options ?? []).map((option) => ({ label: option, value: option }))}
         onChange={(newValue) => onChange(setting.field_name, newValue ?? "")}
@@ -131,11 +132,11 @@ export const PromptCachingPanel: React.FC<{
 
   return (
     <Card>
-      <Title>Prompt Caching</Title>
+      <Title>{t("Prompt Caching")}</Title>
 
       <div className="mt-6 flex items-start justify-between gap-8">
         <div className="max-w-2xl">
-          <Text className="font-medium">Automatic Anthropic prompt caching</Text>
+          <Text className="font-medium">{t("Automatic Anthropic prompt caching")}</Text>
           <p className="mt-1 text-xs text-gray-500">{enableSetting.field_description}</p>
         </div>
         <Switch checked={enabled} onChange={(checked) => persist(ENABLE_ANTHROPIC_PROMPT_CACHING, checked)} />
@@ -144,14 +145,14 @@ export const PromptCachingPanel: React.FC<{
       {ttlSetting && (
         <div className="mt-6 flex items-start justify-between gap-8">
           <div className="max-w-2xl">
-            <Text className={`font-medium ${enabled ? "" : "text-gray-400"}`}>Cache lifetime (TTL)</Text>
+            <Text className={`font-medium ${enabled ? "" : "text-gray-400"}`}>{t("Cache lifetime (TTL)")}</Text>
             <p className="mt-1 text-xs text-gray-500">{ttlSetting.field_description}</p>
           </div>
           <AntdSelect
             allowClear
             disabled={!enabled}
             style={{ minWidth: "10rem" }}
-            placeholder="5m (default)"
+            placeholder={t("5m (default)")}
             value={ttlSetting.field_value || undefined}
             options={(ttlSetting.field_options ?? []).map((option) => ({ label: option, value: option }))}
             onChange={(newValue) => persist(ANTHROPIC_PROMPT_CACHING_TTL, newValue ?? "")}
@@ -234,11 +235,11 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
     <div className="w-full">
       <Tabs defaultValue="loadbalancing" className="h-[75vh] w-full">
         <TabsList variant="line" className="mx-8 mt-4">
-          <TabsTrigger value="loadbalancing">Loadbalancing</TabsTrigger>
-          <TabsTrigger value="routing-groups">Routing Groups</TabsTrigger>
-          <TabsTrigger value="fallbacks">Fallbacks</TabsTrigger>
-          <TabsTrigger value="prompt-caching">Prompt Caching</TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="loadbalancing">{t("Loadbalancing")}</TabsTrigger>
+          <TabsTrigger value="routing-groups">{t("Routing Groups")}</TabsTrigger>
+          <TabsTrigger value="fallbacks">{t("Fallbacks")}</TabsTrigger>
+          <TabsTrigger value="prompt-caching">{t("Prompt Caching")}</TabsTrigger>
+          <TabsTrigger value="general">{t("General")}</TabsTrigger>
         </TabsList>
         <TabsContent value="loadbalancing" className="px-8 py-6">
           <RouterSettings accessToken={accessToken} userRole={userRole} userID={userID} />
@@ -257,10 +258,10 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableHeaderCell>Setting</TableHeaderCell>
-                  <TableHeaderCell>Value</TableHeaderCell>
-                  <TableHeaderCell>Status</TableHeaderCell>
-                  <TableHeaderCell>Action</TableHeaderCell>
+                  <TableHeaderCell>{t("Setting")}</TableHeaderCell>
+                  <TableHeaderCell>{t("Value")}</TableHeaderCell>
+                  <TableHeaderCell>{t("Status")}</TableHeaderCell>
+                  <TableHeaderCell>{t("Action")}</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -286,17 +287,17 @@ const GeneralSettings: React.FC<GeneralSettingsPageProps> = ({ accessToken, user
                       </TableCell>
                       <TableCell>
                         {value.stored_in_db == true ? (
-                          <StatusBadge tone="success" label="In DB" />
+                          <StatusBadge tone="success" label={t("In DB")} />
                         ) : value.stored_in_db == false ? (
-                          <StatusBadge tone="neutral" label="In Config" />
+                          <StatusBadge tone="neutral" label={t("In Config")} />
                         ) : (
-                          <StatusBadge tone="neutral" label="Not Set" />
+                          <StatusBadge tone="neutral" label={t("Not Set")} />
                         )}
                       </TableCell>
                       <TableCell>
-                        <Button onClick={() => handleUpdateField(value.field_name)}>Update</Button>
+                        <Button onClick={() => handleUpdateField(value.field_name)}>{t("Update")}</Button>
                         <Icon icon={TrashIcon} color="red" onClick={() => handleResetField(value.field_name)}>
-                          Reset
+                          {t("Reset")}
                         </Icon>
                       </TableCell>
                     </TableRow>

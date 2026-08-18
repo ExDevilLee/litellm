@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
 import { LineChart, type ChartColor } from "@/components/shared/charts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,7 +76,7 @@ export function EndpointUsageLineChart({ dailyData }: EndpointUsageLineChartProp
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle className="text-base font-semibold">Endpoint Usage Trends</CardTitle>
+        <CardTitle className="text-base font-semibold">{t("Endpoint Usage Trends")}</CardTitle>
       </CardHeader>
       <CardContent>
         <LineChart

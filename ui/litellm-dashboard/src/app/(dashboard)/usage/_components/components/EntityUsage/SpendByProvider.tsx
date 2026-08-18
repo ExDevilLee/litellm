@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { DonutChart } from "@/components/shared/charts";
 import { MoneyCell } from "@/components/shared/table_cells";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
@@ -59,16 +60,16 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
   return (
     <Card className="h-full">
       <div className="flex justify-between items-center mb-4">
-        <Title>Spend by Provider</Title>
+        <Title>{t("Spend by Provider")}</Title>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-700">Show Zero Spend</label>
+            <label className="text-sm text-gray-700">{t("Show Zero Spend")}</label>
             <Switch checked={includeZeroSpend} onChange={setIncludeZeroSpend} />
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
-              <label className="text-sm text-gray-700">Show Unknown</label>
-              <Tooltip title="Requests that failed to route to a provider">
+              <label className="text-sm text-gray-700">{t("Show Unknown")}</label>
+              <Tooltip title={t("Requests that failed to route to a provider")}>
                 <InfoCircleOutlined className="text-gray-400 hover:text-gray-600" />
               </Tooltip>
             </div>
@@ -97,11 +98,11 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableHeaderCell>Provider</TableHeaderCell>
-                  <TableHeaderCell>Spend</TableHeaderCell>
-                  <TableHeaderCell className="text-green-600">Successful</TableHeaderCell>
-                  <TableHeaderCell className="text-red-600">Failed</TableHeaderCell>
-                  <TableHeaderCell>Tokens</TableHeaderCell>
+                  <TableHeaderCell>{t("Provider")}</TableHeaderCell>
+                  <TableHeaderCell>{t("Spend")}</TableHeaderCell>
+                  <TableHeaderCell className="text-green-600">{t("Successful")}</TableHeaderCell>
+                  <TableHeaderCell className="text-red-600">{t("Failed")}</TableHeaderCell>
+                  <TableHeaderCell>{t("Tokens")}</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>

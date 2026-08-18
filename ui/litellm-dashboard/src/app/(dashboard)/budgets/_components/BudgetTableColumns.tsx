@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/cva.config";
+import { t } from "@/contexts/LanguageContext";
 
 /**
  * Filtering happens on the server, so this never runs as a predicate. It exists to override
@@ -28,16 +29,16 @@ serverFilter.autoRemove = () => false;
 
 function RateLimitCell({ value }: { value: number | null | undefined }) {
   if (value == null) {
-    return <span className="text-muted-foreground">n/a</span>;
+    return <span className="text-muted-foreground">{t("n/a")}</span>;
   }
   return <span className="tabular-nums">{value}</span>;
 }
 
 function BudgetDurationCell({ value }: { value: string | null | undefined }) {
   if (!value) {
-    return <span className="text-muted-foreground">Not set</span>;
+    return <span className="text-muted-foreground">{t("Not set")}</span>;
   }
-  return <span className="whitespace-nowrap">{getBudgetDurationLabel(value)}</span>;
+  return <span className="whitespace-nowrap">{t(getBudgetDurationLabel(value))}</span>;
 }
 
 interface BudgetRowActionsProps {
@@ -50,7 +51,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open budget actions"
+        aria-label={t("Open budget actions")}
         data-testid={`budget-actions-${budget.budget_id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -59,7 +60,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="budget-action-edit" onClick={() => onEditClick(budget)}>
           <Pencil />
-          Edit budget
+          {t("Edit budget")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -68,7 +69,7 @@ function BudgetRowActions({ budget, onEditClick, onDeleteClick }: BudgetRowActio
           onClick={() => onDeleteClick(budget)}
         >
           <Trash2 />
-          Delete budget
+          {t("Delete budget")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -95,8 +96,8 @@ export const getBudgetTableColumns = ({
   {
     id: "budget_id",
     accessorKey: "budget_id",
-    meta: { title: "Budget ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Budget ID" />,
+    meta: { title: t("Budget ID") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Budget ID")} />,
     cell: ({ row }) => (
       <IdCell value={row.original.budget_id} variant="plain" truncate={false} copyable className="whitespace-nowrap" />
     ),
@@ -105,24 +106,24 @@ export const getBudgetTableColumns = ({
     id: "max_budget",
     accessorKey: "max_budget",
     filterFn: serverFilter,
-    meta: { title: "Max Budget", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Max Budget" />,
+    meta: { title: t("Max Budget"), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Max Budget")} />,
     size: 120,
-    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={2} showZero emptyText="Unlimited" />,
+    cell: ({ row }) => <MoneyCell value={row.original.max_budget} decimals={2} showZero emptyText={t("Unlimited")} />,
   },
   {
     id: "tpm_limit",
     accessorKey: "tpm_limit",
-    meta: { title: "TPM", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="TPM" />,
+    meta: { title: t("TPM"), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("TPM")} />,
     size: 100,
     cell: ({ row }) => <RateLimitCell value={row.original.tpm_limit} />,
   },
   {
     id: "rpm_limit",
     accessorKey: "rpm_limit",
-    meta: { title: "RPM", numeric: true },
-    header: ({ column }) => <DataTableSortHeader column={column} title="RPM" />,
+    meta: { title: t("RPM"), numeric: true },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("RPM")} />,
     size: 100,
     cell: ({ row }) => <RateLimitCell value={row.original.rpm_limit} />,
   },
@@ -130,10 +131,10 @@ export const getBudgetTableColumns = ({
     id: "budget_duration",
     accessorKey: "budget_duration",
     filterFn: serverFilter,
-    meta: { title: "Reset" },
+    meta: { title: t("Reset") },
     // "7d"/"30d" sort lexicographically, not chronologically, so the route does not offer it.
     enableSorting: false,
-    header: ({ column }) => <DataTableSortHeader column={column} title="Reset" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Reset")} />,
     size: 110,
     cell: ({ row }) => <BudgetDurationCell value={row.original.budget_duration} />,
   },
@@ -141,8 +142,8 @@ export const getBudgetTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     filterFn: serverFilter,
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: t("Created") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created")} />,
     size: 160,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
   },
@@ -151,7 +152,7 @@ export const getBudgetTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">Actions</span>,
+          header: () => <span className="sr-only">{t("Actions")}</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

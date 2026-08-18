@@ -1,5 +1,6 @@
 import React from "react";
 import { Select } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 interface RoutingStrategySelectorProps {
   selectedStrategy: string | null;
@@ -20,10 +21,10 @@ const RoutingStrategySelector: React.FC<RoutingStrategySelectorProps> = ({
     <div className="space-y-2 max-w-3xl">
       <div>
         <label className="text-xs font-medium text-gray-700 uppercase tracking-wide">
-          {routerFieldsMetadata["routing_strategy"]?.ui_field_name || "Routing Strategy"}
+          {t(routerFieldsMetadata["routing_strategy"]?.ui_field_name || "Routing Strategy")}
         </label>
         <p className="text-xs text-gray-500 mt-0.5 mb-2">
-          {routerFieldsMetadata["routing_strategy"]?.field_description || ""}
+          {t(routerFieldsMetadata["routing_strategy"]?.field_description || "")}
         </p>
       </div>
       <div className="routing-strategy-select max-w-3xl">
@@ -33,7 +34,7 @@ const RoutingStrategySelector: React.FC<RoutingStrategySelectorProps> = ({
               <div className="flex flex-col gap-0.5 py-1">
                 <span className="font-mono text-sm font-medium">{strategy}</span>
                 {routingStrategyDescriptions[strategy] && (
-                  <span className="text-xs text-gray-500 font-normal">{routingStrategyDescriptions[strategy]}</span>
+                  <span className="text-xs text-gray-500 font-normal">{t(routingStrategyDescriptions[strategy])}</span>
                 )}
               </div>
             </Select.Option>

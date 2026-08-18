@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 interface TagFilteringToggleProps {
   enabled: boolean;
@@ -13,10 +14,10 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <label className="text-xs font-medium text-gray-700 uppercase tracking-wide">
-            {routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering"}
+            {t(routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering")}
           </label>
           <p className="text-xs text-gray-500 mt-0.5">
-            {routerFieldsMetadata["enable_tag_filtering"]?.field_description || ""}
+            {t(routerFieldsMetadata["enable_tag_filtering"]?.field_description || "")}
             {routerFieldsMetadata["enable_tag_filtering"]?.link && (
               <>
                 {" "}
@@ -26,7 +27,7 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline"
                 >
-                  Learn more
+                  {t("Learn more")}
                 </a>
               </>
             )}
