@@ -5,7 +5,6 @@ import { Copy, Info, Loader2, Pencil, RefreshCw, Trash2 } from "lucide-react";
 
 import { ProviderLogo } from "@/components/molecules/models/ProviderLogo";
 import { ModelData } from "@/components/model_dashboard/types";
-import { t } from "@/contexts/LanguageContext";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { CellTooltip, DateCell, formatCellDate, IdCell, StatusBadge } from "@/components/shared/table_cells";
 import { Badge } from "@/components/ui/badge";
@@ -72,26 +71,26 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             {model.provider ? <ProviderLogo provider={model.provider} className="size-4 shrink-0" /> : null}
-            <span className="truncate text-xs text-muted-foreground">{model.provider || t("Unknown provider")}</span>
+            <span className="truncate text-xs text-muted-foreground">{model.provider || "Unknown provider"}</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">{t("Public Model Name")}</span>
+            <span className="text-xs text-muted-foreground">Public Model Name</span>
             <span className="truncate text-sm font-medium text-foreground" title={displayName}>
               {displayName}
             </span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-muted-foreground">{t("LiteLLM Model Name")}</span>
+            <span className="text-xs text-muted-foreground">LiteLLM Model Name</span>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate font-mono text-sm text-foreground" title={litellmModelName}>
                 {litellmModelName}
               </span>
               <button
                 type="button"
-                aria-label={t("Copy LiteLLM model name")}
+                aria-label="Copy LiteLLM model name"
                 data-testid={`copy-litellm-model-name-${model.model_info.id}`}
                 className="shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
-                onClick={() => void copyToClipboard(litellmModelName, t("LiteLLM model name copied"))}
+                onClick={() => void copyToClipboard(litellmModelName, "LiteLLM model name copied")}
               >
                 <Copy className="size-3.5" />
               </button>
@@ -106,13 +105,13 @@ function ModelInformationCell({ model, displayName }: { model: ModelData; displa
 function CredentialsHeader() {
   return (
     <span className="flex items-center gap-1">
-      {t("Credentials")}
+      Credentials
       <HoverCard>
         <HoverCardTrigger
           render={
             <button
               type="button"
-              aria-label={t("About credential types")}
+              aria-label="About credential types"
               data-testid="credentials-header-info"
               className="cursor-pointer text-muted-foreground hover:text-foreground"
             />
@@ -122,23 +121,23 @@ function CredentialsHeader() {
         </HoverCardTrigger>
         <HoverCardContent align="start" className="w-80">
           <div className="flex flex-col gap-3">
-            <span className="text-sm font-medium text-foreground">{t("Credential types")}</span>
+            <span className="text-sm font-medium text-foreground">Credential types</span>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-blue-600">
                 <RefreshCw className="size-3.5" />
-                {t("Reusable")}
+                Reusable
               </span>
               <span className="text-xs text-muted-foreground">
-                {t("Credentials saved in LiteLLM that can be added to models repeatedly.")}
+                Credentials saved in LiteLLM that can be added to models repeatedly.
               </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                 <Pencil className="size-3.5" />
-                {t("Manual")}
+                Manual
               </span>
               <span className="text-xs text-muted-foreground">
-                {t("Credentials added directly during model creation or defined in the config file.")}
+                Credentials added directly during model creation or defined in the config file.
               </span>
             </div>
           </div>
@@ -153,7 +152,7 @@ function CredentialsCell({ credentialName }: { credentialName: string | undefine
     return (
       <Badge variant="outline" className="gap-1 font-normal text-muted-foreground">
         <Pencil className="size-3" />
-        {t("Manual")}
+        Manual
       </Badge>
     );
   }
@@ -169,8 +168,8 @@ function CredentialsCell({ credentialName }: { credentialName: string | undefine
 function CreatedByCell({ model }: { model: ModelData }) {
   const isConfigModel = !model.model_info?.db_model;
   const createdAt = formatShortDate(model.model_info.created_at);
-  const primary = isConfigModel ? t("Defined in config") : model.model_info.created_by || t("Unknown");
-  const secondaryForDbModel = createdAt ?? t("Unknown date");
+  const primary = isConfigModel ? "Defined in config" : model.model_info.created_by || "Unknown";
+  const secondaryForDbModel = createdAt ?? "Unknown date";
 
   return (
     <div className="flex min-w-0 flex-col gap-0.5">
@@ -191,7 +190,7 @@ function CostsCell({ model }: { model: ModelData }) {
 
   return (
     <CellTooltip
-      content={t("Cost per 1M tokens")}
+      content="Cost per 1M tokens"
       trigger={
         <div className="flex flex-col gap-0.5 whitespace-nowrap">
           {inputCost != null && (
@@ -235,7 +234,7 @@ function AccessGroupsCell({ accessGroups }: { accessGroups: string[] | null }) {
           }
           trigger={
             <Badge variant="outline" className="shrink-0 cursor-default font-normal">
-              {t("+{0} more", overflow.length)}
+              +{overflow.length} more
             </Badge>
           }
         />
@@ -270,19 +269,17 @@ function ModelRowActions({
 
   const resolvePauseTooltip = (): string => {
     if (isConfigModel) {
-      return t("Config models cannot be paused from the dashboard. Pause is DB-backed.");
+      return "Config models cannot be paused from the dashboard. Pause is DB-backed.";
     }
     if (!isAdmin) {
-      return t("Only proxy admins can pause or resume a model.");
+      return "Only proxy admins can pause or resume a model.";
     }
-    return isBlocked
-      ? t("Resume model — restore normal routing.")
-      : t("Pause model — stop routing requests until resumed.");
+    return isBlocked ? "Resume model — restore normal routing." : "Pause model — stop routing requests until resumed.";
   };
 
   const deleteTooltip = isConfigModel
-    ? t("Config model cannot be deleted on the dashboard. Please delete it from the config file.")
-    : t("Delete model");
+    ? "Config model cannot be deleted on the dashboard. Please delete it from the config file."
+    : "Delete model";
 
   return (
     <div className="flex items-center justify-end gap-1.5">
@@ -301,7 +298,7 @@ function ModelRowActions({
                   size="sm"
                   checked={!isBlocked}
                   disabled={!isPauseToggleable}
-                  aria-label={isBlocked ? t("Resume model") : t("Pause model")}
+                  aria-label={isBlocked ? "Resume model" : "Pause model"}
                   data-testid={`model-pause-toggle-${modelId}`}
                   onCheckedChange={(nextChecked) => {
                     if (isPauseToggleable && onTogglePauseClick && modelId) {
@@ -321,7 +318,7 @@ function ModelRowActions({
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label={t("Delete model")}
+              aria-label="Delete model"
               data-testid={`model-delete-${modelId}`}
               disabled={isConfigModel || !canEditModel}
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -362,8 +359,8 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.id,
-    meta: { title: t("Model ID") },
-    header: t("Model ID"),
+    meta: { title: "Model ID" },
+    header: "Model ID",
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -378,8 +375,8 @@ export const getModelsTableColumns = ({
   {
     id: MODEL_NAME_COLUMN_ID,
     accessorFn: (row) => row.model_name ?? "",
-    meta: { title: t("Model Information"), skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("Model Information")} />,
+    meta: { title: "Model Information", skeleton: "twoLine" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Model Information" />,
     enableSorting: true,
     size: 280,
     minSize: 160,
@@ -390,7 +387,7 @@ export const getModelsTableColumns = ({
   {
     id: CREDENTIALS_COLUMN_ID,
     accessorFn: (row) => row.litellm_params?.litellm_credential_name ?? "",
-    meta: { title: t("Credentials") },
+    meta: { title: "Credentials" },
     header: () => <CredentialsHeader />,
     enableSorting: false,
     size: 180,
@@ -400,8 +397,8 @@ export const getModelsTableColumns = ({
   {
     id: CREATED_BY_COLUMN_ID,
     accessorFn: (row) => row.model_info.created_by ?? "",
-    meta: { title: t("Created By"), skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created By")} />,
+    meta: { title: "Created By", skeleton: "twoLine" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Created By" />,
     enableSorting: true,
     size: 180,
     minSize: 110,
@@ -410,8 +407,8 @@ export const getModelsTableColumns = ({
   {
     id: UPDATED_AT_COLUMN_ID,
     accessorFn: (row) => row.model_info.updated_at ?? "",
-    meta: { title: t("Updated At") },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("Updated At")} />,
+    meta: { title: "Updated At" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
     enableSorting: true,
     size: 140,
     minSize: 100,
@@ -420,8 +417,8 @@ export const getModelsTableColumns = ({
   {
     id: COSTS_COLUMN_ID,
     accessorFn: (row) => row.input_cost,
-    meta: { title: t("Costs") },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("Costs")} />,
+    meta: { title: "Costs" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Costs" />,
     enableSorting: true,
     size: 130,
     minSize: 90,
@@ -430,8 +427,8 @@ export const getModelsTableColumns = ({
   {
     id: TEAM_ID_COLUMN_ID,
     accessorFn: (row) => row.model_info.team_id ?? "",
-    meta: { title: t("Team ID") },
-    header: t("Team ID"),
+    meta: { title: "Team ID" },
+    header: "Team ID",
     enableSorting: false,
     size: 140,
     minSize: 90,
@@ -446,8 +443,8 @@ export const getModelsTableColumns = ({
   {
     id: ACCESS_GROUPS_COLUMN_ID,
     accessorFn: (row) => row.model_info.access_groups ?? [],
-    meta: { title: t("Model Access Group"), skeleton: "chips" },
-    header: t("Model Access Group"),
+    meta: { title: "Model Access Group", skeleton: "chips" },
+    header: "Model Access Group",
     enableSorting: false,
     size: 200,
     minSize: 120,
@@ -456,22 +453,22 @@ export const getModelsTableColumns = ({
   {
     id: STATUS_COLUMN_ID,
     accessorFn: (row) => row.model_info.db_model,
-    meta: { title: t("Status"), skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title={t("Status")} />,
+    meta: { title: "Source", skeleton: "badge" },
+    header: ({ column }) => <DataTableSortHeader column={column} title="Source" />,
     enableSorting: true,
     size: 140,
     minSize: 100,
     cell: ({ row }) =>
       row.original.model_info.db_model ? (
-        <StatusBadge tone="info" label={t("DB Model")} />
+        <StatusBadge tone="info" label="DB Model" />
       ) : (
-        <StatusBadge tone="neutral" label={t("Config Model")} />
+        <StatusBadge tone="neutral" label="Config Model" />
       ),
   },
   {
     id: "actions",
-    meta: { title: t("Actions"), className: "text-right", headerClassName: "text-right" },
-    header: t("Actions"),
+    meta: { title: "Actions", className: "text-right", headerClassName: "text-right" },
+    header: "Actions",
     enableSorting: false,
     enableHiding: false,
     enableResizing: false,

@@ -1,8 +1,7 @@
 import React from "react";
+import { FileText } from "lucide-react";
 import { MessageType } from "@/components/chat_ui/types";
 import { shouldShowAttachedImage } from "./ResponsesImageUtils";
-import { FilePdfOutlined } from "@ant-design/icons";
-import { t } from "@/contexts/LanguageContext";
 
 interface ResponsesImageRendererProps {
   message: MessageType;
@@ -18,15 +17,14 @@ const ResponsesImageRenderer: React.FC<ResponsesImageRendererProps> = ({ message
   return (
     <div className="mb-2">
       {isPdf ? (
-        <div className="w-64 h-32 rounded-md border border-gray-200 bg-red-50 flex items-center justify-center">
-          <FilePdfOutlined style={{ fontSize: "48px", color: "#dc2626" }} />
+        <div className="flex h-32 w-64 items-center justify-center rounded-md border border-gray-200 bg-red-50">
+          <FileText className="size-12 text-red-600" aria-label="PDF attachment" />
         </div>
       ) : (
         <img
           src={message.imagePreviewUrl}
-          alt={t("User uploaded image")}
-          className="max-w-64 rounded-md border border-gray-200 shadow-xs"
-          style={{ maxHeight: "200px" }}
+          alt="User uploaded image"
+          className="max-h-[200px] max-w-64 rounded-md border border-gray-200 shadow-xs"
         />
       )}
     </div>

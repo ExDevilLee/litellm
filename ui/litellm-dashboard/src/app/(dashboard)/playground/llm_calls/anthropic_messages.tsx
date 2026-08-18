@@ -5,7 +5,7 @@ import { buildMcpToolBlocks } from "@/components/llm_calls/mcp_tool_blocks";
 import { MCPServer, MCPToolset } from "@/components/mcp_tools/types";
 import { getProxyBaseUrl } from "@/components/networking";
 import NotificationManager from "@/components/molecules/notifications_manager";
-import { t } from "@/contexts/LanguageContext";
+import { extractPromptCacheTokens } from "@/utils/promptCacheUsage";
 
 export async function makeAnthropicMessagesRequest(
   messages: MessageType[],
@@ -110,6 +110,7 @@ export async function makeAnthropicMessagesRequest(
           completionTokens: usage.output_tokens,
           promptTokens: usage.input_tokens,
           totalTokens: usage.input_tokens + usage.output_tokens,
+          ...extractPromptCacheTokens(usage),
         };
         onUsageData(usageData);
       }
@@ -118,7 +119,7 @@ export async function makeAnthropicMessagesRequest(
     if (signal?.aborted) {
     } else {
       NotificationManager.fromBackend(
-        t("Error occurred while generating model response. Please try again. Error: {0}", String(error)),
+        `Error occurred while generating model response. Please try again. Error: ${error}`,
       );
     }
     throw error;

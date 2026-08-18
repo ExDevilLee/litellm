@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { t } from "@/contexts/LanguageContext";
-import { Button } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AddGuardrailForm from "./add_guardrail_form";
 import { Logo } from "@/components/molecules/logo/Logo";
 import { GUARDRAIL_PRESETS } from "./guardrail_garden_configs";
@@ -19,49 +18,35 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
   const [activeTab, setActiveTab] = useState("overview");
 
   const detailRows = [
-    {
-      property: t("Provider"),
-      value: card.category === "litellm" ? t("LiteLLM Content Filter") : t("Partner Guardrail"),
-    },
-    ...(card.subcategory ? [{ property: t("Subcategory"), value: card.subcategory }] : []),
-    ...(card.category === "litellm" ? [{ property: t("Cost"), value: t("$0 / request") }] : []),
-    ...(card.category === "litellm" ? [{ property: t("External Dependencies"), value: t("None") }] : []),
-    ...(card.category === "litellm" ? [{ property: t("Latency"), value: card.eval?.latency || "<1ms" }] : []),
+    { property: "Provider", value: card.category === "litellm" ? "LiteLLM Content Filter" : "Partner Guardrail" },
+    ...(card.subcategory ? [{ property: "Subcategory", value: card.subcategory }] : []),
+    ...(card.category === "litellm" ? [{ property: "Cost", value: "$0 / request" }] : []),
+    ...(card.category === "litellm" ? [{ property: "External Dependencies", value: "None" }] : []),
+    ...(card.category === "litellm" ? [{ property: "Latency", value: card.eval?.latency || "<1ms" }] : []),
   ];
 
   const evalRows = card.eval
     ? [
-        { metric: t("Precision"), value: `${card.eval.precision}%` },
-        { metric: t("Recall"), value: `${card.eval.recall}%` },
-        { metric: t("F1 Score"), value: `${card.eval.f1}%` },
-        { metric: t("Test Cases"), value: String(card.eval.testCases) },
-        { metric: t("False Positives"), value: "0" },
-        { metric: t("False Negatives"), value: "0" },
-        { metric: t("Latency (p50)"), value: card.eval.latency },
+        { metric: "Precision", value: `${card.eval.precision}%` },
+        { metric: "Recall", value: `${card.eval.recall}%` },
+        { metric: "F1 Score", value: `${card.eval.f1}%` },
+        { metric: "Test Cases", value: String(card.eval.testCases) },
+        { metric: "False Positives", value: "0" },
+        { metric: "False Negatives", value: "0" },
+        { metric: "Latency (p50)", value: card.eval.latency },
       ]
     : [];
 
-  const tabs = [
-    { key: "overview", label: t("Overview") },
-    ...(card.eval ? [{ key: "eval", label: t("Eval Results") }] : []),
-  ];
+  const tabs = [{ key: "overview", label: "Overview" }, ...(card.eval ? [{ key: "eval", label: "Eval Results" }] : [])];
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto" }}>
       {/* Back link */}
       <div
         onClick={onBack}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          color: "#5f6368",
-          cursor: "pointer",
-          fontSize: 14,
-          marginBottom: 24,
-        }}
+        className="mb-6 inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground"
       >
-        <ArrowLeftOutlined style={{ fontSize: 11 }} />
+        <ArrowLeft className="size-3" />
         <span>{card.name}</span>
       </div>
 
@@ -74,20 +59,9 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
       <p style={{ fontSize: 14, color: "#5f6368", margin: "0 0 20px 0", lineHeight: 1.6 }}>{card.description}</p>
 
       {/* Action buttons — outlined style like Vertex */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 32 }}>
-        <Button
-          onClick={() => setIsAddFormVisible(true)}
-          style={{
-            borderRadius: 20,
-            padding: "4px 20px",
-            height: 36,
-            borderColor: "#dadce0",
-            color: "#1a73e8",
-            fontWeight: 500,
-            fontSize: 14,
-          }}
-        >
-          {t("Create Guardrail")}
+      <div className="mb-8 flex gap-2.5">
+        <Button variant="outline" className="rounded-full" onClick={() => setIsAddFormVisible(true)}>
+          Create Guardrail
         </Button>
       </div>
 
@@ -119,21 +93,17 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
         <div style={{ display: "flex", gap: 64 }}>
           {/* Left column — overview + details table */}
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 12px 0" }}>
-              {t("Overview")}
-            </h2>
+            <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 12px 0" }}>Overview</h2>
             <p style={{ fontSize: 14, color: "#3c4043", lineHeight: 1.7, margin: "0 0 32px 0" }}>{card.description}</p>
 
-            <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 4px 0" }}>
-              {t("Guardrail Details")}
-            </h2>
-            <p style={{ fontSize: 13, color: "#5f6368", margin: "0 0 16px 0" }}>{t("Details are as follows")}</p>
+            <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 4px 0" }}>Guardrail Details</h2>
+            <p style={{ fontSize: 13, color: "#5f6368", margin: "0 0 16px 0" }}>Details are as follows</p>
 
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #dadce0" }}>
                   <th style={{ textAlign: "left", padding: "12px 0", color: "#5f6368", fontWeight: 500, width: 200 }}>
-                    {t("Property")}
+                    Property
                   </th>
                   <th style={{ textAlign: "left", padding: "12px 0", color: "#5f6368", fontWeight: 500 }}>
                     {card.name}
@@ -155,22 +125,22 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
           <div style={{ width: 240, flexShrink: 0 }}>
             {/* Guardrail ID */}
             <div style={{ marginBottom: 28 }}>
-              <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 4 }}>{t("Guardrail ID")}</div>
+              <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 4 }}>Guardrail ID</div>
               <div style={{ fontSize: 13, color: "#202124", wordBreak: "break-all" }}>litellm/{card.id}</div>
             </div>
 
             {/* Type */}
             <div style={{ marginBottom: 28 }}>
-              <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 4 }}>{t("Type")}</div>
+              <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 4 }}>Type</div>
               <div style={{ fontSize: 13, color: "#202124" }}>
-                {card.category === "litellm" ? t("Content Filter") : t("Partner")}
+                {card.category === "litellm" ? "Content Filter" : "Partner"}
               </div>
             </div>
 
             {/* Tags — pill style like Vertex */}
             {card.tags.length > 0 && (
               <div style={{ marginBottom: 28 }}>
-                <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 8 }}>{t("Tags")}</div>
+                <div style={{ fontSize: 12, color: "#5f6368", marginBottom: 8 }}>Tags</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                   {card.tags.map((tag) => (
                     <span
@@ -196,18 +166,12 @@ const GuardrailDetailView: React.FC<GuardrailDetailViewProps> = ({ card, onBack,
 
       {activeTab === "eval" && (
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 16px 0" }}>
-            {t("Eval Results")}
-          </h2>
+          <h2 style={{ fontSize: 18, fontWeight: 400, color: "#202124", margin: "0 0 16px 0" }}>Eval Results</h2>
           <table style={{ width: "100%", maxWidth: 560, borderCollapse: "collapse", fontSize: 14 }}>
             <thead>
               <tr style={{ backgroundColor: "#f8f9fa", borderBottom: "1px solid #dadce0" }}>
-                <th style={{ textAlign: "left", padding: "12px 16px", color: "#5f6368", fontWeight: 500 }}>
-                  {t("Metric")}
-                </th>
-                <th style={{ textAlign: "left", padding: "12px 16px", color: "#5f6368", fontWeight: 500 }}>
-                  {t("Value")}
-                </th>
+                <th style={{ textAlign: "left", padding: "12px 16px", color: "#5f6368", fontWeight: 500 }}>Metric</th>
+                <th style={{ textAlign: "left", padding: "12px 16px", color: "#5f6368", fontWeight: 500 }}>Value</th>
               </tr>
             </thead>
             <tbody>

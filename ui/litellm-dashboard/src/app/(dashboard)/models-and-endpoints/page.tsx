@@ -1,11 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Tabs } from "antd";
-import { RefreshIcon } from "@heroicons/react/outline";
+import { RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
-import { t } from "@/contexts/LanguageContext";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { useUISettings } from "@/app/(dashboard)/hooks/uiSettings/useUISettings";
 import { all_admin_roles, internalUserRoles } from "@/utils/roles";
@@ -25,6 +23,8 @@ import HealthStatusPanel from "@/app/(dashboard)/models-and-endpoints/panels/Hea
 import ModelRetrySettingsPanel from "@/app/(dashboard)/models-and-endpoints/panels/ModelRetrySettingsPanel";
 import ModelGroupAliasPanel from "@/app/(dashboard)/models-and-endpoints/panels/ModelGroupAliasPanel";
 import PriceDataPanel from "@/app/(dashboard)/models-and-endpoints/panels/PriceDataPanel";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ModelTabSlug =
   | "add"
@@ -108,28 +108,18 @@ export default function ModelsAndEndpointsPage() {
     [canCreate, isAdmin],
   );
 
-  const allModelsLabel = isAdmin ? t("All Models") : t("Your Models");
-  // Auto-Routers carries a Beta badge; BetaBadge honours the admin setting that hides these.
+  const allModelsLabel = isAdmin ? "All Models" : "Your Models";
   const tabLabel = (slug: "" | ModelTabSlug): React.ReactNode => {
     if (!slug) return allModelsLabel;
     if (slug === "auto-routers") {
       return (
         <span className="flex items-center gap-2">
-          {t(TAB_LABELS[slug])} <BetaBadge />
+          {TAB_LABELS[slug]} <BetaBadge />
         </span>
       );
     }
-    return t(TAB_LABELS[slug]);
+    return TAB_LABELS[slug];
   };
-
-  const tabItems = visibleSlugs.map((slug) => {
-    const key = slug || BASE_TAB_KEY;
-    return {
-      key,
-      label: tabLabel(slug),
-      children: key === activeKey ? renderPanel(key) : null,
-    };
-  });
 
   const handleRefreshClick = () => {
     setLastRefreshed(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
@@ -157,15 +147,15 @@ export default function ModelsAndEndpointsPage() {
   }
 
   return (
-    <div className="mx-4 h-[75vh]">
-      <div className="flex flex-col gap-2 p-8 w-full mt-2">
-        <div className="flex justify-between items-center mb-4">
+    <div className="mx-4">
+      <div className="mt-2 flex w-full flex-col gap-2 p-8">
+        <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">{t("Model Management")}</h2>
+            <h2 className="text-lg font-semibold">Model Management</h2>
             {isAdmin ? (
-              <p className="text-sm text-gray-600">{t("Add and manage models for the proxy")}</p>
+              <p className="text-sm text-muted-foreground">Add and manage models for the proxy</p>
             ) : (
-              <p className="text-sm text-gray-600">{t("Add models for teams you are an admin for.")}</p>
+              <p className="text-sm text-muted-foreground">Add models for teams you are an admin for.</p>
             )}
           </div>
         </div>
@@ -183,28 +173,38 @@ export default function ModelsAndEndpointsPage() {
             modelAccessGroups={availableModelAccessGroups}
           />
         ) : (
-          <Tabs
-            activeKey={activeKey}
-            onChange={setActiveKey}
-            items={tabItems}
-            tabBarExtraContent={{
-              right: (
-                <div className="flex items-center space-x-2 self-center">
-                  {lastRefreshed && (
-                    <span className="text-xs text-gray-500">{t("Last Refreshed: {0}", lastRefreshed)}</span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={handleRefreshClick}
-                    aria-label={t("Refresh models")}
-                    className="cursor-pointer"
-                  >
-                    <RefreshIcon className="h-4 w-4 text-gray-500" />
-                  </button>
-                </div>
-              ),
-            }}
-          />
+          <Tabs value={activeKey} onValueChange={setActiveKey}>
+            <div className="flex min-w-0 flex-nowrap items-center gap-3 border-b">
+              <div className="no-scrollbar scroll-fade-e -mb-1.5 min-w-0 flex-1 overflow-x-auto pb-1.5">
+                <TabsList variant="line" className="w-max justify-start">
+                  {visibleSlugs.map((slug) => {
+                    const key = slug || BASE_TAB_KEY;
+                    return (
+                      <TabsTrigger key={key} value={key} className="flex-none">
+                        {tabLabel(slug)}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+              </div>
+              <div className="flex shrink-0 items-center gap-2 pb-1">
+                {lastRefreshed && (
+                  <span className="text-xs text-muted-foreground">Last Refreshed: {lastRefreshed}</span>
+                )}
+                <Button variant="ghost" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh models">
+                  <RefreshCw />
+                </Button>
+              </div>
+            </div>
+            {visibleSlugs.map((slug) => {
+              const key = slug || BASE_TAB_KEY;
+              return (
+                <TabsContent key={key} value={key} className="pt-4">
+                  {renderPanel(key)}
+                </TabsContent>
+              );
+            })}
+          </Tabs>
         )}
       </div>
     </div>

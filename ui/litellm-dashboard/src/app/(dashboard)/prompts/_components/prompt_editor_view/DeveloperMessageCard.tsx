@@ -1,7 +1,6 @@
 import React from "react";
-import { Card, Text } from "@tremor/react";
+import { Card, CardContent } from "@/components/ui/card";
 import VariableTextArea from "../variable_textarea";
-import { t } from "@/contexts/LanguageContext";
 
 interface DeveloperMessageCardProps {
   value: string;
@@ -10,15 +9,17 @@ interface DeveloperMessageCardProps {
 
 const DeveloperMessageCard: React.FC<DeveloperMessageCardProps> = ({ value, onChange }) => {
   return (
-    <Card className="p-3">
-      <Text className="block mb-2 text-sm font-medium">{t("Developer message")}</Text>
-      <Text className="text-gray-500 text-xs mb-2">{t("Optional system instructions for the model")}</Text>
-      <VariableTextArea
-        value={value}
-        onChange={onChange}
-        rows={3}
-        placeholder={t("e.g., You are a helpful assistant...")}
-      />
+    <Card>
+      <CardContent className="p-3">
+        <p className="mb-2 text-sm font-medium text-foreground">Developer message</p>
+        <p className="mb-2 text-xs text-muted-foreground">Optional system instructions for the model</p>
+        <VariableTextArea
+          value={value}
+          onChange={onChange}
+          rows={3}
+          placeholder="e.g., You are a helpful assistant..."
+        />
+      </CardContent>
     </Card>
   );
 };

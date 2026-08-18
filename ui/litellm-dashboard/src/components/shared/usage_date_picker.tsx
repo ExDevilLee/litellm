@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef } from "react";
-import { DateRangePicker, DateRangePickerValue, Text } from "@tremor/react";
-import { t } from "@/contexts/LanguageContext";
+import { DateRangePicker, Text } from "@tremor/react";
+import type { DateRangePickerValue } from "./date_picker_types";
 
 interface UsageDatePickerProps {
   value: DateRangePickerValue;
@@ -16,7 +16,7 @@ interface UsageDatePickerProps {
 const UsageDatePicker: React.FC<UsageDatePickerProps> = ({
   value,
   onValueChange,
-  label = t("Select Time Range"),
+  label = "Select Time Range",
   className = "",
   showTimeRange = true,
 }) => {

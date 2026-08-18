@@ -165,7 +165,7 @@ export const getUsersTableColumns = ({
       header: ({ column }) => <DataTableSortHeader column={column} title={t("Spend (USD)")} variant="header-cycle" />,
       size: 130,
       enableSorting: true,
-      cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={4} />,
+      cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
     },
     {
       id: "max_budget",

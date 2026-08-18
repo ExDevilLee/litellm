@@ -1,6 +1,5 @@
-import { Button } from "antd";
-import { t } from "@/contexts/LanguageContext";
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import NotificationsManager from "../molecules/notifications_manager";
 import { getCallbacksCall, getRouterSettingsCall, setCallbacksCall } from "../networking";
 import RouterSettingsForm, { RouterSettingsFormValue } from "./RouterSettingsForm";
@@ -191,10 +190,10 @@ const RouterSettings: React.FC<RouterSettingsProps> = ({ accessToken, userRole, 
 
       {/* Actions - Sticky at bottom */}
       <div className="border-t border-gray-200 pt-6 flex justify-end gap-3">
-        <Button onClick={() => window.location.reload()}>{t("Reset")}</Button>
-        <Button type="primary" onClick={handleSaveChanges}>
-          {t("Save Changes")}
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          Reset
         </Button>
+        <Button onClick={handleSaveChanges}>Save Changes</Button>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
-import React from "react";
-import { Switch } from "antd";
-import { t } from "@/contexts/LanguageContext";
+import React, { useId } from "react";
+import { Switch } from "@/components/ui/switch";
 
 interface TagFilteringToggleProps {
   enabled: boolean;
@@ -9,15 +8,17 @@ interface TagFilteringToggleProps {
 }
 
 const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, routerFieldsMetadata, onToggle }) => {
+  const toggleId = useId();
+
   return (
     <div className="space-y-3 max-w-3xl">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <label className="text-xs font-medium text-gray-700 uppercase tracking-wide">
-            {t(routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering")}
+          <label htmlFor={toggleId} className="text-xs font-medium text-gray-700 uppercase tracking-wide">
+            {routerFieldsMetadata["enable_tag_filtering"]?.ui_field_name || "Enable Tag Filtering"}
           </label>
           <p className="text-xs text-gray-500 mt-0.5">
-            {t(routerFieldsMetadata["enable_tag_filtering"]?.field_description || "")}
+            {routerFieldsMetadata["enable_tag_filtering"]?.field_description || ""}
             {routerFieldsMetadata["enable_tag_filtering"]?.link && (
               <>
                 {" "}
@@ -27,13 +28,13 @@ const TagFilteringToggle: React.FC<TagFilteringToggleProps> = ({ enabled, router
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline"
                 >
-                  {t("Learn more")}
+                  Learn more
                 </a>
               </>
             )}
           </p>
         </div>
-        <Switch checked={enabled} onChange={onToggle} className="ml-4" />
+        <Switch id={toggleId} checked={enabled} onCheckedChange={onToggle} className="ml-4" />
       </div>
     </div>
   );
