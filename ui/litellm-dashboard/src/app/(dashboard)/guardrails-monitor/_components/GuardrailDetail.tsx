@@ -7,6 +7,7 @@ import { EvaluationSettingsModal } from "./EvaluationSettingsModal";
 import { LogViewer } from "@/components/GuardrailsMonitor/LogViewer";
 import { MetricCard } from "@/components/GuardrailsMonitor/MetricCard";
 import type { LogEntry } from "@/components/GuardrailsMonitor/mockData";
+import { t } from "@/contexts/LanguageContext";
 
 interface GuardrailDetailProps {
   guardrailId: string;
@@ -100,9 +101,9 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
     return (
       <div>
         <Button type="link" icon={<ArrowLeftOutlined />} onClick={onBack} className="pl-0 mb-4">
-          Back to Overview
+          {t("Back to Overview")}
         </Button>
-        <p className="text-red-600">Failed to load guardrail details.</p>
+        <p className="text-red-600">{t("Failed to load guardrail details.")}</p>
       </div>
     );
   }
@@ -111,7 +112,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
     <div>
       <div className="mb-6">
         <Button type="link" icon={<ArrowLeftOutlined />} onClick={onBack} className="pl-0 mb-4">
-          Back to Overview
+          {t("Back to Overview")}
         </Button>
 
         <div className="flex items-start justify-between">
@@ -136,7 +137,7 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
               type="default"
               icon={<SettingOutlined />}
               onClick={() => setEvaluationModalOpen(true)}
-              title="Evaluation settings"
+              title={t("Evaluation settings")}
             />
           </div>
         </div>
@@ -146,8 +147,8 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
         activeKey={activeTab}
         onChange={setActiveTab}
         items={[
-          { key: "overview", label: "Overview" },
-          { key: "logs", label: "Logs" },
+          { key: "overview", label: t("Overview") },
+          { key: "logs", label: t("Logs") },
         ]}
       />
 
@@ -164,7 +165,10 @@ export function GuardrailDetail({ guardrailId, onBack, accessToken = null, start
                 valueColor={
                   data.failRate > 15 ? "text-red-600" : data.failRate > 5 ? "text-amber-600" : "text-green-600"
                 }
-                subtitle={`${Math.round((data.requestsEvaluated * data.failRate) / 100).toLocaleString()} blocked`}
+                subtitle={t(
+                  "{0} blocked",
+                  Math.round((data.requestsEvaluated * data.failRate) / 100).toLocaleString(),
+                )}
                 icon={data.failRate > 15 ? <WarningOutlined className="text-red-400" /> : undefined}
               />
             </Col>

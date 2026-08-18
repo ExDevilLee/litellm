@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Policy } from "@/components/policies/types";
+import { t } from "@/contexts/LanguageContext";
 import { PipelineInfoDisplay } from "./pipeline_flow_builder";
 import { getResolvedGuardrails } from "@/components/networking";
 
@@ -93,9 +94,9 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
     return (
       <Card>
         <CardContent>
-          <p className="text-destructive">Policy not found</p>
+          <p className="text-destructive">{t("Policy not found")}</p>
           <Button variant="secondary" onClick={onClose} className="mt-4">
-            Go Back
+            {t("Go Back")}
           </Button>
         </CardContent>
       </Card>
@@ -109,12 +110,12 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           <div className="flex items-center justify-between">
             <Button variant="secondary" onClick={onClose}>
               <ArrowLeft />
-              Back to Policies
+              {t("Back to Policies")}
             </Button>
             {isAdmin && (
               <Button onClick={() => onEdit(policy)}>
                 <Pencil />
-                Edit Policy
+                {t("Edit Policy")}
               </Button>
             )}
           </div>
@@ -122,43 +123,47 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           <h4 className="text-lg font-semibold">{policy.policy_name}</h4>
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Policy ID">
+            <DetailRow label={t("Policy ID")}>
               <code className="rounded-sm bg-muted px-2 py-1 text-xs">{policy.policy_id}</code>
             </DetailRow>
-            <DetailRow label="Description">{policy.description || <Muted>No description</Muted>}</DetailRow>
-            <DetailRow label="Inherits From">
-              {policy.inherit ? <Badge variant="secondary">{policy.inherit}</Badge> : <Muted>None</Muted>}
+            <DetailRow label={t("Description")}>{policy.description || <Muted>{t("No description")}</Muted>}</DetailRow>
+            <DetailRow label={t("Inherits From")}>
+              {policy.inherit ? <Badge variant="secondary">{policy.inherit}</Badge> : <Muted>{t("None")}</Muted>}
             </DetailRow>
-            <DetailRow label="Created At">
+            <DetailRow label={t("Created At")}>
               {policy.created_at ? new Date(policy.created_at).toLocaleString() : "-"}
             </DetailRow>
-            <DetailRow label="Updated At">
+            <DetailRow label={t("Updated At")}>
               {policy.updated_at ? new Date(policy.updated_at).toLocaleString() : "-"}
             </DetailRow>
           </dl>
 
           {policy.pipeline && (
             <>
-              <SectionHeading>Pipeline Flow</SectionHeading>
+              <SectionHeading>{t("Pipeline Flow")}</SectionHeading>
               <Alert className="mb-4">
                 <Info />
                 <AlertTitle>
-                  Pipeline ({policy.pipeline.mode} mode, {policy.pipeline.steps.length} step
-                  {policy.pipeline.steps.length !== 1 ? "s" : ""})
+                  {t(
+                    "Pipeline ({0} mode, {1} step{2})",
+                    policy.pipeline.mode,
+                    policy.pipeline.steps.length,
+                    policy.pipeline.steps.length !== 1 ? "s" : "",
+                  )}
                 </AlertTitle>
               </Alert>
               <PipelineInfoDisplay pipeline={policy.pipeline} />
             </>
           )}
 
-          <SectionHeading>Guardrails Configuration</SectionHeading>
+          <SectionHeading>{t("Guardrails Configuration")}</SectionHeading>
 
           {resolvedGuardrails.length > 0 && (
             <Alert className="mb-4">
               <Info />
-              <AlertTitle>Resolved Guardrails</AlertTitle>
+              <AlertTitle>{t("Resolved Guardrails")}</AlertTitle>
               <AlertDescription>
-                <span className="mb-2 block">Final guardrails that will be applied (including inheritance):</span>
+                <span className="mb-2 block">{t("Final guardrails that will be applied (including inheritance):")}</span>
                 <div className="flex flex-wrap gap-1">
                   {resolvedGuardrails.map((g) => (
                     <Badge key={g} variant="secondary">
@@ -171,7 +176,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
           )}
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Guardrails to Add">
+            <DetailRow label={t("Guardrails to Add")}>
               <div className="flex flex-wrap gap-1">
                 {policy.guardrails_add && policy.guardrails_add.length > 0 ? (
                   policy.guardrails_add.map((g) => (
@@ -180,11 +185,11 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     </Badge>
                   ))
                 ) : (
-                  <Muted>None</Muted>
+                  <Muted>{t("None")}</Muted>
                 )}
               </div>
             </DetailRow>
-            <DetailRow label="Guardrails to Remove">
+            <DetailRow label={t("Guardrails to Remove")}>
               <div className="flex flex-wrap gap-1">
                 {policy.guardrails_remove && policy.guardrails_remove.length > 0 ? (
                   policy.guardrails_remove.map((g) => (
@@ -193,16 +198,16 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     </Badge>
                   ))
                 ) : (
-                  <Muted>None</Muted>
+                  <Muted>{t("None")}</Muted>
                 )}
               </div>
             </DetailRow>
           </dl>
 
-          <SectionHeading>Conditions</SectionHeading>
+          <SectionHeading>{t("Conditions")}</SectionHeading>
 
           <dl className="rounded-md border border-border">
-            <DetailRow label="Model Condition">
+            <DetailRow label={t("Model Condition")}>
               {policy.condition?.model ? (
                 <Badge variant="secondary">
                   {typeof policy.condition.model === "string"
@@ -210,7 +215,7 @@ const PolicyInfoView: React.FC<PolicyInfoViewProps> = ({
                     : JSON.stringify(policy.condition.model)}
                 </Badge>
               ) : (
-                <Muted>No model condition (applies to all models)</Muted>
+                <Muted>{t("No model condition (applies to all models)")}</Muted>
               )}
             </DetailRow>
           </dl>

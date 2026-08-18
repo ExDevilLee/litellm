@@ -5,6 +5,7 @@ import { Inbox } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 
 import { getSearchToolTableColumns, searchToolKey } from "./SearchToolTableColumns";
 import { AvailableSearchProvider, SearchTool } from "./types";
@@ -26,8 +27,10 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No search tools configured</div>
-      <div className="text-sm text-muted-foreground">Add a search tool to enable web search for your models.</div>
+      <div className="text-sm font-medium text-foreground">{t("No search tools configured")}</div>
+      <div className="text-sm text-muted-foreground">
+        {t("Add a search tool to enable web search for your models.")}
+      </div>
     </div>
   );
 }
@@ -56,7 +59,7 @@ const SearchToolTable: React.FC<SearchToolTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading search tools…"
+      loadingMessage={t("Loading search tools…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

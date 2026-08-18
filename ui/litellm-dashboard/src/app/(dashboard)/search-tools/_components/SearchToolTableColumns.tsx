@@ -5,6 +5,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell, StatusBadge } from "@/components/shared/table_cells";
+import { t } from "@/contexts/LanguageContext";
 import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -35,7 +36,7 @@ function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsPr
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open search tool actions"
+        aria-label={t("Open search tool actions")}
         data-testid={`search-tool-actions-${searchToolKey(tool)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -45,22 +46,22 @@ function SearchToolRowActions({ tool, onEdit, onDelete }: SearchToolRowActionsPr
         <DropdownMenuItem
           disabled={isFromConfig || !toolId}
           data-testid="search-tool-action-edit"
-          title={isFromConfig ? CONFIG_EDIT_HINT : undefined}
+          title={isFromConfig ? t(CONFIG_EDIT_HINT) : undefined}
           onClick={() => toolId && onEdit(toolId)}
         >
           <Pencil />
-          Edit search tool
+          {t("Edit search tool")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           disabled={isFromConfig || !toolId}
           data-testid="search-tool-action-delete"
-          title={isFromConfig ? CONFIG_DELETE_HINT : undefined}
+          title={isFromConfig ? t(CONFIG_DELETE_HINT) : undefined}
           onClick={() => toolId && onDelete(toolId)}
         >
           <Trash2 />
-          Delete search tool
+          {t("Delete search tool")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -84,7 +85,7 @@ export const getSearchToolTableColumns = ({
     id: "search_tool_id",
     accessorKey: "search_tool_id",
     meta: { title: "Search Tool ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Search Tool ID" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Search Tool ID")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -102,7 +103,7 @@ export const getSearchToolTableColumns = ({
     id: "search_tool_name",
     accessorKey: "search_tool_name",
     meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Name")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -114,7 +115,7 @@ export const getSearchToolTableColumns = ({
   {
     id: "provider",
     meta: { title: "Provider" },
-    header: "Provider",
+    header: t("Provider"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -127,7 +128,7 @@ export const getSearchToolTableColumns = ({
     id: "created_at",
     accessorKey: "created_at",
     meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created At")} />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -136,7 +137,7 @@ export const getSearchToolTableColumns = ({
     id: "updated_at",
     accessorKey: "updated_at",
     meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Updated At")} />,
     size: 130,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.updated_at} precision="date" />,
@@ -144,7 +145,7 @@ export const getSearchToolTableColumns = ({
   {
     id: "source",
     meta: { title: "Source", skeleton: "badge" },
-    header: "Source",
+    header: t("Source"),
     size: 100,
     enableSorting: false,
     cell: ({ row }) => {
@@ -155,7 +156,7 @@ export const getSearchToolTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("Actions")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

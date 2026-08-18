@@ -17,6 +17,7 @@ import { cn } from "@/lib/cva.config";
 
 import { getGuardrailLogoAndName } from "./guardrail_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
+import { t } from "@/contexts/LanguageContext";
 
 const CONFIG_DELETE_HINT = "Config guardrails are defined in the config file and cannot be deleted from the dashboard.";
 
@@ -52,11 +53,11 @@ function GuardrailRowActions({ guardrail, onDeleteClick }: GuardrailRowActionsPr
           variant="destructive"
           disabled={isConfigGuardrail}
           data-testid="guardrail-action-delete"
-          title={isConfigGuardrail ? CONFIG_DELETE_HINT : undefined}
-          onClick={() => onDeleteClick(guardrail.guardrail_id, guardrail.guardrail_name || "Unnamed Guardrail")}
+          title={isConfigGuardrail ? t(CONFIG_DELETE_HINT) : undefined}
+          onClick={() => onDeleteClick(guardrail.guardrail_id, guardrail.guardrail_name || t("Unnamed Guardrail"))}
         >
           <Trash2 />
-          Delete
+          {t("Delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -75,8 +76,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "guardrail_id",
     accessorKey: "guardrail_id",
-    meta: { title: "Guardrail ID" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Guardrail ID" />,
+    meta: { title: t("Guardrail ID") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Guardrail ID")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => (
@@ -90,8 +91,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "guardrail_name",
     accessorKey: "guardrail_name",
-    meta: { title: "Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: t("Name") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Name")} />,
     size: 200,
     enableSorting: true,
     cell: ({ row }) => {
@@ -105,16 +106,16 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "provider",
-    meta: { title: "Provider" },
-    header: "Provider",
+    meta: { title: t("Provider") },
+    header: t("Provider"),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailProviderCell provider={row.original.litellm_params.guardrail} />,
   },
   {
     id: "mode",
-    meta: { title: "Mode" },
-    header: "Mode",
+    meta: { title: t("Mode") },
+    header: t("Mode"),
     size: 130,
     enableSorting: false,
     cell: ({ row }) => (
@@ -123,22 +124,22 @@ export const getGuardrailTableColumns = ({
   },
   {
     id: "default_on",
-    meta: { title: "Default On" },
-    header: "Default On",
+    meta: { title: t("Default On") },
+    header: t("Default On"),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {
       const isDefaultOn = !!row.original.litellm_params?.default_on;
       return (
-        <StatusBadge tone={isDefaultOn ? "success" : "neutral"} label={isDefaultOn ? "Default On" : "Default Off"} />
+        <StatusBadge tone={isDefaultOn ? "success" : "neutral"} label={isDefaultOn ? t("Default On") : t("Default Off")} />
       );
     },
   },
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("Created At") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created At")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -146,8 +147,8 @@ export const getGuardrailTableColumns = ({
   {
     id: "updated_at",
     accessorKey: "updated_at",
-    meta: { title: "Updated At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Updated At" />,
+    meta: { title: t("Updated At") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Updated At")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.updated_at} />,

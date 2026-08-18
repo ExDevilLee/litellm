@@ -1,6 +1,7 @@
 import React from "react";
 import { ClearOutlined } from "@ant-design/icons";
 import { Button as TremorButton } from "@tremor/react";
+import { t } from "@/contexts/LanguageContext";
 import { ConversationPanelProps } from "./types";
 import { useConversation } from "./useConversation";
 import VariableInput from "./VariableInput";
@@ -43,7 +44,7 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({ prompt, accessTok
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
             icon={ClearOutlined}
           >
-            Clear Chat
+            {t("Clear Chat")}
           </TremorButton>
         </div>
       )}

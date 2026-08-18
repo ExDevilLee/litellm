@@ -4,6 +4,7 @@ import NotificationsManager from "@/components/molecules/notifications_manager";
 import { MarginConfig } from "./types";
 import { getProviderBackendValue } from "./provider_display_helpers";
 import { Providers } from "@/components/provider_info_helpers";
+import { t } from "@/contexts/LanguageContext";
 
 export interface UseMarginConfigProps {
   accessToken: string | null;
@@ -53,7 +54,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
       }
     } catch (error) {
       console.error("Error fetching margin config:", error);
-      NotificationsManager.fromBackend("Failed to fetch margin configuration");
+      NotificationsManager.fromBackend(t("Failed to fetch margin configuration"));
     }
   }, [accessToken]);
 
@@ -73,16 +74,16 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
         });
 
         if (response.ok) {
-          NotificationsManager.success("Margin configuration updated successfully");
+          NotificationsManager.success(t("Margin configuration updated successfully"));
           await fetchMarginConfig();
         } else {
           const errorData = await response.json();
-          const errorMessage = errorData.detail?.error || errorData.detail || "Failed to update settings";
+          const errorMessage = errorData.detail?.error || errorData.detail || t("Failed to update settings");
           NotificationsManager.fromBackend(errorMessage);
         }
       } catch (error) {
         console.error("Error updating margin config:", error);
-        NotificationsManager.fromBackend("Failed to update margin configuration");
+        NotificationsManager.fromBackend(t("Failed to update margin configuration"));
       }
     },
     [accessToken, fetchMarginConfig],
@@ -93,7 +94,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
       const { selectedProvider, marginType, percentageValue, fixedAmountValue } = params;
 
       if (!selectedProvider) {
-        NotificationsManager.fromBackend("Please select a provider");
+        NotificationsManager.fromBackend(t("Please select a provider"));
         return false;
       }
 
@@ -103,7 +104,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
       } else {
         const backendValue = getProviderBackendValue(selectedProvider);
         if (!backendValue) {
-          NotificationsManager.fromBackend("Invalid provider selected");
+          NotificationsManager.fromBackend(t("Invalid provider selected"));
           return false;
         }
         providerValue = backendValue;
@@ -112,7 +113,7 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
       if (marginConfig[providerValue]) {
         const displayName =
           providerValue === "global" ? "Global" : Providers[selectedProvider as keyof typeof Providers];
-        NotificationsManager.fromBackend(`Margin for ${displayName} already exists. Edit it in the table above.`);
+        NotificationsManager.fromBackend(t("Margin for {0} already exists. Edit it in the table above.", displayName));
         return false;
       }
 
@@ -120,14 +121,14 @@ export function useMarginConfig({ accessToken }: UseMarginConfigProps): UseMargi
       if (marginType === "percentage") {
         const percentValue = parseFloat(percentageValue);
         if (isNaN(percentValue) || percentValue < 0 || percentValue > 1000) {
-          NotificationsManager.fromBackend("Percentage must be between 0% and 1000%");
+          NotificationsManager.fromBackend(t("Percentage must be between 0% and 1000%"));
           return false;
         }
         marginValue = percentValue / 100;
       } else {
         const fixedValue = parseFloat(fixedAmountValue);
         if (isNaN(fixedValue) || fixedValue < 0) {
-          NotificationsManager.fromBackend("Fixed amount must be non-negative");
+          NotificationsManager.fromBackend(t("Fixed amount must be non-negative"));
           return false;
         }
         marginValue = { fixed_amount: fixedValue };

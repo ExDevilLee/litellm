@@ -1,5 +1,6 @@
 import React from "react";
 import { RobotOutlined } from "@ant-design/icons";
+import { t } from "@/contexts/LanguageContext";
 
 interface EmptyStateProps {
   hasVariables: boolean;
@@ -11,8 +12,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({ hasVariables }) => {
       <RobotOutlined style={{ fontSize: "48px", marginBottom: "16px" }} />
       <span className="text-base">
         {hasVariables
-          ? "Fill in the variables above, then type a message to start testing"
-          : "Type a message below to start testing your prompt"}
+          ? t("Fill in the variables above, then type a message to start testing")
+          : t("Type a message below to start testing your prompt")}
       </span>
     </div>
   );

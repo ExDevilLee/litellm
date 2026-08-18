@@ -1,4 +1,5 @@
 import React, { type ReactNode } from "react";
+import { t } from "@/contexts/LanguageContext";
 
 interface MetricCardProps {
   label: string;
@@ -12,11 +13,11 @@ export function MetricCard({ label, value, valueColor = "text-gray-900", icon, s
   return (
     <div className="h-full bg-white border border-gray-200 rounded-lg p-5 flex flex-col">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm font-medium text-gray-600">{label}</span>
+        <span className="text-sm font-medium text-gray-600">{t(label)}</span>
         {icon && <span className="text-gray-400">{icon}</span>}
       </div>
       <div className={`text-3xl font-semibold ${valueColor} tracking-tight`}>{value}</div>
-      {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-gray-500 mt-1">{t(subtitle)}</p>}
     </div>
   );
 }

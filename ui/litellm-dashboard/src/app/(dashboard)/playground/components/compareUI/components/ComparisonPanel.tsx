@@ -1,5 +1,6 @@
 import { Settings, X } from "lucide-react";
 import { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { ComparisonInstance } from "../CompareUI";
 import { MessageDisplay } from "./MessageDisplay";
 import { UnifiedSelector } from "./UnifiedSelector";
@@ -104,7 +105,7 @@ export function ComparisonPanel({
         {/* Sync Checkbox */}
         <div className="flex items-center gap-2">
           <Checkbox checked={comparison.applyAcrossModels} onChange={(e) => handleSyncChange(e.target.checked)}>
-            <span className="text-xs font-medium">Sync Settings Across Models</span>
+            <span className="text-xs font-medium">{t("Sync Settings Across Models")}</span>
           </Checkbox>
         </div>
 
@@ -112,10 +113,10 @@ export function ComparisonPanel({
 
         {/* General Settings */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">General Settings</h4>
+          <h4 className="text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">{t("General Settings")}</h4>
           <div className="space-y-2">
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-0.5">Tags</label>
+              <label className="text-xs font-medium text-gray-600 block mb-0.5">{t("Tags")}</label>
               <TagSelector
                 value={comparison.tags}
                 onChange={(value) => handleSettingChange("tags", value)}
@@ -123,7 +124,7 @@ export function ComparisonPanel({
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-0.5">Vector Stores</label>
+              <label className="text-xs font-medium text-gray-600 block mb-0.5">{t("Vector Stores")}</label>
               <VectorStoreSelector
                 value={comparison.vectorStores}
                 onChange={(value) => handleSettingChange("vectorStores", value)}
@@ -131,7 +132,7 @@ export function ComparisonPanel({
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-0.5">Guardrails</label>
+              <label className="text-xs font-medium text-gray-600 block mb-0.5">{t("Guardrails")}</label>
               <GuardrailSelector
                 value={comparison.guardrails}
                 onChange={(value) => handleSettingChange("guardrails", value)}
@@ -142,14 +143,14 @@ export function ComparisonPanel({
         </div>
         {/* Advanced Settings */}
         <div>
-          <h4 className="text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">Advanced Settings</h4>
+          <h4 className="text-xs font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">{t("Advanced Settings")}</h4>
           <div className="space-y-2">
             <div className="flex items-center gap-2 pb-1">
               <Checkbox
                 checked={comparison.useAdvancedParams}
                 onChange={(e) => handleAdvancedParamsChange(e.target.checked)}
               >
-                <span className="text-sm font-medium">Use Advanced Parameters</span>
+                <span className="text-sm font-medium">{t("Use Advanced Parameters")}</span>
               </Checkbox>
             </div>
             <div className="space-y-2 transition-opacity duration-200" style={{ opacity: disabledOpacity }}>

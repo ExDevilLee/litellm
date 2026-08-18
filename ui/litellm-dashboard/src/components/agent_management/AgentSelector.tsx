@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
+import { t } from "@/contexts/LanguageContext";
 import { getAgentsList } from "../networking";
 
 interface Agent {
@@ -26,7 +27,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select agents",
+  placeholder = t("Select agents"),
   disabled = false,
 }) => {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -66,13 +67,13 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
       label: group,
       value: `group:${group}`,
       isAccessGroup: true,
-      searchText: `${group} Access Group`,
+      searchText: t("{0} Access Group", group),
     })),
     ...agents.map((agent) => ({
       label: `${agent.agent_name || agent.agent_id}`,
       value: agent.agent_id,
       isAccessGroup: false,
-      searchText: `${agent.agent_name || agent.agent_id} ${agent.agent_id} Agent`,
+      searchText: t("{0} {1} Agent", agent.agent_name || agent.agent_id, agent.agent_id),
     })),
   ];
 
@@ -126,7 +127,7 @@ const AgentSelector: React.FC<AgentSelectorProps> = ({
                   opacity: 0.8,
                 }}
               >
-                {opt.isAccessGroup ? "Access Group" : "Agent"}
+                {opt.isAccessGroup ? t("Access Group") : t("Agent")}
               </span>
             </div>
           </Select.Option>

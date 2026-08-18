@@ -3,6 +3,7 @@ import { Form, Input, Switch, Collapse, Select, Space, Tooltip } from "antd";
 import { Button as AntButton } from "antd";
 import { PlusOutlined, MinusCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { AGENT_FORM_CONFIG, SKILL_FIELD_CONFIG } from "./agent_config";
+import { t } from "@/contexts/LanguageContext";
 
 import CostConfigFields from "./cost_config_fields";
 
@@ -23,36 +24,42 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
     <>
       {showAgentName && (
         <Form.Item
-          label="Agent Name"
+          label={t("Agent Name")}
           name="agent_name"
-          rules={[{ required: true, message: "Please enter a unique agent name" }]}
-          tooltip="Unique identifier for the agent"
+          rules={[{ required: true, message: t("Please enter a unique agent name") }]}
+          tooltip={t("Unique identifier for the agent")}
         >
-          <Input placeholder="e.g., customer-support-agent" />
+          <Input placeholder={t("e.g., customer-support-agent")} />
         </Form.Item>
       )}
 
       <Collapse defaultActiveKey={["basic"]} style={{ marginBottom: 16 }}>
         {/* Basic Information */}
         {shouldShow(AGENT_FORM_CONFIG.basic.key) && (
-          <Panel header={`${AGENT_FORM_CONFIG.basic.title} (Required)`} key={AGENT_FORM_CONFIG.basic.key}>
+          <Panel
+            header={`${t(AGENT_FORM_CONFIG.basic.title)} ${t("(Required)")}`}
+            key={AGENT_FORM_CONFIG.basic.key}
+          >
             {AGENT_FORM_CONFIG.basic.fields.map((field) => (
               <Form.Item
                 key={field.name}
-                label={field.label}
+                label={t(field.label)}
                 name={field.name}
                 rules={
                   field.required
-                    ? [{ required: true, message: `Please enter ${field.label.toLowerCase()}` }]
+                    ? [{ required: true, message: t("Please enter {0}", (field.label ?? "").toLowerCase()) }]
                     : undefined
                 }
-                tooltip={field.tooltip}
-                extra={field.helpText}
+                tooltip={field.tooltip ? t(field.tooltip) : undefined}
+                extra={field.helpText ? t(field.helpText) : undefined}
               >
                 {field.type === "textarea" ? (
-                  <Input.TextArea rows={field.rows} placeholder={field.placeholder} />
+                  <Input.TextArea
+                    rows={field.rows}
+                    placeholder={field.placeholder ? t(field.placeholder) : undefined}
+                  />
                 ) : field.type === "select" ? (
-                  <Select placeholder={field.placeholder}>
+                  <Select placeholder={field.placeholder ? t(field.placeholder) : undefined}>
                     {(field.options ?? []).map((opt) => (
                       <Select.Option key={opt} value={opt}>
                         {opt}
@@ -60,7 +67,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
                     ))}
                   </Select>
                 ) : (
-                  <Input placeholder={field.placeholder} />
+                  <Input placeholder={field.placeholder ? t(field.placeholder) : undefined} />
                 )}
               </Form.Item>
             ))}
@@ -69,7 +76,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
 
         {/* Skills */}
         {shouldShow(AGENT_FORM_CONFIG.skills.key) && (
-          <Panel header={`${AGENT_FORM_CONFIG.skills.title}`} key={AGENT_FORM_CONFIG.skills.key}>
+          <Panel header={`${t(AGENT_FORM_CONFIG.skills.title)}`} key={AGENT_FORM_CONFIG.skills.key}>
             <Form.List name="skills">
               {(fields, { add, remove }) => (
                 <>
@@ -80,64 +87,68 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
                     >
                       <Form.Item
                         {...field}
-                        label={SKILL_FIELD_CONFIG.id.label}
+                        label={t(SKILL_FIELD_CONFIG.id.label)}
                         name={[field.name, "id"]}
-                        rules={[{ required: SKILL_FIELD_CONFIG.id.required, message: "Required" }]}
+                        rules={[{ required: SKILL_FIELD_CONFIG.id.required, message: t("Required") }]}
                       >
-                        <Input placeholder={SKILL_FIELD_CONFIG.id.placeholder} />
+                        <Input placeholder={t(SKILL_FIELD_CONFIG.id.placeholder)} />
                       </Form.Item>
 
                       <Form.Item
                         {...field}
-                        label={SKILL_FIELD_CONFIG.name.label}
+                        label={t(SKILL_FIELD_CONFIG.name.label)}
                         name={[field.name, "name"]}
-                        rules={[{ required: SKILL_FIELD_CONFIG.name.required, message: "Required" }]}
+                        rules={[{ required: SKILL_FIELD_CONFIG.name.required, message: t("Required") }]}
                       >
-                        <Input placeholder={SKILL_FIELD_CONFIG.name.placeholder} />
+                        <Input placeholder={t(SKILL_FIELD_CONFIG.name.placeholder)} />
                       </Form.Item>
 
                       <Form.Item
                         {...field}
-                        label={SKILL_FIELD_CONFIG.description.label}
+                        label={t(SKILL_FIELD_CONFIG.description.label)}
                         name={[field.name, "description"]}
-                        rules={[{ required: SKILL_FIELD_CONFIG.description.required, message: "Required" }]}
+                        rules={[{ required: SKILL_FIELD_CONFIG.description.required, message: t("Required") }]}
                       >
                         <Input.TextArea
                           rows={SKILL_FIELD_CONFIG.description.rows}
-                          placeholder={SKILL_FIELD_CONFIG.description.placeholder}
+                          placeholder={t(SKILL_FIELD_CONFIG.description.placeholder)}
                         />
                       </Form.Item>
 
                       <Form.Item
                         {...field}
-                        label={SKILL_FIELD_CONFIG.tags.label}
+                        label={t(SKILL_FIELD_CONFIG.tags.label)}
                         name={[field.name, "tags"]}
-                        rules={[{ required: SKILL_FIELD_CONFIG.tags.required, message: "Required" }]}
+                        rules={[{ required: SKILL_FIELD_CONFIG.tags.required, message: t("Required") }]}
                       >
                         <Select
                           mode="tags"
                           style={{ width: "100%" }}
                           tokenSeparators={[","]}
-                          placeholder={SKILL_FIELD_CONFIG.tags.placeholder}
+                          placeholder={t(SKILL_FIELD_CONFIG.tags.placeholder)}
                         />
                       </Form.Item>
 
-                      <Form.Item {...field} label={SKILL_FIELD_CONFIG.examples.label} name={[field.name, "examples"]}>
+                      <Form.Item
+                        {...field}
+                        label={t(SKILL_FIELD_CONFIG.examples.label)}
+                        name={[field.name, "examples"]}
+                      >
                         <Select
                           mode="tags"
                           style={{ width: "100%" }}
                           tokenSeparators={[","]}
-                          placeholder={SKILL_FIELD_CONFIG.examples.placeholder}
+                          placeholder={t(SKILL_FIELD_CONFIG.examples.placeholder)}
                         />
                       </Form.Item>
 
                       <AntButton type="link" danger onClick={() => remove(field.name)} icon={<MinusCircleOutlined />}>
-                        Remove Skill
+                        {t("Remove Skill")}
                       </AntButton>
                     </div>
                   ))}
                   <AntButton type="dashed" onClick={() => add()} icon={<PlusOutlined />} style={{ width: "100%" }}>
-                    Add Skill
+                    {t("Add Skill")}
                   </AntButton>
                 </>
               )}
@@ -147,9 +158,9 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
 
         {/* Capabilities */}
         {shouldShow(AGENT_FORM_CONFIG.capabilities.key) && (
-          <Panel header={AGENT_FORM_CONFIG.capabilities.title} key={AGENT_FORM_CONFIG.capabilities.key}>
+          <Panel header={t(AGENT_FORM_CONFIG.capabilities.title)} key={AGENT_FORM_CONFIG.capabilities.key}>
             {AGENT_FORM_CONFIG.capabilities.fields.map((field) => (
-              <Form.Item key={field.name} label={field.label} name={field.name} valuePropName="checked">
+              <Form.Item key={field.name} label={t(field.label)} name={field.name} valuePropName="checked">
                 <Switch />
               </Form.Item>
             ))}
@@ -158,15 +169,19 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
 
         {/* Optional Settings */}
         {shouldShow(AGENT_FORM_CONFIG.optional.key) && (
-          <Panel header={AGENT_FORM_CONFIG.optional.title} key={AGENT_FORM_CONFIG.optional.key}>
+          <Panel header={t(AGENT_FORM_CONFIG.optional.title)} key={AGENT_FORM_CONFIG.optional.key}>
             {AGENT_FORM_CONFIG.optional.fields.map((field) => (
               <Form.Item
                 key={field.name}
-                label={field.label}
+                label={t(field.label)}
                 name={field.name}
                 valuePropName={field.type === "switch" ? "checked" : undefined}
               >
-                {field.type === "switch" ? <Switch /> : <Input placeholder={field.placeholder} />}
+                {field.type === "switch" ? (
+                  <Switch />
+                ) : (
+                  <Input placeholder={field.placeholder ? t(field.placeholder) : undefined} />
+                )}
               </Form.Item>
             ))}
           </Panel>
@@ -174,22 +189,26 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
 
         {/* Cost Configuration */}
         {shouldShow(AGENT_FORM_CONFIG.cost.key) && (
-          <Panel header={AGENT_FORM_CONFIG.cost.title} key={AGENT_FORM_CONFIG.cost.key}>
+          <Panel header={t(AGENT_FORM_CONFIG.cost.title)} key={AGENT_FORM_CONFIG.cost.key}>
             <CostConfigFields />
           </Panel>
         )}
 
         {/* LiteLLM Parameters */}
         {shouldShow(AGENT_FORM_CONFIG.litellm.key) && (
-          <Panel header={AGENT_FORM_CONFIG.litellm.title} key={AGENT_FORM_CONFIG.litellm.key}>
+          <Panel header={t(AGENT_FORM_CONFIG.litellm.title)} key={AGENT_FORM_CONFIG.litellm.key}>
             {AGENT_FORM_CONFIG.litellm.fields.map((field) => (
               <Form.Item
                 key={field.name}
-                label={field.label}
+                label={t(field.label)}
                 name={field.name}
                 valuePropName={field.type === "switch" ? "checked" : undefined}
               >
-                {field.type === "switch" ? <Switch /> : <Input placeholder={field.placeholder} />}
+                {field.type === "switch" ? (
+                  <Switch />
+                ) : (
+                  <Input placeholder={field.placeholder ? t(field.placeholder) : undefined} />
+                )}
               </Form.Item>
             ))}
           </Panel>
@@ -197,13 +216,13 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
 
         {/* Authentication Headers */}
         {shouldShow("auth_headers") && (
-          <Panel header="Authentication Headers" key="auth_headers">
+          <Panel header={t("Authentication Headers")} key="auth_headers">
             {/* Static Headers */}
             <Form.Item
               label={
                 <span>
-                  Static Headers{" "}
-                  <Tooltip title="Headers always sent to the backend agent, regardless of the client request. Admin-configured, static wins on conflict.">
+                  {t("Static Headers")}{" "}
+                  <Tooltip title={t("Headers always sent to the backend agent, regardless of the client request. Admin-configured, static wins on conflict.")}>
                     <InfoCircleOutlined style={{ color: "#8c8c8c" }} />
                   </Tooltip>
                 </span>
@@ -217,22 +236,22 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
                         <Form.Item
                           {...restField}
                           name={[name, "header"]}
-                          rules={[{ required: true, message: "Header name required" }]}
+                          rules={[{ required: true, message: t("Header name required") }]}
                         >
-                          <Input placeholder="Header name (e.g. Authorization)" style={{ width: 220 }} />
+                          <Input placeholder={t("Header name (e.g. Authorization)")} style={{ width: 220 }} />
                         </Form.Item>
                         <Form.Item
                           {...restField}
                           name={[name, "value"]}
-                          rules={[{ required: true, message: "Value required" }]}
+                          rules={[{ required: true, message: t("Value required") }]}
                         >
-                          <Input placeholder="Value (e.g. Bearer token123)" style={{ width: 260 }} />
+                          <Input placeholder={t("Value (e.g. Bearer token123)")} style={{ width: 260 }} />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} style={{ color: "#ff4d4f" }} />
                       </Space>
                     ))}
                     <AntButton type="dashed" onClick={() => add()} icon={<PlusOutlined />} style={{ width: "100%" }}>
-                      Add Static Header
+                      {t("Add Static Header")}
                     </AntButton>
                   </>
                 )}
@@ -243,8 +262,8 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
             <Form.Item
               label={
                 <span>
-                  Forward Client Headers{" "}
-                  <Tooltip title="Header names to extract from the client's request and forward to the agent. Type a name and press Enter.">
+                  {t("Forward Client Headers")}{" "}
+                  <Tooltip title={t("Header names to extract from the client's request and forward to the agent. Type a name and press Enter.")}>
                     <InfoCircleOutlined style={{ color: "#8c8c8c" }} />
                   </Tooltip>
                 </span>
@@ -254,7 +273,7 @@ const AgentFormFields: React.FC<AgentFormFieldsProps> = ({ showAgentName = true,
               <Select
                 mode="tags"
                 style={{ width: "100%" }}
-                placeholder="e.g. x-api-key, Authorization"
+                placeholder={t("e.g. x-api-key, Authorization")}
                 tokenSeparators={[","]}
               />
             </Form.Item>

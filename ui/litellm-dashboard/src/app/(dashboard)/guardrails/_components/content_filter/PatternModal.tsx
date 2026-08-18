@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Typography, Select, Modal, Space, Button } from "antd";
 
 const { Text } = Typography;
@@ -35,12 +36,12 @@ const PatternModal: React.FC<PatternModalProps> = ({
   onCancel,
 }) => {
   return (
-    <Modal title="Add prebuilt pattern" open={visible} onCancel={onCancel} footer={null} width={800}>
+    <Modal title={t("Add prebuilt pattern")} open={visible} onCancel={onCancel} footer={null} width={800}>
       <Space direction="vertical" style={{ width: "100%" }} size="large">
         <div>
-          <Text strong>Pattern type</Text>
+          <Text strong>{t("Pattern type")}</Text>
           <Select
-            placeholder="Choose pattern type"
+            placeholder={t("Choose pattern type")}
             value={selectedPatternName}
             onChange={onPatternNameChange}
             style={{ width: "100%", marginTop: 8 }}
@@ -74,21 +75,21 @@ const PatternModal: React.FC<PatternModalProps> = ({
         </div>
 
         <div>
-          <Text strong>Action</Text>
+          <Text strong>{t("Action")}</Text>
           <Text type="secondary" style={{ display: "block", marginTop: 4, marginBottom: 8 }}>
-            Choose what action the guardrail should take when this pattern is detected
+            {t("Choose what action the guardrail should take when this pattern is detected")}
           </Text>
           <Select value={patternAction} onChange={onActionChange} style={{ width: "100%" }}>
-            <Option value="BLOCK">Block</Option>
-            <Option value="MASK">Mask</Option>
+            <Option value="BLOCK">{t("Block")}</Option>
+            <Option value="MASK">{t("Mask")}</Option>
           </Select>
         </div>
       </Space>
 
       <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "24px" }}>
-        <Button onClick={onCancel}>Cancel</Button>
+        <Button onClick={onCancel}>{t("Cancel")}</Button>
         <Button type="primary" onClick={onAdd}>
-          Add
+          {t("Add")}
         </Button>
       </div>
     </Modal>

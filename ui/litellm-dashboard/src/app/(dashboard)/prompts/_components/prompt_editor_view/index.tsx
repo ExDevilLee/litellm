@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ToolModal from "../tool_modal";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 import { createPromptCall, updatePromptCall, getPromptInfo } from "@/components/networking";
 import { PromptType, PromptEditorViewProps, Tool } from "./types";
 import { convertToDotPrompt, parseExistingPrompt } from "./utils";
@@ -21,7 +22,7 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
         return parseExistingPrompt(initialPromptData);
       } catch (error) {
         console.error("Error parsing existing prompt:", error);
-        NotificationsManager.fromBackend("Failed to parse prompt data");
+        NotificationsManager.fromBackend(t("Failed to parse prompt data"));
       }
     }
     return {
@@ -36,7 +37,7 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
       messages: [
         {
           role: "user",
-          content: "Enter task specifics. Use {{template_variables}} for dynamic inputs",
+          content: t("Enter task specifics. Use {0} for dynamic inputs", "{{template_variables}}"),
         },
       ],
       environment: "development",
@@ -142,7 +143,7 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
       setShowToolModal(false);
       setEditingToolIndex(null);
     } catch (error) {
-      NotificationsManager.fromBackend("Invalid JSON format");
+      NotificationsManager.fromBackend(t("Invalid JSON format"));
     }
   };
 
@@ -172,7 +173,7 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
       // NotificationsManager.success(`Loaded version v${versionNum}`);
     } catch (error) {
       console.error("Error loading version:", error);
-      NotificationsManager.fromBackend("Failed to load prompt version");
+      NotificationsManager.fromBackend(t("Failed to load prompt version"));
     }
   };
 
@@ -186,12 +187,12 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
 
   const handleSave = async () => {
     if (!accessToken) {
-      NotificationsManager.fromBackend("Access token is required");
+      NotificationsManager.fromBackend(t("Access token is required"));
       return;
     }
 
     if (!prompt.name || prompt.name.trim() === "") {
-      NotificationsManager.fromBackend("Please enter a valid prompt name");
+      NotificationsManager.fromBackend(t("Please enter a valid prompt name"));
       return;
     }
 
@@ -215,16 +216,16 @@ const PromptEditorView: React.FC<PromptEditorViewProps> = ({ onClose, onSuccess,
 
       if (editMode && initialPromptData?.prompt_spec?.prompt_id) {
         await updatePromptCall(accessToken, initialPromptData.prompt_spec.prompt_id, promptData);
-        NotificationsManager.success("Prompt updated successfully!");
+        NotificationsManager.success(t("Prompt updated successfully!"));
       } else {
         await createPromptCall(accessToken, promptData);
-        NotificationsManager.success("Prompt created successfully!");
+        NotificationsManager.success(t("Prompt created successfully!"));
       }
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Error saving prompt:", error);
-      NotificationsManager.fromBackend(editMode ? "Failed to update prompt" : "Failed to save prompt");
+      NotificationsManager.fromBackend(editMode ? t("Failed to update prompt") : t("Failed to save prompt"));
     } finally {
       setIsSaving(false);
       setShowNameModal(false);

@@ -6,6 +6,7 @@ import { Bot, Layers, MoreHorizontal, Server, Trash2 } from "lucide-react";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell } from "@/components/shared/table_cells";
 import { buttonVariants } from "@/components/ui/button";
+import { t } from "@/contexts/LanguageContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,7 +43,7 @@ function ResourcesCell({ group }: { group: AccessGroup }) {
         return (
           <span
             key={item.key}
-            title={`${item.count} ${item.label}`}
+            title={t("{0} {1}", item.count, t(item.label))}
             className={cn(
               "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset [&_svg]:size-3.5",
               tone.className,
@@ -67,7 +68,7 @@ function AccessGroupRowActions({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open access group actions"
+        aria-label={t("Open access group actions")}
         data-testid={`access-group-actions-${group.id}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -80,7 +81,7 @@ function AccessGroupRowActions({
           onClick={() => onDeleteClick(group)}
         >
           <Trash2 />
-          Delete access group
+          {t("Delete access group")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -102,8 +103,8 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "id",
       accessorKey: "id",
-      meta: { title: "ID" },
-      header: "ID",
+      meta: { title: t("ID") },
+      header: t("ID"),
       size: 200,
       enableSorting: false,
       cell: ({ row }) => (
@@ -117,8 +118,8 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "name",
       accessorKey: "name",
-      meta: { title: "Name" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+      meta: { title: t("Name") },
+      header: ({ column }) => <DataTableSortHeader column={column} title={t("Name")} />,
       size: 220,
       enableSorting: true,
       cell: ({ row }) => {
@@ -132,8 +133,8 @@ export const getAccessGroupsTableColumns = ({
     },
     {
       id: "resources",
-      meta: { title: "Resources" },
-      header: "Resources",
+      meta: { title: t("Resources") },
+      header: t("Resources"),
       size: 220,
       enableSorting: false,
       cell: ({ row }) => <ResourcesCell group={row.original} />,
@@ -141,8 +142,8 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "createdAt",
       accessorKey: "createdAt",
-      meta: { title: "Created" },
-      header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+      meta: { title: t("Created") },
+      header: ({ column }) => <DataTableSortHeader column={column} title={t("Created")} />,
       size: 150,
       enableSorting: true,
       sortingFn: "datetime",
@@ -151,8 +152,8 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "updatedAt",
       accessorKey: "updatedAt",
-      meta: { title: "Updated" },
-      header: "Updated",
+      meta: { title: t("Updated") },
+      header: t("Updated"),
       size: 150,
       enableSorting: false,
       cell: ({ row }) => <DateCell value={row.original.updatedAt} precision="date" />,
@@ -168,7 +169,7 @@ export const getAccessGroupsTableColumns = ({
     {
       id: "actions",
       meta: { className: "text-right", headerClassName: "text-right" },
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">{t("Actions")}</span>,
       size: 64,
       enableSorting: false,
       enableHiding: false,

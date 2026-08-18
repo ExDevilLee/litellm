@@ -6,6 +6,7 @@ import DefaultProxyAdminTag from "@/components/common_components/DefaultProxyAdm
 import { KeyResponse } from "@/components/key_team_helpers/key_list";
 import { CellTooltip, DateCell, IdentityCell } from "@/components/shared/table_cells";
 import { keyDetailHref } from "@/utils/entityLinks";
+import { t } from "@/contexts/LanguageContext";
 
 function OwnerCell({ record }: { record: KeyResponse }) {
   const email = record.user?.user_email ?? record.user_id ?? null;
@@ -26,8 +27,8 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "key_alias",
     accessorKey: "key_alias",
-    meta: { title: "Key Name" },
-    header: "Key Name",
+    meta: { title: t("Key Name") },
+    header: t("Key Name"),
     enableSorting: false,
     cell: ({ row }) => (
       <IdentityCell
@@ -39,16 +40,16 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   },
   {
     id: "owner",
-    meta: { title: "Owner" },
-    header: "Owner",
+    meta: { title: t("Owner") },
+    header: t("Owner"),
     enableSorting: false,
     cell: ({ row }) => <OwnerCell record={row.original} />,
   },
   {
     id: "created_at",
     accessorKey: "created_at",
-    meta: { title: "Created" },
-    header: "Created",
+    meta: { title: t("Created") },
+    header: t("Created"),
     size: 130,
     enableSorting: false,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -56,10 +57,10 @@ export const getProjectKeysTableColumns = (): ColumnDef<KeyResponse>[] => [
   {
     id: "last_active",
     accessorKey: "last_active",
-    meta: { title: "Last Active" },
-    header: "Last Active",
+    meta: { title: t("Last Active") },
+    header: t("Last Active"),
     size: 130,
     enableSorting: false,
-    cell: ({ row }) => <DateCell value={row.original.last_active} precision="date" fallback="Never" />,
+    cell: ({ row }) => <DateCell value={row.original.last_active} precision="date" fallback={t("Never")} />,
   },
 ];

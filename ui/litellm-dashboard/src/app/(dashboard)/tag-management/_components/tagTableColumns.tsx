@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/cva.config";
+import { t } from "@/contexts/LanguageContext";
 
 export const DYNAMIC_SPEND_TAG_DESCRIPTION =
   "This is just a spend tag that was passed dynamically in a request. It does not control any LLM models.";
@@ -25,7 +26,7 @@ function TagNameCell({ tag, onSelectTag }: { tag: Tag; onSelectTag: (tagName: st
   if (isDynamicSpendTag(tag)) {
     return (
       <CellTooltip
-        content="You cannot view the information of a dynamically generated spend tag"
+        content={t("You cannot view the information of a dynamically generated spend tag")}
         trigger={<span className="block max-w-60 truncate font-mono text-xs text-muted-foreground">{tag.name}</span>}
       />
     );
@@ -43,14 +44,14 @@ function TagNameCell({ tag, onSelectTag }: { tag: Tag; onSelectTag: (tagName: st
 function TagModelsCell({ tag }: { tag: Tag }) {
   const models = tag.models ?? [];
   if (models.length === 0) {
-    return <Badge variant="secondary">All Models</Badge>;
+    return <Badge variant="secondary">{t("All Models")}</Badge>;
   }
   return (
     <div className="flex flex-wrap items-center gap-1">
       {models.map((modelId) => (
         <CellTooltip
           key={modelId}
-          content={`ID: ${modelId}`}
+          content={t("ID: {0}", modelId)}
           trigger={
             <Badge variant="outline" className="cursor-default">
               {tag.model_info?.[modelId] || modelId}
@@ -74,7 +75,7 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open tag actions"
+        aria-label={t("Open tag actions")}
         data-testid={`tag-actions-${tag.name}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -84,21 +85,21 @@ function TagRowActions({ tag, onEdit, onDelete }: TagRowActionsProps) {
         <DropdownMenuItem
           disabled={isDynamic}
           data-testid="tag-action-edit"
-          title={isDynamic ? "Dynamically generated spend tags cannot be edited" : undefined}
+          title={isDynamic ? t("Dynamically generated spend tags cannot be edited") : undefined}
           onClick={() => onEdit(tag)}
         >
           <Pencil />
-          Edit
+          {t("Edit")}
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
           disabled={isDynamic}
           data-testid="tag-action-delete"
-          title={isDynamic ? "Dynamically generated spend tags cannot be deleted" : undefined}
+          title={isDynamic ? t("Dynamically generated spend tags cannot be deleted") : undefined}
           onClick={() => onDelete(tag.name)}
         >
           <Trash2 />
-          Delete
+          {t("Delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -115,8 +116,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Tag Name" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Tag Name" />,
+    meta: { title: t("Tag Name") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Tag Name")} />,
     size: 260,
     enableSorting: true,
     cell: ({ row }) => <TagNameCell tag={row.original} onSelectTag={onSelectTag} />,
@@ -124,8 +125,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "description",
     accessorKey: "description",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: { title: t("Description") },
+    header: t("Description"),
     size: 300,
     enableSorting: false,
     cell: ({ row }) => {
@@ -139,8 +140,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   },
   {
     id: "models",
-    meta: { title: "Allowed Models", skeleton: "chips" },
-    header: "Allowed Models",
+    meta: { title: t("Allowed Models"), skeleton: "chips" },
+    header: t("Allowed Models"),
     size: 240,
     enableSorting: false,
     cell: ({ row }) => <TagModelsCell tag={row.original} />,
@@ -149,8 +150,8 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
     id: "created_at",
     accessorKey: "created_at",
     sortingFn: "datetime",
-    meta: { title: "Created" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created" />,
+    meta: { title: t("Created") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} precision="date" />,
@@ -158,7 +159,7 @@ export const getTagTableColumns = ({ onSelectTag, onEdit, onDelete }: TagTableCo
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("Actions")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

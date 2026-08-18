@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 interface ToolModalProps {
   visible: boolean;
@@ -53,7 +54,7 @@ const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onC
     <Modal
       title={
         <div className="flex items-center justify-between">
-          <span className="text-lg font-medium">Add Tool</span>
+          <span className="text-lg font-medium">{t("Add Tool")}</span>
         </div>
       }
       open={visible}
@@ -61,20 +62,22 @@ const ToolModal: React.FC<ToolModalProps> = ({ visible, initialJson, onSave, onC
       width={800}
       footer={[
         <Button key="cancel" onClick={handleClose}>
-          Cancel
+          {t("Cancel")}
         </Button>,
         <Button key="save" type="primary" onClick={handleSave}>
-          Add
+          {t("Add")}
         </Button>,
       ]}
     >
       <div className="space-y-3">
-        {error && <div className="p-3 bg-red-50 border border-red-200 rounded-sm text-red-600 text-sm">{error}</div>}
+        {error && (
+          <div className="p-3 bg-red-50 border border-red-200 rounded-sm text-red-600 text-sm">{t(error)}</div>
+        )}
         <textarea
           value={json}
           onChange={(e) => setJson(e.target.value)}
           className="w-full min-h-[400px] px-4 py-3 border border-gray-300 rounded-lg text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
-          placeholder="Paste your tool JSON here..."
+          placeholder={t("Paste your tool JSON here...")}
         />
       </div>
     </Modal>

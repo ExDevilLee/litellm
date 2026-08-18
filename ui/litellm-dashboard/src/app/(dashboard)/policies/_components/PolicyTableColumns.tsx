@@ -6,6 +6,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdentityCell, StatusBadge } from "@/components/shared/table_cells";
 import { Policy } from "@/components/policies/types";
+import { t } from "@/contexts/LanguageContext";
 import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -63,22 +64,22 @@ function PolicyRowActions({ policy, onEditClick, onDeleteClick }: PolicyRowActio
         <DropdownMenuItem
           data-testid="policy-action-edit"
           disabled={isConfigPolicy}
-          title={isConfigPolicy ? CONFIG_POLICY_HINT : undefined}
+          title={isConfigPolicy ? t(CONFIG_POLICY_HINT) : undefined}
           onClick={() => onEditClick(policy)}
         >
           <Pencil />
-          Edit policy
+          {t("Edit policy")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           data-testid="policy-action-delete"
           disabled={isConfigPolicy}
-          title={isConfigPolicy ? CONFIG_POLICY_HINT : undefined}
-          onClick={() => onDeleteClick(policy.policy_id, policy.policy_name || "Unnamed Policy")}
+          title={isConfigPolicy ? t(CONFIG_POLICY_HINT) : undefined}
+          onClick={() => onDeleteClick(policy.policy_id, policy.policy_name || t("Unnamed Policy"))}
         >
           <Trash2 />
-          Delete policy
+          {t("Delete policy")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -101,22 +102,26 @@ export const getPolicyTableColumns = ({
   {
     id: "policy_name",
     accessorKey: "policy_name",
-    meta: { title: "Name", skeleton: "twoLine" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Name" />,
+    meta: { title: t("Name"), skeleton: "twoLine" },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Name")} />,
     size: 220,
     enableSorting: true,
     cell: ({ row }) => {
       const isConfigPolicy = row.original.primaryPolicy.definition_location === "config";
       const versionBadge =
         row.original.versionCount > 1 ? (
-          <StatusBadge tone="neutral" label={`${row.original.versionCount} versions`} />
+          <StatusBadge tone="neutral" label={t("{0} versions", row.original.versionCount)} />
         ) : undefined;
       return (
         <IdentityCell
           title={row.original.policy_name}
           titleClassName="max-w-60"
           badge={
-            isConfigPolicy ? <StatusBadge tone="neutral" label="Config" tooltip={CONFIG_POLICY_HINT} /> : versionBadge
+            isConfigPolicy ? (
+              <StatusBadge tone="neutral" label={t("Config")} tooltip={t(CONFIG_POLICY_HINT)} />
+            ) : (
+              versionBadge
+            )
           }
           onClick={isConfigPolicy ? undefined : () => onViewClick(row.original.primaryPolicy.policy_id)}
         />
@@ -126,8 +131,8 @@ export const getPolicyTableColumns = ({
   {
     id: "description",
     accessorFn: (row) => row.primaryPolicy.description ?? "",
-    meta: { title: "Description" },
-    header: "Description",
+    meta: { title: t("Description") },
+    header: t("Description"),
     size: 220,
     enableSorting: false,
     cell: ({ row }) => {
@@ -145,8 +150,8 @@ export const getPolicyTableColumns = ({
   {
     id: "inherit",
     accessorFn: (row) => row.primaryPolicy.inherit ?? "",
-    meta: { title: "Inherits From", skeleton: "badge" },
-    header: "Inherits From",
+    meta: { title: t("Inherits From"), skeleton: "badge" },
+    header: t("Inherits From"),
     size: 150,
     enableSorting: false,
     cell: ({ row }) => {
@@ -159,24 +164,24 @@ export const getPolicyTableColumns = ({
   },
   {
     id: "guardrails_add",
-    meta: { title: "Guardrails (Add)", skeleton: "chips" },
-    header: "Guardrails (Add)",
+    meta: { title: t("Guardrails (Add)"), skeleton: "chips" },
+    header: t("Guardrails (Add)"),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailChips guardrails={row.original.primaryPolicy.guardrails_add ?? []} tone="success" />,
   },
   {
     id: "guardrails_remove",
-    meta: { title: "Guardrails (Remove)", skeleton: "chips" },
-    header: "Guardrails (Remove)",
+    meta: { title: t("Guardrails (Remove)"), skeleton: "chips" },
+    header: t("Guardrails (Remove)"),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <GuardrailChips guardrails={row.original.primaryPolicy.guardrails_remove ?? []} tone="error" />,
   },
   {
     id: "model_condition",
-    meta: { title: "Model Condition" },
-    header: "Model Condition",
+    meta: { title: t("Model Condition") },
+    header: t("Model Condition"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => {
@@ -194,8 +199,8 @@ export const getPolicyTableColumns = ({
   {
     id: "created_at",
     accessorFn: (row) => row.primaryPolicy.created_at ?? "",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("Created At") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created At")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.primaryPolicy.created_at} />,
@@ -205,7 +210,7 @@ export const getPolicyTableColumns = ({
         {
           id: "actions",
           meta: { className: "text-right", headerClassName: "text-right" },
-          header: () => <span className="sr-only">Actions</span>,
+          header: () => <span className="sr-only">{t("Actions")}</span>,
           size: 64,
           enableSorting: false,
           enableHiding: false,

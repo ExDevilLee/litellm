@@ -1,6 +1,7 @@
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
 import NotificationManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 export async function makeOpenAIAudioTranscriptionRequest(
   audioFile: File,
@@ -45,7 +46,7 @@ export async function makeOpenAIAudioTranscriptionRequest(
     // The response is a transcription object with a text field
     if (response && response.text) {
       updateUI(response.text, selectedModel);
-      NotificationManager.success(`Audio transcribed successfully`);
+      NotificationManager.success(t("Audio transcribed successfully"));
     } else {
       throw new Error("No transcription text in response");
     }
@@ -54,7 +55,7 @@ export async function makeOpenAIAudioTranscriptionRequest(
 
     if (signal?.aborted) {
     } else {
-      let errorMessage = "Failed to transcribe audio";
+      let errorMessage = t("Failed to transcribe audio");
 
       if (error?.error?.message) {
         errorMessage = error.error.message;
@@ -62,7 +63,7 @@ export async function makeOpenAIAudioTranscriptionRequest(
         errorMessage = error.message;
       }
 
-      NotificationManager.fromBackend(`Audio transcription failed: ${errorMessage}`);
+      NotificationManager.fromBackend(t("Audio transcription failed: {0}", errorMessage));
     }
     throw error; // Re-throw to allow the caller to handle the error
   }

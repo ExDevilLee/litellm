@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Card, Typography, Select, Table, Tag, Collapse, Button } from "antd";
 import { DeleteOutlined, PlusOutlined, FileTextOutlined } from "@ant-design/icons";
 import { getCategoryYaml } from "@/components/networking";
@@ -162,7 +163,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
 
   const columns = [
     {
-      title: "Category",
+      title: t("Category"),
       dataIndex: "display_name",
       key: "display_name",
       render: (text: string, record: SelectedCategory) => {
@@ -178,7 +179,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       },
     },
     {
-      title: "Action",
+      title: t("Action"),
       dataIndex: "action",
       key: "action",
       width: 150,
@@ -189,16 +190,16 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           style={{ width: "100%" }}
         >
           <Option value="BLOCK">
-            <Tag color="red">BLOCK</Tag>
+            <Tag color="red">{t("Block")}</Tag>
           </Option>
           <Option value="MASK">
-            <Tag color="orange">MASK</Tag>
+            <Tag color="orange">{t("Mask")}</Tag>
           </Option>
         </Select>
       ),
     },
     {
-      title: "Severity Threshold",
+      title: t("Severity Threshold"),
       dataIndex: "severity_threshold",
       key: "severity_threshold",
       width: 180,
@@ -208,9 +209,9 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           onChange={(value) => onCategoryUpdate(record.id, "severity_threshold", value)}
           style={{ width: "100%" }}
         >
-          <Option value="low">Low</Option>
-          <Option value="medium">Medium</Option>
-          <Option value="high">High</Option>
+          <Option value="low">{t("Low")}</Option>
+          <Option value="medium">{t("Medium")}</Option>
+          <Option value="high">{t("High")}</Option>
         </Select>
       ),
     },
@@ -220,7 +221,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
       width: 80,
       render: (_: any, record: SelectedCategory) => (
         <Button icon={<DeleteOutlined />} onClick={() => onCategoryRemove(record.id)} size="small">
-          Remove
+          {t("Remove")}
         </Button>
       ),
     },
@@ -237,10 +238,10 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}
         >
           <Title level={5} style={{ margin: 0 }}>
-            Blocked topics
+            {t("Blocked topics")}
           </Title>
           <Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
-            Select topics to block using keyword and semantic analysis
+            {t("Select topics to block using keyword and semantic analysis")}
           </Text>
         </div>
       }
@@ -248,7 +249,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
     >
       <div style={{ marginBottom: 16, display: "flex", gap: 8 }}>
         <Select
-          placeholder="Select a content category"
+          placeholder={t("Select a content category")}
           value={selectedCategoryName || undefined}
           onChange={setSelectedCategoryName}
           style={{ flex: 1 }}
@@ -268,7 +269,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           ))}
         </Select>
         <Button type="primary" onClick={handleAddCategory} disabled={!selectedCategoryName} icon={<PlusOutlined />}>
-          Add
+          {t("Add")}
         </Button>
       </div>
 
@@ -284,7 +285,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
           }}
         >
           <div style={{ marginBottom: 8, fontWeight: 500, fontSize: "14px" }}>
-            Preview: {availableCategories.find((c) => c.name === selectedCategoryName)?.display_name}
+            {t("Preview: {0}", availableCategories.find((c) => c.name === selectedCategoryName)?.display_name ?? "")}
             {categoryFileTypes[selectedCategoryName] && (
               <span style={{ marginLeft: 8, fontSize: "12px", color: "#888", fontWeight: 400 }}>
                 ({categoryFileTypes[selectedCategoryName]?.toUpperCase()})
@@ -292,7 +293,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             )}
           </div>
           {loadingPreviewYaml ? (
-            <div style={{ padding: "16px", textAlign: "center", color: "#888" }}>Loading content...</div>
+            <div style={{ padding: "16px", textAlign: "center", color: "#888" }}>{t("Loading content...")}</div>
           ) : previewYaml ? (
             <pre
               style={{
@@ -314,7 +315,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             </pre>
           ) : (
             <div style={{ padding: "8px", textAlign: "center", color: "#888", fontSize: "12px" }}>
-              Unable to load category content
+              {t("Unable to load category content")}
             </div>
           )}
         </div>
@@ -350,13 +351,11 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
                   label: (
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <FileTextOutlined />
-                      <span>
-                        View {fileTypeLabel} for {category.display_name}
-                      </span>
+                      <span>{t("View {0} for {1}", fileTypeLabel, category.display_name)}</span>
                     </div>
                   ),
                   children: loadingYaml[category.category] ? (
-                    <div style={{ padding: "16px", textAlign: "center", color: "#888" }}>Loading content...</div>
+                    <div style={{ padding: "16px", textAlign: "center", color: "#888" }}>{t("Loading content...")}</div>
                   ) : categoryYaml[category.category] ? (
                     <pre
                       style={{
@@ -374,7 +373,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
                     </pre>
                   ) : (
                     <div style={{ padding: "16px", textAlign: "center", color: "#888" }}>
-                      Content will load when expanded
+                      {t("Content will load when expanded")}
                     </div>
                   ),
                 };
@@ -392,7 +391,7 @@ const ContentCategoryConfiguration: React.FC<ContentCategoryConfigurationProps> 
             borderRadius: "4px",
           }}
         >
-          No blocked topics selected. Add topics to detect and block harmful content.
+          {t("No blocked topics selected. Add topics to detect and block harmful content.")}
         </div>
       )}
     </Card>

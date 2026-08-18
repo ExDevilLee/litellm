@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { getGeneralSettingsCall } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 import {
   PromptCachingPanel,
   generalSettingsItem,
@@ -27,7 +28,7 @@ const PromptCachingTab: React.FC<PromptCachingTabProps> = ({ accessToken, activi
       .then((data: generalSettingsItem[]) => setSettings(data))
       .catch((error) => {
         console.error("Failed to load prompt caching settings:", error);
-        NotificationsManager.fromBackend("Failed to load prompt caching settings");
+        NotificationsManager.fromBackend(t("Failed to load prompt caching settings"));
       });
   }, [accessToken]);
 

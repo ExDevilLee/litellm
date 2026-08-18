@@ -1,5 +1,6 @@
 import NotificationManager from "@/components/molecules/notifications_manager";
 import { getGlobalLitellmHeaderName, getProxyBaseUrl } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 export async function makeInteractionsRequest(
   input: string,
@@ -115,7 +116,7 @@ export async function makeInteractionsRequest(
     if (signal?.aborted) {
       throw error;
     }
-    NotificationManager.fromBackend(`Error occurred while making Interactions API request. Error: ${error}`);
+    NotificationManager.fromBackend(t("Error occurred while making Interactions API request. Error: {0}", String(error)));
     throw error;
   }
 }

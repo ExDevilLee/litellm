@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Form } from "antd";
 import MessageManager from "@/components/molecules/message_manager";
+import { t } from "@/contexts/LanguageContext";
 import { AccessGroupBaseForm, AccessGroupFormValues } from "./AccessGroupBaseForm";
 import {
   useCreateAccessGroup,
@@ -31,7 +32,7 @@ export function AccessGroupCreateModal({ visible, onCancel, onSuccess }: AccessG
 
         createMutation.mutate(params, {
           onSuccess: () => {
-            MessageManager.success("Access group created successfully");
+            MessageManager.success(t("Access group created successfully"));
             form.resetFields();
             onSuccess?.();
             onCancel();
@@ -43,13 +44,13 @@ export function AccessGroupCreateModal({ visible, onCancel, onSuccess }: AccessG
 
   return (
     <Modal
-      title="Create Access Group"
+      title={t("Create Access Group")}
       open={visible}
       onOk={handleOk}
       onCancel={onCancel}
       width={700}
-      okText="Create Group"
-      cancelText="Cancel"
+      okText={t("Create Group")}
+      cancelText={t("Cancel")}
       confirmLoading={createMutation.isPending}
       destroyOnClose
     >

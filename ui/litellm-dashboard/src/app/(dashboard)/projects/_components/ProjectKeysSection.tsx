@@ -2,6 +2,7 @@ import { useKeys } from "@/app/(dashboard)/hooks/keys/useKeys";
 import { PaginationState } from "@tanstack/react-table";
 import { Card, Flex, Input } from "antd";
 import { KeyIcon, SearchIcon } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
 import { ProjectKeysTable } from "./ProjectKeysTable";
 
@@ -32,7 +33,7 @@ export function ProjectKeysSection({ projectId }: ProjectKeysSectionProps) {
       title={
         <Flex align="center" gap={8}>
           <KeyIcon size={16} />
-          Keys
+          {t("Keys")}
         </Flex>
       }
       style={{ height: "100%" }}
@@ -40,7 +41,7 @@ export function ProjectKeysSection({ projectId }: ProjectKeysSectionProps) {
       <Flex justify="flex-start" align="center" style={{ marginBottom: 12 }}>
         <Input
           prefix={<SearchIcon size={14} />}
-          placeholder="Filter by key name..."
+          placeholder={t("Filter by key name...")}
           style={{ maxWidth: 220 }}
           value={keyAlias}
           onChange={(e) => setKeyAlias(e.target.value)}

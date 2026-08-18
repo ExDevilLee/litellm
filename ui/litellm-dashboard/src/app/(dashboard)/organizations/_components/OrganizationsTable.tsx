@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Organization } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 import { getOrganizationsTableColumns } from "./OrganizationsTableColumns";
 
@@ -29,12 +30,12 @@ function EmptyState({ searchActive }: { searchActive: boolean }) {
         <Icon className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {searchActive ? "No matching organizations" : "No organizations yet"}
+        {searchActive ? t("No matching organizations") : t("No organizations yet")}
       </div>
       <div className="text-sm text-muted-foreground">
         {searchActive
-          ? "No organizations match your search. Try a different name or ID."
-          : "Create an organization to group teams, models, and budgets."}
+          ? t("No organizations match your search. Try a different name or ID.")
+          : t("Create an organization to group teams, models, and budgets.")}
       </div>
     </div>
   );
@@ -65,7 +66,7 @@ const OrganizationsTable: React.FC<OrganizationsTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading organizations…"
+      loadingMessage={t("Loading organizations…")}
       noDataMessage={<EmptyState searchActive={searchActive} />}
       size="compact"
     />

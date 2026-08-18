@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Typography, Select, Table, Tag, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -30,7 +31,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
 }) => {
   const columns = [
     {
-      title: "Category",
+      title: t("Category"),
       dataIndex: "display_name",
       key: "display_name",
       render: (displayName: string, record: ContentCategory) => (
@@ -47,7 +48,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       ),
     },
     {
-      title: "Severity Threshold",
+      title: t("Severity Threshold"),
       dataIndex: "severity_threshold",
       key: "severity_threshold",
       width: 180,
@@ -67,15 +68,15 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
             style={{ width: 150 }}
             size="small"
           >
-            <Option value="high">High</Option>
-            <Option value="medium">Medium</Option>
-            <Option value="low">Low</Option>
+            <Option value="high">{t("High")}</Option>
+            <Option value="medium">{t("Medium")}</Option>
+            <Option value="low">{t("Low")}</Option>
           </Select>
         );
       },
     },
     {
-      title: "Action",
+      title: t("Action"),
       dataIndex: "action",
       key: "action",
       width: 150,
@@ -90,8 +91,8 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
             style={{ width: 120 }}
             size="small"
           >
-            <Option value="BLOCK">Block</Option>
-            <Option value="MASK">Mask</Option>
+            <Option value="BLOCK">{t("Block")}</Option>
+            <Option value="MASK">{t("Mask")}</Option>
           </Select>
         );
       },
@@ -105,14 +106,14 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
       width: 100,
       render: (_: any, record: ContentCategory) => (
         <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onRemove?.(record.id)}>
-          Delete
+          {t("Delete")}
         </Button>
       ),
     } as any);
   }
 
   if (categories.length === 0) {
-    return <div style={{ textAlign: "center", padding: "40px 0", color: "#999" }}>No categories configured.</div>;
+    return <div style={{ textAlign: "center", padding: "40px 0", color: "#999" }}>{t("No categories configured.")}</div>;
   }
 
   return <Table dataSource={categories} columns={columns} rowKey="id" pagination={false} size="small" />;

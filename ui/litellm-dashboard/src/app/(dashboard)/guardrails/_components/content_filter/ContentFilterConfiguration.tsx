@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Typography, Space, Upload, Card, Button } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { validateBlockedWordsFile } from "@/components/networking";
@@ -139,7 +140,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddCustomPattern = () => {
     if (!customPatternName || !customPatternRegex) {
-      NotificationsManager.error("Please provide pattern name and regex");
+      NotificationsManager.error(t("Please provide pattern name and regex"));
       return;
     }
 
@@ -159,7 +160,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddKeyword = () => {
     if (!newKeyword) {
-      NotificationsManager.error("Please enter a keyword");
+      NotificationsManager.error(t("Please enter a keyword"));
       return;
     }
 
@@ -187,14 +188,14 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           if (onFileUpload) {
             onFileUpload(content);
           }
-          NotificationsManager.success(result.message || "File uploaded successfully");
+          NotificationsManager.success(result.message || t("File uploaded successfully"));
         } else {
-          const errorMessage = result.error || (result.errors && result.errors.join(", ")) || "Invalid file";
-          NotificationsManager.error(`Validation failed: ${errorMessage}`);
+          const errorMessage = result.error || (result.errors && result.errors.join(", ")) || t("Invalid file");
+          NotificationsManager.error(t("Validation failed: {0}", errorMessage));
         }
       }
     } catch (error) {
-      NotificationsManager.error(`Failed to upload file: ${error}`);
+      NotificationsManager.error(t("Failed to upload file: {0}", error));
     } finally {
       setUploadValidating(false);
     }
@@ -211,8 +212,9 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
       {!showStep && (
         <div>
           <Text type="secondary">
-            Configure patterns, keywords, and content categories to detect and filter sensitive information in requests
-            and responses.
+            {t(
+              "Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses.",
+            )}
           </Text>
         </div>
       )}
@@ -222,10 +224,10 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           title={
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Title level={5} style={{ margin: 0 }}>
-                Pattern Detection
+                {t("Pattern Detection")}
               </Title>
               <Text type="secondary" style={{ fontSize: 14, fontWeight: 400 }}>
-                Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)
+                {t("Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)")}
               </Text>
             </div>
           }
@@ -234,10 +236,10 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           <div style={{ marginBottom: 16 }}>
             <Space>
               <Button type="primary" onClick={() => setPatternModalVisible(true)} icon={<PlusOutlined />}>
-                Add prebuilt pattern
+                {t("Add prebuilt pattern")}
               </Button>
               <Button onClick={() => setCustomPatternModalVisible(true)} icon={<PlusOutlined />}>
-                Add custom regex
+                {t("Add custom regex")}
               </Button>
             </Space>
           </div>
@@ -250,10 +252,10 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           title={
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Title level={5} style={{ margin: 0 }}>
-                Blocked Keywords
+                {t("Blocked Keywords")}
               </Title>
               <Text type="secondary" style={{ fontSize: 14, fontWeight: 400 }}>
-                Block or mask specific sensitive terms and phrases
+                {t("Block or mask specific sensitive terms and phrases")}
               </Text>
             </div>
           }
@@ -262,11 +264,11 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           <div style={{ marginBottom: 16 }}>
             <Space>
               <Button type="primary" onClick={() => setKeywordModalVisible(true)} icon={<PlusOutlined />}>
-                Add keyword
+                {t("Add keyword")}
               </Button>
               <Upload beforeUpload={handleFileUpload} accept=".yaml,.yml" showUploadList={false}>
                 <Button icon={<UploadOutlined />} loading={uploadValidating}>
-                  Upload YAML file
+                  {t("Upload YAML file")}
                 </Button>
               </Upload>
             </Space>

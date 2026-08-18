@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Form, Select, Spin, Input, Slider } from "antd";
 import {
   guardrail_provider_map,
@@ -68,7 +69,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
         populateGuardrailProviderMap(data);
       } catch (error) {
         console.error("Error fetching provider params:", error);
-        setError("Failed to load provider parameters");
+        setError(t("Failed to load provider parameters"));
       } finally {
         setLoading(false);
       }
@@ -87,7 +88,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
 
   // Show loading state
   if (loading) {
-    return <Spin tip="Loading provider parameters..." />;
+    return <Spin tip={t("Loading provider parameters...")} />;
   }
 
   // Show error state
@@ -102,7 +103,7 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
   const providerFields = providerParams && providerParams[providerKey];
 
   if (!providerFields || Object.keys(providerFields).length === 0) {
-    return <div>No configuration fields available for this provider.</div>;
+    return <div>{t("No configuration fields available for this provider.")}</div>;
   }
 
   // Fields to skip for content filter provider (handled in dedicated steps)
@@ -180,8 +181,8 @@ const GuardrailProviderFields: React.FC<GuardrailProviderFieldsProps> = ({
             </Select>
           ) : field.type === "bool" || field.type === "boolean" ? (
             <Select placeholder={field.description}>
-              <Select.Option value={true}>True</Select.Option>
-              <Select.Option value={false}>False</Select.Option>
+              <Select.Option value={true}>{t("True")}</Select.Option>
+              <Select.Option value={false}>{t("False")}</Select.Option>
             </Select>
           ) : field.type === "percentage" && field.min != null && field.max != null ? (
             <Slider

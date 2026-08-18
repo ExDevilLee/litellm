@@ -6,6 +6,7 @@ import { Guardrail } from "@/components/guardrails/types";
 import { getResolvedGuardrails, modelAvailableCall } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { t } from "@/contexts/LanguageContext";
 
 const { Text } = Typography;
 
@@ -73,10 +74,10 @@ const ModePicker: React.FC<ModePicker> = ({ selected, onSelect }) => (
         </svg>
       </div>
       <Text strong style={{ fontSize: 15, display: "block", marginBottom: 4 }}>
-        Simple Mode
+        {t("Simple Mode")}
       </Text>
       <Text type="secondary" style={{ fontSize: 13 }}>
-        Pick guardrails from a list. All run in parallel.
+        {t("Pick guardrails from a list. All run in parallel.")}
       </Text>
     </div>
 
@@ -105,7 +106,7 @@ const ModePicker: React.FC<ModePicker> = ({ selected, onSelect }) => (
           margin: 0,
         }}
       >
-        NEW
+        {t("NEW")}
       </Tag>
       <div
         style={{
@@ -133,10 +134,10 @@ const ModePicker: React.FC<ModePicker> = ({ selected, onSelect }) => (
         </svg>
       </div>
       <Text strong style={{ fontSize: 15, display: "block", marginBottom: 4 }}>
-        Flow Builder
+        {t("Flow Builder")}
       </Text>
       <Text type="secondary" style={{ fontSize: 13 }}>
-        Define steps, conditions, and error responses.
+        {t("Define steps, conditions, and error responses.")}
       </Text>
     </div>
   </div>
@@ -322,10 +323,10 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
       if (isEditing && editingPolicy) {
         await updatePolicy(accessToken, editingPolicy.policy_id, data as PolicyUpdateRequest);
-        NotificationsManager.success("Policy updated successfully");
+        NotificationsManager.success(t("Policy updated successfully"));
       } else {
         await createPolicy(accessToken, data as PolicyCreateRequest);
-        NotificationsManager.success("Policy created successfully");
+        NotificationsManager.success(t("Policy created successfully"));
       }
 
       resetForm();
@@ -334,7 +335,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
     } catch (error) {
       console.error("Failed to save policy:", error);
       NotificationsManager.fromBackend(
-        "Failed to save policy: " + (error instanceof Error ? error.message : String(error)),
+        t("Failed to save policy: ") + (error instanceof Error ? error.message : String(error)),
       );
     } finally {
       setIsSubmitting(false);
@@ -356,12 +357,12 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
   // ── Mode Picker Step ──────────────────────────────────────────────────────
   if (step === "pick_mode") {
     return (
-      <Modal title="Create New Policy" open={visible} onCancel={handleClose} footer={null} width={620}>
+      <Modal title={t("Create New Policy")} open={visible} onCancel={handleClose} footer={null} width={620}>
         <ModePicker selected={selectedMode} onSelect={setSelectedMode} />
 
         {selectedMode === "flow_builder" && (
           <Alert
-            message="You'll be redirected to the full-screen Flow Builder to design your policy logic visually."
+            message={t("You'll be redirected to the full-screen Flow Builder to design your policy logic visually.")}
             type="info"
             style={{
               marginTop: 16,
@@ -373,7 +374,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
         <div className="flex justify-end gap-2" style={{ marginTop: 24 }}>
           <Button variant="secondary" onClick={handleClose}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             onClick={handleModeConfirm}
@@ -383,7 +384,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               border: "none",
             }}
           >
-            {selectedMode === "flow_builder" ? "Continue to Builder" : "Create Policy"}
+            {selectedMode === "flow_builder" ? t("Continue to Builder") : t("Create Policy")}
           </Button>
         </div>
       </Modal>
@@ -393,7 +394,7 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
   // ── Simple Form Step ──────────────────────────────────────────────────────
   return (
     <Modal
-      title={isEditing ? "Edit Policy" : "Create New Policy"}
+      title={isEditing ? t("Edit Policy") : t("Create New Policy")}
       open={visible}
       onCancel={handleClose}
       footer={null}
@@ -410,52 +411,52 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
       >
         <Form.Item
           name="policy_name"
-          label="Policy Name"
+          label={t("Policy Name")}
           rules={[
-            { required: true, message: "Please enter a policy name" },
+            { required: true, message: t("Please enter a policy name") },
             {
               pattern: /^[a-zA-Z0-9_-]+$/,
-              message: "Policy name can only contain letters, numbers, hyphens, and underscores",
+              message: t("Policy name can only contain letters, numbers, hyphens, and underscores"),
             },
           ]}
         >
-          <TextInput placeholder="e.g., global-baseline, healthcare-compliance" disabled={isEditing} />
+          <TextInput placeholder={t("e.g., global-baseline, healthcare-compliance")} disabled={isEditing} />
         </Form.Item>
 
-        <Form.Item name="description" label="Description">
-          <Textarea rows={2} placeholder="Describe what this policy does..." />
+        <Form.Item name="description" label={t("Description")}>
+          <Textarea rows={2} placeholder={t("Describe what this policy does...")} />
         </Form.Item>
 
         <Divider orientation="left">
-          <Text strong>Inheritance</Text>
+          <Text strong>{t("Inheritance")}</Text>
         </Divider>
 
         <Form.Item
           name="inherit"
-          label="Inherit From"
-          tooltip="Inherit guardrails from another policy. The child policy will include all guardrails from the parent."
+          label={t("Inherit From")}
+          tooltip={t("Inherit guardrails from another policy. The child policy will include all guardrails from the parent.")}
         >
           <Select
             allowClear
-            placeholder="Select a parent policy (optional)"
+            placeholder={t("Select a parent policy (optional)")}
             options={policyOptions}
             style={{ width: "100%" }}
           />
         </Form.Item>
 
         <Divider orientation="left">
-          <Text strong>Guardrails</Text>
+          <Text strong>{t("Guardrails")}</Text>
         </Divider>
 
         <Form.Item
           name="guardrails_add"
-          label="Guardrails to Add"
-          tooltip="These guardrails will be added to requests matching this policy"
+          label={t("Guardrails to Add")}
+          tooltip={t("These guardrails will be added to requests matching this policy")}
         >
           <Select
             mode="multiple"
             allowClear
-            placeholder="Select guardrails to add"
+            placeholder={t("Select guardrails to add")}
             options={guardrailOptions}
             style={{ width: "100%" }}
           />
@@ -463,13 +464,13 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
         <Form.Item
           name="guardrails_remove"
-          label="Guardrails to Remove"
-          tooltip="These guardrails will be removed from inherited guardrails"
+          label={t("Guardrails to Remove")}
+          tooltip={t("These guardrails will be removed from inherited guardrails")}
         >
           <Select
             mode="multiple"
             allowClear
-            placeholder="Select guardrails to remove (from inherited)"
+            placeholder={t("Select guardrails to remove (from inherited)")}
             options={guardrailOptions}
             style={{ width: "100%" }}
           />
@@ -477,11 +478,11 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
 
         {resolvedGuardrails.length > 0 && (
           <Alert
-            message="Resolved Guardrails"
+            message={t("Resolved Guardrails")}
             description={
               <div>
                 <Text type="secondary" style={{ display: "block", marginBottom: 8 }}>
-                  These are the final guardrails that will be applied (including inheritance):
+                  {t("These are the final guardrails that will be applied (including inheritance):")}
                 </Text>
                 <div className="flex flex-wrap gap-1">
                   {resolvedGuardrails.map((g) => (
@@ -499,18 +500,18 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
         )}
 
         <Divider orientation="left">
-          <Text strong>Conditions (Optional)</Text>
+          <Text strong>{t("Conditions (Optional)")}</Text>
         </Divider>
 
         <Alert
-          message="Model Scope"
-          description="By default, this policy will run on all models. You can optionally restrict it to specific models below."
+          message={t("Model Scope")}
+          description={t("By default, this policy will run on all models. You can optionally restrict it to specific models below.")}
           type="info"
           showIcon
           style={{ marginBottom: 16 }}
         />
 
-        <Form.Item label="Model Condition Type">
+        <Form.Item label={t("Model Condition Type")}>
           <Radio.Group
             value={modelConditionType}
             onChange={(e) => {
@@ -518,25 +519,25 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               form.setFieldValue("model_condition", undefined);
             }}
           >
-            <Radio value="model">Select Model</Radio>
-            <Radio value="regex">Custom Regex Pattern</Radio>
+            <Radio value="model">{t("Select Model")}</Radio>
+            <Radio value="regex">{t("Custom Regex Pattern")}</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
           name="model_condition"
-          label={modelConditionType === "model" ? "Model (Optional)" : "Regex Pattern (Optional)"}
+          label={modelConditionType === "model" ? t("Model (Optional)") : t("Regex Pattern (Optional)")}
           tooltip={
             modelConditionType === "model"
-              ? "Select a specific model to apply this policy to. Leave empty to apply to all models."
-              : "Enter a regex pattern to match models (e.g., gpt-4.* or bedrock/.*). Leave empty to apply to all models."
+              ? t("Select a specific model to apply this policy to. Leave empty to apply to all models.")
+              : t("Enter a regex pattern to match models (e.g., gpt-4.* or bedrock/.*). Leave empty to apply to all models.")
           }
         >
           {modelConditionType === "model" ? (
             <Select
               showSearch
               allowClear
-              placeholder="Leave empty to apply to all models"
+              placeholder={t("Leave empty to apply to all models")}
               options={availableModels.map((model) => ({
                 label: model,
                 value: model,
@@ -545,16 +546,16 @@ const AddPolicyForm: React.FC<AddPolicyFormProps> = ({
               style={{ width: "100%" }}
             />
           ) : (
-            <TextInput placeholder="Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)" />
+            <TextInput placeholder={t("Leave empty to apply to all models (e.g., gpt-4.* or bedrock/claude-.*)")} />
           )}
         </Form.Item>
 
         <div className="flex justify-end space-x-2 mt-4">
           <Button variant="secondary" onClick={handleClose}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button onClick={handleSubmit} loading={isSubmitting}>
-            {isEditing ? "Update Policy" : "Create Policy"}
+            {isEditing ? t("Update Policy") : t("Create Policy")}
           </Button>
         </div>
       </Form>

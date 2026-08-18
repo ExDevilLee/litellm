@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Input } from "antd";
 import { SearchOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { GuardrailCardInfo, ALL_CARDS } from "./guardrail_garden_data";
@@ -47,7 +48,7 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
       <div style={{ marginBottom: 24 }}>
         <Input
           size="large"
-          placeholder="Search guardrails"
+          placeholder={t("Search guardrails")}
           prefix={<SearchOutlined style={{ color: "#9ca3af" }} />}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -58,7 +59,9 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
       {/* LiteLLM Content Filter Section */}
       <div style={{ marginBottom: 40 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-          <h2 style={{ fontSize: 20, fontWeight: 600, color: "#111827", margin: 0 }}>LiteLLM Content Filter</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: "#111827", margin: 0 }}>
+            {t("LiteLLM Content Filter")}
+          </h2>
           <span
             style={{
               display: "inline-flex",
@@ -71,17 +74,17 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
             onClick={() => setShowAllLitellm(!showAllLitellm)}
           >
             {showAllLitellm ? (
-              <>Show less</>
+              <>{t("Show less")}</>
             ) : (
               <>
                 <ArrowRightOutlined style={{ fontSize: 12 }} />
-                {`Show all (${litellmCards.length})`}
+                {t("Show all ({0})", litellmCards.length)}
               </>
             )}
           </span>
         </div>
         <p style={{ fontSize: 13, color: "#6b7280", margin: "4px 0 20px 0" }}>
-          Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.
+          {t("Built-in guardrails powered by LiteLLM. Zero latency, no external dependencies, no additional cost.")}
         </p>
         <div
           style={{
@@ -98,9 +101,11 @@ const GuardrailGarden: React.FC<GuardrailGardenProps> = ({ accessToken, onGuardr
 
       {/* Partner Guardrails Section */}
       <div style={{ marginBottom: 40 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 600, color: "#111827", margin: "0 0 4px 0" }}>Partner Guardrails</h2>
+        <h2 style={{ fontSize: 20, fontWeight: 600, color: "#111827", margin: "0 0 4px 0" }}>
+          {t("Partner Guardrails")}
+        </h2>
         <p style={{ fontSize: 13, color: "#6b7280", margin: "4px 0 20px 0" }}>
-          Third-party guardrail integrations from leading AI security providers.
+          {t("Third-party guardrail integrations from leading AI security providers.")}
         </p>
         <div
           style={{

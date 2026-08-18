@@ -5,6 +5,7 @@ import { SimpleTable } from "@/components/common_components/simple_table";
 import { MarginConfig } from "./types";
 import { getProviderLogoAndName } from "@/components/provider_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
+import { t } from "@/contexts/LanguageContext";
 
 interface ProviderMarginTableProps {
   marginConfig: MarginConfig;
@@ -99,12 +100,12 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
       data={data}
       columns={[
         {
-          header: "Provider",
+          header: t("Provider"),
           cell: (row) => {
             if (row.provider === "global") {
               return (
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium">Global (All Providers)</span>
+                  <span className="font-medium">{t("Global (All Providers)")}</span>
                 </div>
               );
             }
@@ -118,7 +119,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           },
         },
         {
-          header: "Margin",
+          header: t("Margin"),
           cell: (row) => (
             <div className="flex items-center gap-2">
               {editingProvider === row.provider ? (
@@ -170,9 +171,10 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           width: "350px",
         },
         {
-          header: "Actions",
+          header: t("Actions"),
           cell: (row) => {
-            const displayName = row.provider === "global" ? "Global" : getProviderLogoAndName(row.provider).displayName;
+            const displayName =
+              row.provider === "global" ? t("Global") : getProviderLogoAndName(row.provider).displayName;
             return (
               <Icon
                 icon={TrashIcon}
@@ -186,7 +188,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider margins configured"
+      emptyMessage={t("No provider margins configured")}
     />
   );
 };

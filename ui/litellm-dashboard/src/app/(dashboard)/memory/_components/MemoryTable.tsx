@@ -5,6 +5,7 @@ import { Database } from "lucide-react";
 import React, { useMemo } from "react";
 
 import { MemoryRow } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 import { DataTable, DataTableToolbar } from "@/components/shared/DataTable";
 
 import { getMemoryTableColumns } from "./MemoryTableColumns";
@@ -32,12 +33,12 @@ function MemoryEmptyState({ hasActiveSearch }: { hasActiveSearch: boolean }) {
         <Database className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {hasActiveSearch ? "No matching memories" : "No memories stored yet"}
+        {hasActiveSearch ? t("No matching memories") : t("No memories stored yet")}
       </div>
       <div className="text-sm text-muted-foreground">
         {hasActiveSearch
-          ? "No memories have keys starting with your search."
-          : "Memories your agents store under /v1/memory will appear here."}
+          ? t("No memories have keys starting with your search.")
+          : t("Memories your agents store under /v1/memory will appear here.")}
       </div>
     </div>
   );
@@ -73,7 +74,7 @@ export function MemoryTable({
       onPaginationChange={onPaginationChange}
       rowCount={rowCount}
       isLoading={isLoading}
-      loadingMessage="Loading memories…"
+      loadingMessage={t("Loading memories…")}
       noDataMessage={<MemoryEmptyState hasActiveSearch={hasActiveSearch} />}
       size="compact"
       toolbar={(table) => (
@@ -81,7 +82,7 @@ export function MemoryTable({
           table={table}
           searchValue={searchValue}
           onSearchChange={onSearchChange}
-          searchPlaceholder='Filter by key prefix, e.g. "user:"'
+          searchPlaceholder={t('Filter by key prefix, e.g. "user:"')}
           onRefresh={onRefresh}
           isRefreshing={isRefreshing}
           showViewOptions={false}

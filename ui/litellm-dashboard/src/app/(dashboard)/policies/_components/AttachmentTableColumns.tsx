@@ -6,6 +6,7 @@ import { Copy, MoreHorizontal, Trash2 } from "lucide-react";
 import { DataTableSortHeader } from "@/components/shared/DataTable";
 import { DateCell, IdCell, StatusBadge } from "@/components/shared/table_cells";
 import { PolicyAttachment } from "@/components/policies/types";
+import { t } from "@/contexts/LanguageContext";
 import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -59,10 +60,10 @@ function AttachmentRowActions({ attachment, isAdmin, onDeleteClick }: Attachment
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem
           data-testid="attachment-action-copy-id"
-          onClick={() => void copyToClipboard(attachment.attachment_id, "Attachment ID copied")}
+          onClick={() => void copyToClipboard(attachment.attachment_id, t("Attachment ID copied"))}
         >
           <Copy />
-          Copy attachment ID
+          {t("Copy attachment ID")}
         </DropdownMenuItem>
         {isAdmin && (
           <>
@@ -71,11 +72,11 @@ function AttachmentRowActions({ attachment, isAdmin, onDeleteClick }: Attachment
               variant="destructive"
               data-testid="attachment-action-delete"
               disabled={isConfigAttachment}
-              title={isConfigAttachment ? CONFIG_ATTACHMENT_HINT : undefined}
+              title={isConfigAttachment ? t(CONFIG_ATTACHMENT_HINT) : undefined}
               onClick={() => onDeleteClick(attachment.attachment_id)}
             >
               <Trash2 />
-              Delete attachment
+              {t("Delete attachment")}
             </DropdownMenuItem>
           </>
         )}
@@ -98,8 +99,8 @@ export const getAttachmentTableColumns = ({
   {
     id: "attachment_id",
     accessorKey: "attachment_id",
-    meta: { title: "Attachment ID" },
-    header: "Attachment ID",
+    meta: { title: t("Attachment ID") },
+    header: t("Attachment ID"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <IdCell value={row.original.attachment_id} variant="plain" />,
@@ -107,8 +108,8 @@ export const getAttachmentTableColumns = ({
   {
     id: "policy_name",
     accessorKey: "policy_name",
-    meta: { title: "Policy", skeleton: "badge" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Policy" />,
+    meta: { title: t("Policy"), skeleton: "badge" },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Policy")} />,
     size: 180,
     enableSorting: true,
     cell: ({ row }) => <StatusBadge tone="info" label={row.original.policy_name} />,
@@ -116,8 +117,8 @@ export const getAttachmentTableColumns = ({
   {
     id: "scope",
     accessorFn: (row) => row.scope ?? "",
-    meta: { title: "Scope", skeleton: "badge" },
-    header: "Scope",
+    meta: { title: t("Scope"), skeleton: "badge" },
+    header: t("Scope"),
     size: 120,
     enableSorting: false,
     cell: ({ row }) => {
@@ -126,7 +127,7 @@ export const getAttachmentTableColumns = ({
         return <span className="text-muted-foreground">-</span>;
       }
       if (scope === "*") {
-        return <StatusBadge tone="warning" label="Global (*)" />;
+        return <StatusBadge tone="warning" label={t("Global (*)")} />;
       }
       return (
         <span className="block max-w-40 truncate text-xs" title={scope}>
@@ -137,32 +138,32 @@ export const getAttachmentTableColumns = ({
   },
   {
     id: "teams",
-    meta: { title: "Teams", skeleton: "chips" },
-    header: "Teams",
+    meta: { title: t("Teams"), skeleton: "chips" },
+    header: t("Teams"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.teams ?? []} />,
   },
   {
     id: "keys",
-    meta: { title: "Keys", skeleton: "chips" },
-    header: "Keys",
+    meta: { title: t("Keys"), skeleton: "chips" },
+    header: t("Keys"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.keys ?? []} />,
   },
   {
     id: "models",
-    meta: { title: "Models", skeleton: "chips" },
-    header: "Models",
+    meta: { title: t("Models"), skeleton: "chips" },
+    header: t("Models"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.models ?? []} />,
   },
   {
     id: "tags",
-    meta: { title: "Tags", skeleton: "chips" },
-    header: "Tags",
+    meta: { title: t("Tags"), skeleton: "chips" },
+    header: t("Tags"),
     size: 160,
     enableSorting: false,
     cell: ({ row }) => <ChipList values={row.original.tags ?? []} />,
@@ -170,8 +171,8 @@ export const getAttachmentTableColumns = ({
   {
     id: "created_at",
     accessorFn: (row) => row.created_at ?? "",
-    meta: { title: "Created At" },
-    header: ({ column }) => <DataTableSortHeader column={column} title="Created At" />,
+    meta: { title: t("Created At") },
+    header: ({ column }) => <DataTableSortHeader column={column} title={t("Created At")} />,
     size: 150,
     enableSorting: true,
     cell: ({ row }) => <DateCell value={row.original.created_at} />,
@@ -179,7 +180,7 @@ export const getAttachmentTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("Actions")}</span>,
     size: 88,
     enableSorting: false,
     enableHiding: false,

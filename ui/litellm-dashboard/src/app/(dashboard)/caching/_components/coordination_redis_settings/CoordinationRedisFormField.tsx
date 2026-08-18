@@ -1,6 +1,7 @@
 import { Form, Input, Switch } from "antd";
 import React from "react";
 import { CoordinationField } from "./coordinationRedisFields";
+import { t } from "@/contexts/LanguageContext";
 
 export const SECRET_ALREADY_SET_PLACEHOLDER = "Already set. Enter a new value to replace it.";
 
@@ -27,12 +28,12 @@ const renderControl = (field: CoordinationField, placeholder: string): React.Rea
 const CoordinationRedisFormField: React.FC<CoordinationRedisFormFieldProps> = ({ field, isSecretConfigured }) => (
   <Form.Item
     name={field.name}
-    label={field.label}
-    extra={field.helpText}
+    label={t(field.label)}
+    extra={t(field.helpText)}
     rules={field.rules}
     valuePropName={field.type === "boolean" ? "checked" : "value"}
   >
-    {renderControl(field, isSecretConfigured ? SECRET_ALREADY_SET_PLACEHOLDER : field.helpText)}
+    {renderControl(field, isSecretConfigured ? t(SECRET_ALREADY_SET_PLACEHOLDER) : t(field.helpText))}
   </Form.Item>
 );
 

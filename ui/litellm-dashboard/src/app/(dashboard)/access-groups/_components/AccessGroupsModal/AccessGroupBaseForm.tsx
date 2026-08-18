@@ -4,6 +4,7 @@ import { ModelSelect } from "@/components/ModelSelect/ModelSelect";
 import type { FormInstance } from "antd";
 import { Form, Input, Select, Space, Tabs } from "antd";
 import { BotIcon, InfoIcon, LayersIcon, ServerIcon } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 
 const { TextArea } = Input;
 
@@ -32,25 +33,25 @@ export function AccessGroupBaseForm({ form, isNameDisabled = false }: AccessGrou
       label: (
         <Space align="center" size={4}>
           <InfoIcon size={16} />
-          General Info
+          {t("General Info")}
         </Space>
       ),
       children: (
         <div style={{ paddingTop: 16 }}>
           <Form.Item
             name="name"
-            label="Group Name"
+            label={t("Group Name")}
             rules={[
               {
                 required: true,
-                message: "Please enter the access group name",
+                message: t("Please enter the access group name"),
               },
             ]}
           >
-            <Input placeholder="e.g. Engineering Team" disabled={isNameDisabled} />
+            <Input placeholder={t("e.g. Engineering Team")} disabled={isNameDisabled} />
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <TextArea rows={4} placeholder="Describe the purpose of this access group..." />
+          <Form.Item name="description" label={t("Description")}>
+            <TextArea rows={4} placeholder={t("Describe the purpose of this access group...")} />
           </Form.Item>
         </div>
       ),
@@ -60,12 +61,12 @@ export function AccessGroupBaseForm({ form, isNameDisabled = false }: AccessGrou
       label: (
         <Space align="center" size={4}>
           <LayersIcon size={16} />
-          Models
+          {t("Models")}
         </Space>
       ),
       children: (
         <div style={{ paddingTop: 16 }}>
-          <Form.Item name="modelIds" label="Allowed Models">
+          <Form.Item name="modelIds" label={t("Allowed Models")}>
             <ModelSelect
               context="global"
               value={form.getFieldValue("modelIds") ?? []}
@@ -81,15 +82,15 @@ export function AccessGroupBaseForm({ form, isNameDisabled = false }: AccessGrou
       label: (
         <Space align="center" size={4}>
           <ServerIcon size={16} />
-          MCP Servers
+          {t("MCP Servers")}
         </Space>
       ),
       children: (
         <div style={{ paddingTop: 16 }}>
-          <Form.Item name="mcpServerIds" label="Allowed MCP Servers">
+          <Form.Item name="mcpServerIds" label={t("Allowed MCP Servers")}>
             <Select
               mode="multiple"
-              placeholder="Select MCP servers"
+              placeholder={t("Select MCP servers")}
               style={{ width: "100%" }}
               optionFilterProp="label"
               allowClear
@@ -107,15 +108,15 @@ export function AccessGroupBaseForm({ form, isNameDisabled = false }: AccessGrou
       label: (
         <Space align="center" size={4}>
           <BotIcon size={16} />
-          Agents
+          {t("Agents")}
         </Space>
       ),
       children: (
         <div style={{ paddingTop: 16 }}>
-          <Form.Item name="agentIds" label="Allowed Agents">
+          <Form.Item name="agentIds" label={t("Allowed Agents")}>
             <Select
               mode="multiple"
-              placeholder="Select agents"
+              placeholder={t("Select agents")}
               style={{ width: "100%" }}
               optionFilterProp="label"
               allowClear

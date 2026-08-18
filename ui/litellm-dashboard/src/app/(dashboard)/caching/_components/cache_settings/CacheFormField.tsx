@@ -1,6 +1,7 @@
 import { Form, Input, Select, Switch } from "antd";
 import React from "react";
 import { CacheField } from "./cacheSettingsFields";
+import { t } from "@/contexts/LanguageContext";
 
 export interface EmbeddingModelOption {
   value: string;
@@ -35,7 +36,7 @@ const renderControl = (
         <Select
           showSearch
           allowClear
-          placeholder="Search and select a model..."
+          placeholder={t("Search and select a model...")}
           options={embeddingModels}
           optionFilterProp="label"
           style={{ width: "100%" }}
@@ -49,12 +50,12 @@ const renderControl = (
 const CacheFormField: React.FC<CacheFormFieldProps> = ({ field, embeddingModels, isSecretConfigured = false }) => (
   <Form.Item
     name={field.name}
-    label={field.label}
-    extra={field.helpText}
+    label={t(field.label)}
+    extra={t(field.helpText)}
     rules={field.rules}
     valuePropName={field.type === "boolean" ? "checked" : "value"}
   >
-    {renderControl(field, embeddingModels, isSecretConfigured ? SECRET_ALREADY_SET_PLACEHOLDER : field.helpText)}
+    {renderControl(field, embeddingModels, isSecretConfigured ? t(SECRET_ALREADY_SET_PLACEHOLDER) : t(field.helpText))}
   </Form.Item>
 );
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Button, Card } from "@tremor/react";
 import { CopyOutlined, CheckCircleOutlined, ClockCircleOutlined, DownOutlined, RightOutlined } from "@ant-design/icons";
 import NotificationsManager from "@/components/molecules/notifications_manager";
@@ -67,7 +68,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
 
   return (
     <div className="space-y-3 pt-4 border-t border-gray-200">
-      <h3 className="text-sm font-semibold text-gray-900">Results</h3>
+      <h3 className="text-sm font-semibold text-gray-900">{t("Results")}</h3>
 
       {/* Success Results */}
       {results &&
@@ -102,13 +103,13 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                         onClick={async () => {
                           const success = await copyToClipboard(result.response_text);
                           if (success) {
-                            NotificationsManager.success("Result copied to clipboard");
+                            NotificationsManager.success(t("Result copied to clipboard"));
                           } else {
-                            NotificationsManager.fromBackend("Failed to copy result");
+                            NotificationsManager.fromBackend(t("Failed to copy result"));
                           }
                         }}
                       >
-                        Copy
+                        {t("Copy")}
                       </Button>
                     )}
                   </div>
@@ -116,13 +117,13 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                 {!isCollapsed && (
                   <>
                     <div className="bg-white border border-green-200 rounded-sm p-3">
-                      <label className="text-xs font-medium text-gray-600 mb-2 block">Output Text</label>
+                      <label className="text-xs font-medium text-gray-600 mb-2 block">{t("Output Text")}</label>
                       <div className="font-mono text-sm text-gray-900 whitespace-pre-wrap wrap-break-word">
                         {result.response_text}
                       </div>
                     </div>
                     <div className="text-xs text-gray-600">
-                      <span className="font-medium">Characters:</span> {result.response_text.length}
+                      <span className="font-medium">{t("Characters:")}</span> {result.response_text.length}
                     </div>
                   </>
                 )}
@@ -160,7 +161,7 @@ export function GuardrailTestResults({ results, errors }: GuardrailTestResultsPr
                       className="text-sm font-medium text-red-800 cursor-pointer"
                       onClick={() => toggleResultCollapse(errorItem.guardrailName)}
                     >
-                      {errorItem.guardrailName} - Error
+                      {t("{0} - Error", errorItem.guardrailName)}
                     </p>
                     <div className="flex items-center space-x-1 text-xs text-gray-600">
                       <ClockCircleOutlined />

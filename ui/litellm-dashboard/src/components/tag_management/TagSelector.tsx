@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { Tag } from "./types";
 import { tagListCall } from "../networking";
+import { t } from "@/contexts/LanguageContext";
 
 interface TagSelectorProps {
   onChange: (selectedTags: string[]) => void;
@@ -34,7 +35,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({ onChange, value, className, a
     <Select
       mode="tags"
       showSearch
-      placeholder="Select or create tags"
+      placeholder={t("Select or create tags")}
       onChange={onChange}
       value={value}
       loading={loading}

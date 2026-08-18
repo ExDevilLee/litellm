@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { Policy } from "./types";
 import { getPoliciesList } from "../networking";
+import { t } from "@/contexts/LanguageContext";
 
 /** Prefix for policy version IDs in request body; must match backend POLICY_VERSION_ID_PREFIX. */
 export const POLICY_VERSION_ID_PREFIX = "policy_";
@@ -85,7 +86,7 @@ const PolicySelector: React.FC<PolicySelectorProps> = ({
         mode="multiple"
         disabled={disabled}
         placeholder={
-          disabled ? "Setting policies is a premium feature." : "Select policies (production or published versions)"
+          disabled ? t("Setting policies is a premium feature.") : t("Select policies (production or published versions)")
         }
         onChange={handlePolicyChange}
         value={value}

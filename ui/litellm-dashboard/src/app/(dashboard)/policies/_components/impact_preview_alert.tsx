@@ -2,6 +2,7 @@ import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/shared/Alert";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Info } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 
 interface ImpactResult {
   affected_keys_count: number;
@@ -19,7 +20,6 @@ interface SampleListProps {
   samples: string[];
   totalCount: number;
 }
-
 const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) => (
   <div className="mt-1 flex flex-wrap items-center gap-1">
     <span className="text-xs text-muted-foreground">{label}: </span>
@@ -28,7 +28,7 @@ const SampleList: React.FC<SampleListProps> = ({ label, samples, totalCount }) =
         {sample}
       </Badge>
     ))}
-    {totalCount > 5 && <span className="text-xs text-muted-foreground">and {totalCount - 5} more...</span>}
+    {totalCount > 5 && <span className="text-xs text-muted-foreground">{t("and {0} more...", totalCount - 5)}</span>}
   </div>
 );
 
@@ -38,35 +38,35 @@ const ImpactPreviewAlert: React.FC<ImpactPreviewAlertProps> = ({ impactResult })
   return (
     <Alert className="mb-4">
       {isGlobal ? <AlertTriangle /> : <Info />}
-      <AlertTitle>Impact Preview</AlertTitle>
+      <AlertTitle>{t("Impact Preview")}</AlertTitle>
       <AlertDescription>
         {isGlobal ? (
           <span>
-            Global scope — this will affect <strong>all keys and teams</strong>.
+            {t("Global scope — this will affect ")}<strong>{t("all keys and teams")}</strong>.
           </span>
         ) : (
           <div>
             <span>
-              This attachment would affect{" "}
+              {t("This attachment would affect ")}
               <strong>
-                {impactResult.affected_keys_count} key{impactResult.affected_keys_count !== 1 ? "s" : ""}
+                {impactResult.affected_keys_count} {t(impactResult.affected_keys_count !== 1 ? "keys" : "key")}
               </strong>{" "}
-              and{" "}
+              {t("and")}{" "}
               <strong>
-                {impactResult.affected_teams_count} team{impactResult.affected_teams_count !== 1 ? "s" : ""}
+                {impactResult.affected_teams_count} {t(impactResult.affected_teams_count !== 1 ? "teams" : "team")}
               </strong>
               .
             </span>
             {impactResult.sample_keys.length > 0 && (
               <SampleList
-                label="Keys"
+                label={t("Keys")}
                 samples={impactResult.sample_keys}
                 totalCount={impactResult.affected_keys_count}
               />
             )}
             {impactResult.sample_teams.length > 0 && (
               <SampleList
-                label="Teams"
+                label={t("Teams")}
                 samples={impactResult.sample_teams}
                 totalCount={impactResult.affected_teams_count}
               />

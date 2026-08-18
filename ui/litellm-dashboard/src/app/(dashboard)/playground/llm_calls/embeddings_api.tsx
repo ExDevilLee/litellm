@@ -1,5 +1,6 @@
 import NotificationManager from "@/components/molecules/notifications_manager";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 export async function makeOpenAIEmbeddingsRequest(
   input: string,
@@ -58,7 +59,7 @@ export async function makeOpenAIEmbeddingsRequest(
     updateEmbeddingsUI(JSON.stringify(embedding), responseData?.model ?? selectedModel);
   } catch (error: unknown) {
     NotificationManager.fromBackend(
-      `Error occurred while making embeddings request. Please try again. Error: ${error}`,
+      t("Error occurred while making embeddings request. Please try again. Error: {0}", String(error)),
     );
 
     throw error; // Re-throw to allow the caller to handle the error

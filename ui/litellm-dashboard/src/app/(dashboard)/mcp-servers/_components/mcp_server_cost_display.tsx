@@ -1,5 +1,6 @@
 import React from "react";
 import { MCPServerCostInfo } from "@/components/mcp_tools/types";
+import { t } from "@/contexts/LanguageContext";
 
 interface MCPServerCostDisplayProps {
   costConfig?: MCPServerCostInfo | null;
@@ -18,7 +19,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
         <div className="space-y-4">
           <div className="rounded-lg border border-border bg-muted p-4">
             <p className="text-sm text-muted-foreground">
-              No cost configuration set for this server. Tool calls will be charged at $0.00 per tool call.
+              {t("No cost configuration set for this server. Tool calls will be charged at $0.00 per tool call.")}
             </p>
           </div>
         </div>
@@ -33,14 +34,14 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
           costConfig?.default_cost_per_query !== undefined &&
           costConfig?.default_cost_per_query !== null && (
             <div>
-              <p className="text-sm font-medium">Default Cost per Query</p>
-              <div className="font-mono text-sm">${costConfig.default_cost_per_query.toFixed(4)}</div>
+              <p className="text-sm font-medium">{t("Default Cost per Query")}</p>
+              <div className="font-mono text-sm">{t("${0}", costConfig.default_cost_per_query.toFixed(4))}</div>
             </div>
           )}
 
         {hasToolCosts && costConfig?.tool_name_to_cost_per_query && (
           <div>
-            <p className="text-sm font-medium">Tool-Specific Costs</p>
+            <p className="text-sm font-medium">{t("Tool-Specific Costs")}</p>
             <div className="mt-2 space-y-2">
               {Object.entries(costConfig.tool_name_to_cost_per_query).map(
                 ([toolName, cost]) =>
@@ -48,7 +49,7 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
                   cost !== undefined && (
                     <div key={toolName} className="flex items-center justify-between rounded-lg bg-muted p-3">
                       <p className="text-sm font-medium">{toolName}</p>
-                      <p className="font-mono text-sm">${cost.toFixed(4)} per query</p>
+                      <p className="font-mono text-sm">{t("${0} per query", cost.toFixed(4))}</p>
                     </div>
                   ),
               )}
@@ -57,18 +58,18 @@ const MCPServerCostDisplay: React.FC<MCPServerCostDisplayProps> = ({ costConfig 
         )}
 
         <div className="mt-4 rounded-lg border border-border bg-muted p-4">
-          <p className="text-sm font-medium">Cost Summary:</p>
+          <p className="text-sm font-medium">{t("Cost Summary:")}</p>
           <div className="mt-2 space-y-1">
             {hasDefaultCost &&
               costConfig?.default_cost_per_query !== undefined &&
               costConfig?.default_cost_per_query !== null && (
                 <p className="text-sm text-muted-foreground">
-                  • Default cost: ${costConfig.default_cost_per_query.toFixed(4)} per query
+                  {t("• Default cost: ${0} per query", costConfig.default_cost_per_query.toFixed(4))}
                 </p>
               )}
             {hasToolCosts && costConfig?.tool_name_to_cost_per_query && (
               <p className="text-sm text-muted-foreground">
-                • {Object.keys(costConfig.tool_name_to_cost_per_query).length} tool(s) with custom pricing
+                {t("• {0} tool(s) with custom pricing", Object.keys(costConfig.tool_name_to_cost_per_query).length)}
               </p>
             )}
           </div>

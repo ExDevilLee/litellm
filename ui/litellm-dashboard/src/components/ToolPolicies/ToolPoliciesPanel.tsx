@@ -7,6 +7,7 @@ import useCan from "@/app/(dashboard)/hooks/useCan";
 import { MetricCard } from "@/components/GuardrailsMonitor/MetricCard";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 import { ToolRow, updateToolPolicy } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 import { toolPoliciesListOptions } from "./toolPoliciesQueries";
 import { ToolPoliciesTable } from "./ToolPoliciesTable";
@@ -31,7 +32,7 @@ function countToolsInUTCDay(tools: ToolRow[], utcDateKey: string): number {
 function getTrendSubtitle(newToday: number, newYesterday: number): string | undefined {
   const diff = newToday - newYesterday;
   if (diff === 0) return undefined;
-  return diff > 0 ? `+${diff} since yesterday` : `${diff} since yesterday`;
+  return diff > 0 ? t("+{0} since yesterday", diff) : t("{0} since yesterday", diff);
 }
 
 function toMessage(error: unknown, fallback: string): string {
@@ -79,7 +80,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
         await updateToolPolicy(accessToken, toolName, { input_policy: newPolicy });
         await patchTool(toolName, { input_policy: newPolicy });
       } catch (e) {
-        NotificationsManager.fromBackend(`Failed to update input policy: ${toMessage(e, "unknown error")}`);
+        NotificationsManager.fromBackend(t("Failed to update input policy: {0}", toMessage(e, t("unknown error"))));
       } finally {
         setSavingInput((previous) => withoutTool(previous, toolName));
       }
@@ -95,7 +96,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
         await updateToolPolicy(accessToken, toolName, { output_policy: newPolicy });
         await patchTool(toolName, { output_policy: newPolicy });
       } catch (e) {
-        NotificationsManager.fromBackend(`Failed to update output policy: ${toMessage(e, "unknown error")}`);
+        NotificationsManager.fromBackend(t("Failed to update output policy: {0}", toMessage(e, t("unknown error"))));
       } finally {
         setSavingOutput((previous) => withoutTool(previous, toolName));
       }
@@ -131,11 +132,11 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">Tool Policies</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-6">{t("Tool Policies")}</h1>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <MetricCard
-          label="New Today"
+          label={t("New Today")}
           value={newToday}
           valueColor="text-green-600"
           subtitle={trendSubtitle}
@@ -145,21 +146,25 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
             </svg>
           }
         />
-        <MetricCard label="Total Tools Discovered" value={totalTools} />
+        <MetricCard label={t("Total Tools Discovered")} value={totalTools} />
         <MetricCard
-          label="Blocked Tools"
+          label={t("Blocked Tools")}
           value={blockedCount}
           valueColor={blockedCount > 0 ? "text-red-600" : undefined}
         />
-        <MetricCard label="Active Teams" value={activeTeamsCount > 0 ? activeTeamsCount : "—"} />
+        <MetricCard label={t("Active Teams")} value={activeTeamsCount > 0 ? activeTeamsCount : "—"} />
       </div>
 
       {needsReviewTools.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-          <h2 className="text-sm font-semibold text-amber-900 mb-1">Needs Review</h2>
+          <h2 className="text-sm font-semibold text-amber-900 mb-1">{t("Needs Review")}</h2>
           <p className="text-sm text-amber-800 mb-3">
-            {needsReviewTools.length} new tool{needsReviewTools.length !== 1 ? "s" : ""} discovered that require policy
-            decisions.
+            {t(
+              needsReviewTools.length === 1
+                ? "{0} new tool discovered that requires policy decisions"
+                : "{0} new tools discovered that require policy decisions",
+              needsReviewTools.length,
+            )}
           </p>
           <div className="flex flex-wrap gap-2">
             {needsReviewTools.map((tool) => (
@@ -175,7 +180,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
                   onClick={() => scrollToToolRow(tool.tool_id)}
                   className="text-amber-700 hover:text-amber-900 font-medium text-xs whitespace-nowrap"
                 >
-                  Review
+                  {t("Review")}
                 </button>
               </span>
             ))}
@@ -185,7 +190,7 @@ export const ToolPoliciesPanel: React.FC<ToolPoliciesPanelProps> = ({ accessToke
 
       {query.isError && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-sm text-sm text-red-700" role="alert">
-          {toMessage(query.error, "Failed to load tools")}
+          {toMessage(query.error, t("Failed to load tools"))}
         </div>
       )}
 

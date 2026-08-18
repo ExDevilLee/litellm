@@ -1,5 +1,6 @@
 import React from "react";
 import { Input } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 interface VariableInputProps {
   extractedVariables: string[];
@@ -14,7 +15,9 @@ const VariableInput: React.FC<VariableInputProps> = ({ extractedVariables, varia
 
   return (
     <div className="p-4 border-b border-gray-200 bg-blue-50">
-      <h3 className="text-sm font-semibold text-gray-700 mb-3">Fill in template variables to start testing</h3>
+      <h3 className="text-sm font-semibold text-gray-700 mb-3">
+        {t("Fill in template variables to start testing")}
+      </h3>
       <div className="space-y-2">
         {extractedVariables.map((varName) => (
           <div key={varName}>
@@ -26,7 +29,7 @@ const VariableInput: React.FC<VariableInputProps> = ({ extractedVariables, varia
             <Input
               value={variables[varName] || ""}
               onChange={(e) => onVariableChange(varName, e.target.value)}
-              placeholder={`Enter value for ${varName}`}
+              placeholder={t("Enter value for {0}", varName)}
               size="small"
             />
           </div>

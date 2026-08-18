@@ -14,6 +14,7 @@ import { Checkbox } from "antd";
 import { Text } from "@tremor/react";
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 import { CrudOp, MCPToolEntry, CRUD_GROUP_META, groupToolsByCrud } from "../../utils/mcpToolCrudClassification";
+import { t } from "@/contexts/LanguageContext";
 
 interface McpCrudPermissionPanelProps {
   /** List of tools available on this MCP server. */
@@ -170,25 +171,28 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                 ) : (
                   <ChevronDownIcon className="w-4 h-4 text-gray-500 shrink-0" />
                 )}
-                <span className="font-semibold text-gray-900 text-sm">{meta.label}</span>
+                <span className="font-semibold text-gray-900 text-sm">{t(meta.label)}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${RISK_BADGE[meta.risk]}`}>
                   {meta.risk === "high"
-                    ? "High Risk"
+                    ? t("High Risk")
                     : meta.risk === "medium"
-                      ? "Medium Risk"
+                      ? t("Medium Risk")
                       : meta.risk === "low"
-                        ? "Safe"
-                        : "Unclassified"}
+                        ? t("Safe")
+                        : t("Unclassified")}
                 </span>
                 <span className="text-xs text-gray-500 ml-1">
-                  {group.filter((t) => effectiveAllowed.has(t.name)).length}/{group.length} allowed
+                  {t(
+                    "{0} allowed",
+                    `${group.filter((te) => effectiveAllowed.has(te.name)).length}/${group.length}`,
+                  )}
                 </span>
               </button>
 
               {!readOnly && (
                 <div className="flex items-center gap-2 ml-4">
                   <Text className="text-xs text-gray-500">
-                    {fullyAllowed ? "All on" : partial ? "Partial" : "All off"}
+                    {fullyAllowed ? t("All on") : partial ? t("Partial") : t("All off")}
                   </Text>
                   {/* Checkbox supports `indeterminate`; Switch does not. */}
                   <Checkbox
@@ -204,7 +208,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
             {/* Description row */}
             {!isCollapsed && (
               <div className="px-4 pt-2 pb-1 text-xs text-gray-500 bg-white border-b border-gray-100">
-                {meta.description}
+                {t(meta.description)}
               </div>
             )}
 
@@ -245,7 +249,7 @@ const McpCrudPermissionPanel: React.FC<McpCrudPermissionPanelProps> = ({
                             allowed ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
                           }`}
                         >
-                          {allowed ? "on" : "off"}
+                          {allowed ? t("on") : t("off")}
                         </span>
                       </div>
                     );

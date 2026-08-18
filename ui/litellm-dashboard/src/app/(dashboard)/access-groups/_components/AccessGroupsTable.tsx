@@ -5,6 +5,7 @@ import { Layers } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 
 import { getAccessGroupsTableColumns } from "./AccessGroupsTableColumns";
 import { AccessGroup } from "./types";
@@ -27,12 +28,12 @@ function EmptyState({ isFiltered }: { isFiltered: boolean }) {
         <Layers className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {isFiltered ? "No matching access groups" : "No access groups yet"}
+        {isFiltered ? t("No matching access groups") : t("No access groups yet")}
       </div>
       <div className="text-sm text-muted-foreground">
         {isFiltered
-          ? "Try a different search term."
-          : "Create an access group to manage resource permissions for your organization."}
+          ? t("Try a different search term.")
+          : t("Create an access group to manage resource permissions for your organization.")}
       </div>
     </div>
   );
@@ -64,7 +65,7 @@ export function AccessGroupsTable({
       paginationMode="client"
       pageSizeOptions={PAGE_SIZE_OPTIONS}
       isLoading={isLoading}
-      loadingMessage="Loading access groups…"
+      loadingMessage={t("Loading access groups…")}
       noDataMessage={<EmptyState isFiltered={isFiltered} />}
       size="compact"
     />

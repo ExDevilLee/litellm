@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { VectorStore } from "./types";
 import { vectorStoreListCall } from "../networking";
+import { t } from "@/contexts/LanguageContext";
 interface VectorStoreSelectorProps {
   onChange: (selectedVectorStores: string[]) => void;
   value?: string[];
@@ -16,7 +17,7 @@ const VectorStoreSelector: React.FC<VectorStoreSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select vector stores",
+  placeholder = t("Select vector stores"),
   disabled = false,
 }) => {
   const [vectorStores, setVectorStores] = useState<VectorStore[]>([]);

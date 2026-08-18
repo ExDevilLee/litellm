@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import { ProjectResponse } from "@/app/(dashboard)/hooks/projects/useProjects";
 import { DataTable, DataTablePagination } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 
 import { getProjectsTableColumns } from "./ProjectsTableColumns";
 
@@ -29,10 +30,12 @@ function EmptyState({ isFiltered }: { isFiltered: boolean }) {
         <FolderKanban className="size-5 text-muted-foreground" />
       </div>
       <div className="text-sm font-medium text-foreground">
-        {isFiltered ? "No matching projects" : "No projects yet"}
+        {isFiltered ? t("No matching projects") : t("No projects yet")}
       </div>
       <div className="text-sm text-muted-foreground">
-        {isFiltered ? "Try a different search term." : "Create a project to organize keys within your teams."}
+        {isFiltered
+          ? t("Try a different search term.")
+          : t("Create a project to organize keys within your teams.")}
       </div>
     </div>
   );
@@ -84,7 +87,7 @@ export function ProjectsTable({
         />
       )}
       isLoading={isLoading}
-      loadingMessage="Loading projects…"
+      loadingMessage={t("Loading projects…")}
       noDataMessage={<EmptyState isFiltered={isFiltered} />}
       size="compact"
     />

@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { PolicyAttachment } from "@/components/policies/types";
+import { t } from "@/contexts/LanguageContext";
 
 import { getAttachmentTableColumns } from "./AttachmentTableColumns";
 
@@ -25,9 +26,9 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No attachments found</div>
+      <div className="text-sm font-medium text-foreground">{t("No attachments found")}</div>
       <div className="text-sm text-muted-foreground">
-        Attach a policy to teams, keys, models, or tags to control where it applies.
+        {t("Attach a policy to teams, keys, models, or tags to control where it applies.")}
       </div>
     </div>
   );
@@ -56,7 +57,7 @@ const AttachmentTable: React.FC<AttachmentTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading attachments…"
+      loadingMessage={t("Loading attachments…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

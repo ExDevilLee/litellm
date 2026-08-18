@@ -5,6 +5,7 @@ import { Button as TremorButton, Text } from "@tremor/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 interface PromptCodeSnippetsProps {
   promptId: string;
@@ -235,13 +236,13 @@ main();`;
   return (
     <>
       <TremorButton variant="secondary" icon={CodeOutlined} onClick={showModal}>
-        Get Code
+        {t("Get Code")}
       </TremorButton>
 
-      <Modal title="Generated Code" open={isModalVisible} onCancel={handleCancel} footer={null} width={800}>
+      <Modal title={t("Generated Code")} open={isModalVisible} onCancel={handleCancel} footer={null} width={800}>
         <div className="flex justify-between items-center mb-4">
           <div>
-            <Text className="font-medium block mb-1 text-gray-700">Language</Text>
+            <Text className="font-medium block mb-1 text-gray-700">{t("Language")}</Text>
             <Select
               value={selectedLanguage}
               onChange={(value) => setSelectedLanguage(value as "curl" | "python" | "javascript")}
@@ -256,10 +257,10 @@ main();`;
           <AntdButton
             onClick={() => {
               navigator.clipboard.writeText(generatedCode);
-              NotificationsManager.success("Copied to clipboard!");
+              NotificationsManager.success(t("Copied to clipboard!"));
             }}
           >
-            Copy to Clipboard
+            {t("Copy to Clipboard")}
           </AntdButton>
         </div>
 
@@ -267,9 +268,9 @@ main();`;
           activeKey={selectedTab}
           onChange={setSelectedTab}
           items={[
-            { label: "Basic", key: "basic" },
-            { label: "With Messages", key: "messages" },
-            { label: "With Version", key: "version" },
+            { label: t("Basic"), key: "basic" },
+            { label: t("With Messages"), key: "messages" },
+            { label: t("With Version"), key: "version" },
           ]}
         />
 

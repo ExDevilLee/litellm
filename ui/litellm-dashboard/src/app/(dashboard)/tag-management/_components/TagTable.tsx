@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Tag } from "@/components/tag_management/types";
+import { t } from "@/contexts/LanguageContext";
 
 import { getTagTableColumns } from "./tagTableColumns";
 
@@ -25,8 +26,10 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No tags yet</div>
-      <div className="text-sm text-muted-foreground">Create a tag to start routing and restricting model usage.</div>
+      <div className="text-sm font-medium text-foreground">{t("No tags yet")}</div>
+      <div className="text-sm text-muted-foreground">
+        {t("Create a tag to start routing and restricting model usage.")}
+      </div>
     </div>
   );
 }
@@ -45,7 +48,7 @@ const TagTable: React.FC<TagTableProps> = ({ data, onEdit, onDelete, onSelectTag
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading tags…"
+      loadingMessage={t("Loading tags…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

@@ -1,6 +1,7 @@
 import { Drawer, List, Skeleton, Tag, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { getPromptVersions, PromptSpec } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 const { Text } = Typography;
 
@@ -68,7 +69,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
 
   return (
     <Drawer
-      title="Version History"
+      title={t("Version History")}
       placement="right"
       onClose={onClose}
       open={isOpen}
@@ -79,7 +80,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
       {loading ? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : versions.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">No version history available.</div>
+        <div className="text-center py-8 text-gray-500">{t("No version history available.")}</div>
       ) : (
         <List
           dataSource={versions}
@@ -113,13 +114,13 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
                     <Tag className="m-0">{getVersionNumber(item)}</Tag>
                     {index === 0 && (
                       <Tag color="blue" className="m-0">
-                        Latest
+                        {t("Latest")}
                       </Tag>
                     )}
                   </div>
                   {isSelected && (
                     <Tag color="green" className="m-0">
-                      Active
+                      {t("Active")}
                     </Tag>
                   )}
                 </div>
@@ -127,7 +128,7 @@ const VersionHistorySidePanel: React.FC<VersionHistorySidePanelProps> = ({
                 <div className="flex flex-col gap-1">
                   <Text className="text-sm text-gray-600 font-medium">{formatDate(item.created_at)}</Text>
                   <Text type="secondary" className="text-xs">
-                    {item.prompt_info?.prompt_type === "db" ? "Saved to Database" : "Config Prompt"}
+                    {item.prompt_info?.prompt_type === "db" ? t("Saved to Database") : t("Config Prompt")}
                   </Text>
                 </div>
               </div>

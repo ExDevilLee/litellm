@@ -1,5 +1,6 @@
 import React from "react";
 import { Agent } from "@/components/agents/types";
+import { t } from "@/contexts/LanguageContext";
 
 interface AgentCostViewProps {
   agent: Agent;
@@ -26,11 +27,11 @@ const AgentCostView: React.FC<AgentCostViewProps> = ({ agent }) => {
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-semibold text-foreground">Cost Configuration</h3>
+      <h3 className="text-lg font-semibold text-foreground">{t("Cost Configuration")}</h3>
       <dl className="mt-4 divide-y divide-border overflow-hidden rounded-lg border border-border">
         {rows.map(([label, value]) => (
           <div key={label} className="grid grid-cols-1 sm:grid-cols-3">
-            <dt className="bg-muted/50 px-4 py-3 text-sm font-medium text-foreground">{label}</dt>
+            <dt className="bg-muted/50 px-4 py-3 text-sm font-medium text-foreground">{t(label)}</dt>
             <dd className="px-4 py-3 text-sm text-foreground sm:col-span-2">${value}</dd>
           </div>
         ))}

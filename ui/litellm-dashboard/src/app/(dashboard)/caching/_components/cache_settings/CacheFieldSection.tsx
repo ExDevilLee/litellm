@@ -2,6 +2,7 @@ import React from "react";
 import CacheFormField, { EmbeddingModelOption } from "./CacheFormField";
 import { fieldsForSection } from "./cacheSettingsUtils";
 import { CacheSection, RedisType } from "./cacheSettingsFields";
+import { t } from "@/contexts/LanguageContext";
 
 interface CacheFieldSectionProps {
   title: string;
@@ -31,7 +32,7 @@ const CacheFieldSection: React.FC<CacheFieldSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <Heading className="text-sm font-medium text-gray-900">{title}</Heading>
+      <Heading className="text-sm font-medium text-gray-900">{t(title)}</Heading>
       <div className={`grid ${gridCols}`}>
         {fields.map((field) => (
           <CacheFormField

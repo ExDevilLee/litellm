@@ -1,5 +1,6 @@
 import { Alert, Divider, Typography } from "antd";
 import React, { useEffect, useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import ContentFilterConfiguration from "./ContentFilterConfiguration";
 import ContentFilterDisplay from "./ContentFilterDisplay";
 import type { CompetitorIntentConfig } from "./CompetitorIntentConfiguration";
@@ -233,17 +234,14 @@ const ContentFilterManager: React.FC<ContentFilterManagerProps> = ({
   // Edit mode
   return (
     <>
-      <Divider orientation="left">Content Filter Configuration</Divider>
+      <Divider orientation="left">{t("Content Filter Configuration")}</Divider>
       {hasUnsavedChanges && (
         <Alert
           type="warning"
           showIcon
           className="mb-4"
           message={
-            <Text>
-              You have unsaved changes to patterns or keywords. Remember to click &quot;Save Changes&quot; at the
-              bottom.
-            </Text>
+            <Text>{t('You have unsaved changes to patterns or keywords. Remember to click "Save Changes" at the bottom.')}</Text>
           }
         />
       )}

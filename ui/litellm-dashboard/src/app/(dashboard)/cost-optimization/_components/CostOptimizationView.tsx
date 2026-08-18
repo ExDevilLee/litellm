@@ -3,6 +3,7 @@
 import React from "react";
 import { PiggyBank } from "lucide-react";
 import { Alert, Tabs } from "antd";
+import { t } from "@/contexts/LanguageContext";
 
 import UsageTab from "./UsageTab";
 import PromptCompressionTab from "./PromptCompressionTab";
@@ -22,22 +23,22 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
   const items = [
     {
       key: "usage",
-      label: "Overall",
+      label: t("Overall"),
       children: <UsageTab accessToken={accessToken} activity={activity} />,
     },
     {
       key: "compression",
-      label: "Prompt Compression",
+      label: t("Prompt Compression"),
       children: <PromptCompressionTab accessToken={accessToken} />,
     },
     {
       key: "caching",
-      label: "Prompt Caching",
+      label: t("Prompt Caching"),
       children: <PromptCachingTab accessToken={accessToken} activity={activity} />,
     },
     {
       key: "autorouter-usage",
-      label: "Auto-Router",
+      label: t("Auto-Router"),
       children: <AutoRouterBenchmarksTab accessToken={accessToken} />,
     },
   ];
@@ -47,28 +48,29 @@ const CostOptimizationView: React.FC<CostOptimizationViewProps> = ({ accessToken
       <div>
         <div className="flex items-center gap-2">
           <PiggyBank className="size-6 text-emerald-600" strokeWidth={1.75} />
-          <h1 className="text-xl font-semibold text-foreground">Cost Optimization</h1>
+          <h1 className="text-xl font-semibold text-foreground">{t("Cost Optimization")}</h1>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
-          Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers
-          live under Models + Endpoints, on the Auto-Routers tab
+          {t(
+            "Track and configure the mechanisms that save you money: prompt compression and prompt caching. Auto routers live under Models + Endpoints, on the Auto-Routers tab",
+          )}
         </p>
       </div>
 
       <Alert
         type="info"
         showIcon
-        message="This is an experimental dashboard"
+        message={t("This is an experimental dashboard")}
         description={
           <span>
-            Have feedback? Join the discussion{" "}
+            {t("Have feedback? Join the discussion")}{" "}
             <a
               href="https://github.com/BerriAI/litellm/discussions/32168"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              here
+              {t("here")}
             </a>
           </span>
         }

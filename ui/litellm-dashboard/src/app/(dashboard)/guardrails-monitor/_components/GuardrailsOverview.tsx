@@ -8,6 +8,7 @@ import { type PerformanceRow } from "@/components/GuardrailsMonitor/mockData";
 import { EvaluationSettingsModal } from "./EvaluationSettingsModal";
 import { MetricCard } from "@/components/GuardrailsMonitor/MetricCard";
 import { ScoreChart } from "./ScoreChart";
+import { t } from "@/contexts/LanguageContext";
 
 interface GuardrailsOverviewProps {
   accessToken?: string | null;
@@ -84,7 +85,7 @@ export function GuardrailsOverview({
 
   const columns: ColumnsType<PerformanceRow> = [
     {
-      title: "Guardrail",
+      title: t("Guardrail"),
       dataIndex: "name",
       key: "name",
       render: (name: string, row) => (
@@ -98,7 +99,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      title: "Provider",
+      title: t("Provider"),
       dataIndex: "provider",
       key: "provider",
       render: (provider: string) => (
@@ -112,7 +113,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      title: "Requests",
+      title: t("Requests"),
       dataIndex: "requestsEvaluated",
       key: "requestsEvaluated",
       align: "right",
@@ -121,7 +122,7 @@ export function GuardrailsOverview({
       render: (v: number) => v.toLocaleString(),
     },
     {
-      title: "Fail Rate",
+      title: t("Fail Rate"),
       dataIndex: "failRate",
       key: "failRate",
       align: "right",
@@ -135,7 +136,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      title: "Avg. latency added",
+      title: t("Avg. latency added"),
       dataIndex: "avgLatency",
       key: "avgLatency",
       align: "right",
@@ -152,7 +153,7 @@ export function GuardrailsOverview({
       ),
     },
     {
-      title: "Status",
+      title: t("Status"),
       dataIndex: "status",
       key: "status",
       align: "center",
@@ -184,13 +185,13 @@ export function GuardrailsOverview({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <SafetyOutlined className="text-lg text-indigo-500" />
-            <h1 className="text-xl font-semibold text-gray-900">Guardrails Monitor</h1>
+            <h1 className="text-xl font-semibold text-gray-900">{t("Guardrails Monitor")}</h1>
           </div>
-          <p className="text-sm text-gray-500">Monitor guardrail performance across all requests</p>
+          <p className="text-sm text-gray-500">{t("Monitor guardrail performance across all requests")}</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button type="default" icon={<DownloadOutlined />} title="Coming soon">
-            Export Data
+          <Button type="default" icon={<DownloadOutlined />} title={t("Coming soon")}>
+            {t("Export Data")}
           </Button>
         </div>
       </div>
@@ -237,22 +238,24 @@ export function GuardrailsOverview({
         {(isLoading || error) && (
           <div className="px-6 py-4 border-b border-gray-200 flex items-center gap-2">
             {isLoading && <Spin size="small" />}
-            {error && <span className="text-sm text-red-600">Failed to load data. Try again.</span>}
+            {error && <span className="text-sm text-red-600">{t("Failed to load data. Try again.")}</span>}
           </div>
         )}
         <div className="px-6 py-4 border-b border-gray-200 flex items-start justify-between gap-4">
           <div>
             <Typography.Title level={5} className="mb-0! text-gray-900">
-              Guardrail Performance
+              {t("Guardrail Performance")}
             </Typography.Title>
-            <p className="text-xs text-gray-500 mt-0.5">Click a guardrail to view details, logs, and configuration</p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {t("Click a guardrail to view details, logs, and configuration")}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <Button
               type="default"
               icon={<SettingOutlined />}
               onClick={() => setEvaluationModalOpen(true)}
-              title="Evaluation settings"
+              title={t("Evaluation settings")}
             />
           </div>
         </div>
@@ -263,7 +266,7 @@ export function GuardrailsOverview({
           pagination={false}
           loading={isLoading}
           onChange={handleTableChange}
-          locale={activeData.length === 0 && !isLoading ? { emptyText: "No data for this period" } : undefined}
+          locale={activeData.length === 0 && !isLoading ? { emptyText: t("No data for this period") } : undefined}
           onRow={(row) => ({
             onClick: () => onSelectGuardrail(row.id),
             style: { cursor: "pointer" },

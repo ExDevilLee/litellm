@@ -3,6 +3,7 @@ import { Button as TremorButton } from "@tremor/react";
 import { Input, Select } from "antd";
 import { ArrowLeftIcon, SaveIcon, ClockIcon } from "lucide-react";
 import PromptCodeSnippets from "./PromptCodeSnippets";
+import { t } from "@/contexts/LanguageContext";
 
 interface PromptEditorHeaderProps {
   promptName: string;
@@ -44,7 +45,7 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
     <div className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         <TremorButton icon={ArrowLeftIcon} variant="light" onClick={onBack} size="xs">
-          Back
+          {t("Back")}
         </TremorButton>
         <Input
           value={promptName}
@@ -61,13 +62,13 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
           style={{ width: 140 }}
           size="small"
           options={[
-            { label: "Development", value: "development" },
-            { label: "Staging", value: "staging" },
-            { label: "Production", value: "production" },
+            { label: t("Development"), value: "development" },
+            { label: t("Staging"), value: "staging" },
+            { label: t("Production"), value: "production" },
           ]}
         />
-        <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-sm">Draft</span>
-        <span className="text-xs text-gray-400">Unsaved changes</span>
+        <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-sm">{t("Draft")}</span>
+        <span className="text-xs text-gray-400">{t("Unsaved changes")}</span>
       </div>
       <div className="flex items-center space-x-2">
         <PromptCodeSnippets
@@ -80,11 +81,11 @@ const PromptEditorHeader: React.FC<PromptEditorHeaderProps> = ({
         />
         {editMode && onShowHistory && (
           <TremorButton icon={ClockIcon} variant="secondary" onClick={onShowHistory}>
-            History
+            {t("History")}
           </TremorButton>
         )}
         <TremorButton icon={SaveIcon} onClick={onSave} loading={isSaving} disabled={isSaving}>
-          {editMode ? "Update" : "Save"}
+          {editMode ? t("Update") : t("Save")}
         </TremorButton>
       </div>
     </div>

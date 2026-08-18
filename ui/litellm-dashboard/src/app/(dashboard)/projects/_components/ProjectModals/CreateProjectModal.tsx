@@ -1,6 +1,7 @@
 import { Modal, Form, Button, Typography } from "antd";
 import { FolderAddOutlined } from "@ant-design/icons";
 import MessageManager from "@/components/molecules/message_manager";
+import { t } from "@/contexts/LanguageContext";
 import { useCreateProject, ProjectCreateParams } from "@/app/(dashboard)/hooks/projects/useCreateProject";
 import { ProjectBaseForm, ProjectFormValues } from "./ProjectBaseForm";
 import { buildProjectApiParams } from "./projectFormUtils";
@@ -24,12 +25,12 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
 
       createMutation.mutate(params, {
         onSuccess: () => {
-          MessageManager.success("Project created successfully");
+          MessageManager.success(t("Project created successfully"));
           form.resetFields();
           onClose();
         },
         onError: (error) => {
-          MessageManager.error(error.message || "Failed to create project");
+          MessageManager.error(error.message || t("Failed to create project"));
         },
       });
     } catch (error) {
@@ -46,7 +47,7 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
     <Modal
       title={
         <Typography.Text strong style={{ fontSize: 18 }}>
-          Create New Project
+          {t("Create New Project")}
         </Typography.Text>
       }
       open={isOpen}
@@ -55,7 +56,7 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
       destroyOnHidden
       footer={[
         <Button key="cancel" onClick={handleCancel}>
-          Cancel
+          {t("Cancel")}
         </Button>,
         <Button
           key="submit"
@@ -64,7 +65,7 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
           loading={createMutation.isPending}
           onClick={handleSubmit}
         >
-          Create Project
+          {t("Create Project")}
         </Button>,
       ]}
     >

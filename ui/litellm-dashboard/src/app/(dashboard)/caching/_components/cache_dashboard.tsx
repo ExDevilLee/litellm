@@ -16,6 +16,7 @@ import {
   ComboboxList,
   ComboboxValue,
 } from "@/components/ui/combobox";
+import { t } from "@/contexts/LanguageContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { RefreshCw } from "lucide-react";
@@ -35,11 +36,11 @@ const REQUEST_SERIES = {
 
 const toChartDatum = (group: CacheActivityGroup) => ({
   name: group.call_type,
-  [REQUEST_SERIES.apiRequests]: group.api_requests,
-  [REQUEST_SERIES.cacheHits]: group.cache_hits,
-  [REQUEST_SERIES.failed]: group.failed_requests,
-  "Cached Completion Tokens": group.cached_completion_tokens,
-  "Generated Completion Tokens": group.generated_completion_tokens,
+  [t(REQUEST_SERIES.apiRequests)]: group.api_requests,
+  [t(REQUEST_SERIES.cacheHits)]: group.cache_hits,
+  [t(REQUEST_SERIES.failed)]: group.failed_requests,
+  [t("Cached Completion Tokens")]: group.cached_completion_tokens,
+  [t("Generated Completion Tokens")]: group.generated_completion_tokens,
 });
 
 const formatDateWithoutTZ = (date: Date | undefined) => {
@@ -101,7 +102,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
 
   const runCachingHealthCheck = async () => {
     try {
-      NotificationsManager.info("Running cache health check...");
+      NotificationsManager.info(t("Running cache health check..."));
       setHealthCheckResponse("");
       const response = await cachingHealthCheckCall(accessToken !== null ? accessToken : "");
       setHealthCheckResponse(response);
@@ -121,7 +122,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
           errorData = { message: error.message };
         }
       } else {
-        errorData = { message: "Unknown error occurred" };
+        errorData = { message: t("Unknown error occurred") };
       }
       setHealthCheckResponse({ error: errorData });
     }
@@ -130,9 +131,9 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
   const totals = activity?.totals;
   const hasRequests = totals != null && totals.api_requests + totals.cache_hits + totals.failed_requests > 0;
   const statCards = [
-    { label: "Cache Hit Ratio", value: `${hasRequests ? totals.cache_hit_ratio.toFixed(2) : "0"}%` },
-    { label: "Cache Hits", value: valueFormatterNumbers(totals?.cache_hits ?? 0) },
-    { label: "Cached Completion Tokens", value: valueFormatterNumbers(totals?.cached_completion_tokens ?? 0) },
+    { label: t("Cache Hit Ratio"), value: `${hasRequests ? totals.cache_hit_ratio.toFixed(2) : "0"}%` },
+    { label: t("Cache Hits"), value: valueFormatterNumbers(totals?.cache_hits ?? 0) },
+    { label: t("Cached Completion Tokens"), value: valueFormatterNumbers(totals?.cached_completion_tokens ?? 0) },
   ];
 
   return (
@@ -140,22 +141,22 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
       <div className="mt-2 flex w-full items-center justify-between">
         <TabsList>
           <TabsTrigger value="analytics" className="flex-none">
-            Cache Analytics
+            {t("Cache Analytics")}
           </TabsTrigger>
           <TabsTrigger value="health" className="flex-none">
-            Cache Health
+            {t("Cache Health")}
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex-none">
-            Cache Settings
+            {t("Cache Settings")}
           </TabsTrigger>
           <TabsTrigger value="coordination" className="flex-none">
-            Coordination Redis
+            {t("Coordination Redis")}
           </TabsTrigger>
         </TabsList>
 
         <div className="flex items-center space-x-2">
-          {lastRefreshed && <p className="text-sm text-muted-foreground">Last Refreshed: {lastRefreshed}</p>}
-          <Button variant="outline" size="icon-sm" onClick={handleRefreshClick} aria-label="Refresh">
+          {lastRefreshed && <p className="text-sm text-muted-foreground">{t("Last Refreshed: {0}", lastRefreshed)}</p>}
+          <Button variant="outline" size="icon-sm" onClick={handleRefreshClick} aria-label={t("Refresh")}>
             <RefreshCw />
           </Button>
         </div>
@@ -165,26 +166,25 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
         <Card>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Analytics for LiteLLM&apos;s{" "}
+              {t("Analytics for LiteLLM's")} {" "}
               <a
                 href="https://docs.litellm.ai/docs/proxy/caching"
                 target="_blank"
                 rel="noreferrer"
                 className="underline"
               >
-                response cache
+                {t("response cache")}
               </a>{" "}
-              (e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side{" "}
+              {t("(e.g. Redis / in-memory): requests answered from cache without calling the LLM provider. Provider-side")} {" "}
               <a
                 href="https://docs.litellm.ai/docs/completion/prompt_caching"
                 target="_blank"
                 rel="noreferrer"
                 className="underline"
               >
-                prompt caching
+                {t("prompt caching")}
               </a>{" "}
-              (cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see &quot;Prompt Caching
-              Metrics&quot; on the Usage page or individual requests in the Logs page.
+              {t("(cached input tokens from Anthropic, OpenAI, etc.) is not shown here; see \"Prompt Caching Metrics\" on the Usage page or individual requests in the Logs page.")}
             </p>
 
             <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -204,10 +204,10 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
                       ))
                     }
                   </ComboboxValue>
-                  <ComboboxChipsInput placeholder="Select Virtual Keys" className="border-0 bg-transparent" />
+                  <ComboboxChipsInput placeholder={t("Select Virtual Keys")} className="border-0 bg-transparent" />
                 </ComboboxChips>
                 <ComboboxContent>
-                  <ComboboxEmpty>No virtual keys found</ComboboxEmpty>
+                  <ComboboxEmpty>{t("No virtual keys found")}</ComboboxEmpty>
                   <ComboboxList>
                     {(key: string) => (
                       <ComboboxItem key={key} value={key}>
@@ -234,10 +234,10 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
                       ))
                     }
                   </ComboboxValue>
-                  <ComboboxChipsInput placeholder="Select Models" className="border-0 bg-transparent" />
+                  <ComboboxChipsInput placeholder={t("Select Models")} className="border-0 bg-transparent" />
                 </ComboboxChips>
                 <ComboboxContent>
-                  <ComboboxEmpty>No models found</ComboboxEmpty>
+                  <ComboboxEmpty>{t("No models found")}</ComboboxEmpty>
                   <ComboboxList>
                     {(model: string) => (
                       <ComboboxItem key={model} value={model}>
@@ -271,7 +271,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
 
             <Card className="mt-4">
               <CardHeader>
-                <CardTitle className="text-base font-semibold">Cache Hits vs API Requests</CardTitle>
+                <CardTitle className="text-base font-semibold">{t("Cache Hits vs API Requests")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <BarChart
@@ -279,7 +279,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
                   stack={true}
                   index="name"
                   valueFormatter={valueFormatterNumbers}
-                  categories={[REQUEST_SERIES.apiRequests, REQUEST_SERIES.cacheHits, REQUEST_SERIES.failed]}
+                  categories={[t(REQUEST_SERIES.apiRequests), t(REQUEST_SERIES.cacheHits), t(REQUEST_SERIES.failed)]}
                   colors={["sky", "teal", "red"]}
                   yAxisWidth={48}
                 />
@@ -289,7 +289,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
             <Card className="mt-6">
               <CardHeader>
                 <CardTitle className="text-base font-semibold">
-                  Cached Completion Tokens vs Generated Completion Tokens
+                  {t("Cached Completion Tokens vs Generated Completion Tokens")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -298,7 +298,7 @@ const CacheDashboard: React.FC<CachePageProps> = ({ accessToken, token, userRole
                   stack={true}
                   index="name"
                   valueFormatter={valueFormatterNumbers}
-                  categories={["Generated Completion Tokens", "Cached Completion Tokens"]}
+                  categories={[t("Generated Completion Tokens"), t("Cached Completion Tokens")]}
                   colors={["sky", "teal"]}
                   yAxisWidth={48}
                 />

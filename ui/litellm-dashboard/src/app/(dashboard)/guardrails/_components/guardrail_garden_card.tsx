@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { CheckCircleFilled } from "@ant-design/icons";
 import { GuardrailCardInfo } from "./guardrail_garden_data";
 import { Logo } from "@/components/molecules/logo/Logo";
@@ -40,7 +41,7 @@ const GuardrailCard: React.FC<{ card: GuardrailCardInfo; onClick: () => void }> 
         <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 4 }}>
           <CheckCircleFilled style={{ color: "#16a34a", fontSize: 12 }} />
           <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 500 }}>
-            F1: {card.eval.f1}% &middot; {card.eval.testCases} test cases
+            {t("F1: {0}% · {1} test cases", card.eval.f1, card.eval.testCases)}
           </span>
         </div>
       )}

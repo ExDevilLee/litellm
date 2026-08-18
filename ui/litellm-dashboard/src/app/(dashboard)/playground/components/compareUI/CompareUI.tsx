@@ -6,6 +6,7 @@ import { ClearOutlined, DeleteOutlined, FilePdfOutlined, PlusOutlined } from "@a
 import { useDebouncedValue } from "@tanstack/react-pacer/debouncer";
 import { Button, Input, Select, Tooltip } from "antd";
 import { useEffect, useMemo, useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { v4 as uuidv4 } from "uuid";
 import ChatImageUpload from "../chat_ui/ChatImageUpload";
 import { createChatDisplayMessage, createChatMultimodalMessage } from "../chat_ui/ChatImageUtils";
@@ -488,7 +489,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
     }
     // Validate selection based on endpoint type
     if (targetComparisons.some((comparison) => !hasValidSelection(comparison, selectedEndpoint))) {
-      NotificationsManager.fromBackend(endpointConfig.validationMessage);
+      NotificationsManager.fromBackend(t(endpointConfig.validationMessage));
       return;
     }
 
@@ -626,6 +627,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
           const errorMessage = error instanceof Error ? error.message : String(error);
           console.error("CompareUI: failed to fetch response", error);
           NotificationsManager.fromBackend(errorMessage);
+          const errorResponseText = t("Error fetching response: {0}", errorMessage);
           setComparisons((prev) =>
             prev.map((comparison) => {
               if (comparison.id !== prepared.id) {
@@ -639,13 +641,13 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                 messages[messages.length - 1] = {
                   ...last,
                   content: assistantContent
-                    ? `${assistantContent}\nError fetching response: ${errorMessage}`
-                    : `Error fetching response: ${errorMessage}`,
+                    ? `${assistantContent}\n${errorResponseText}`
+                    : errorResponseText,
                 };
               } else {
                 messages.push({
                   role: "assistant",
-                  content: `Error fetching response: ${errorMessage}`,
+                  content: errorResponseText,
                 });
               }
               return {
@@ -689,7 +691,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
         <div className="border-b px-4 py-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600">Virtual Key Source</span>
+              <span className="text-sm font-medium text-gray-600">{t("Virtual Key Source")}</span>
               <Select
                 value={apiKeySource}
                 onChange={(value) => setApiKeySource(value as "session" | "custom")}
@@ -697,15 +699,15 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                 className="w-48"
               >
                 <Select.Option value="session" disabled={!canUseSessionKey}>
-                  Current UI Session
+                  {t("Current UI Session")}
                 </Select.Option>
-                <Select.Option value="custom">Virtual Key</Select.Option>
+                <Select.Option value="custom">{t("Virtual Key")}</Select.Option>
               </Select>
               {apiKeySource === "custom" && (
                 <Input.Password
                   value={customApiKey}
                   onChange={(event) => setCustomApiKey(event.target.value)}
-                  placeholder="Enter Virtual Key"
+                  placeholder={t("Enter Virtual Key")}
                   className="w-56"
                 />
               )}
@@ -726,15 +728,17 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             </div>
             <div className="flex items-center gap-3">
               <Button onClick={clearAllChats} disabled={!hasMessages} icon={<ClearOutlined />}>
-                Clear All Chats
+                {t("Clear All Chats")}
               </Button>
               <Tooltip
                 title={
-                  comparisons.length >= maxComparisons ? "Compare up to 3 models at a time" : "Add another comparison"
+                  comparisons.length >= maxComparisons
+                    ? t("Compare up to 3 models at a time")
+                    : t("Add another comparison")
                 }
               >
                 <Button onClick={addComparison} disabled={comparisons.length >= maxComparisons} icon={<PlusOutlined />}>
-                  Add Comparison
+                  {t("Add Comparison")}
                 </Button>
               </Tooltip>
             </div>
@@ -766,7 +770,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
             <div className="border border-gray-200 shadow-lg rounded-xl bg-white p-4">
               <div className="flex items-center justify-between gap-4 mb-3 min-h-8">
                 {hasAttachment ? (
-                  <span className="text-sm text-gray-500">Attachment ready to send</span>
+                  <span className="text-sm text-gray-500">{t("Attachment ready to send")}</span>
                 ) : showSuggestedPrompts ? (
                   <div className="flex items-center gap-2 overflow-x-auto">
                     {SUGGESTED_PROMPTS.map((prompt) => (
@@ -776,7 +780,7 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                         onClick={() => handleFollowUpSelect(prompt)}
                         className="shrink-0 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-100 cursor-pointer"
                       >
-                        {prompt}
+                        {t(prompt)}
                       </button>
                     ))}
                   </div>
@@ -789,17 +793,17 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                         onClick={() => handleFollowUpSelect(question)}
                         className="shrink-0 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-100 cursor-pointer"
                       >
-                        {question}
+                        {t(question)}
                       </button>
                     ))}
                   </div>
                 ) : isAnyComparisonLoading ? (
                   <span className="flex items-center gap-2 text-sm text-gray-500">
                     <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" aria-hidden />
-                    {endpointConfig.loadingMessage}
+                    {t(endpointConfig.loadingMessage)}
                   </span>
                 ) : (
-                  <span className="text-sm text-gray-500">{endpointConfig.inputPlaceholder}</span>
+                  <span className="text-sm text-gray-500">{t(endpointConfig.inputPlaceholder)}</span>
                 )}
               </div>
               {uploadedFile && (
@@ -813,14 +817,14 @@ export default function CompareUI({ accessToken, disabledPersonalKeyCreation }: 
                       ) : (
                         <img
                           src={uploadedFilePreviewUrl || ""}
-                          alt="Upload preview"
+                          alt={t("Upload preview")}
                           className="w-10 h-10 rounded-md border border-gray-200 object-cover"
                         />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-gray-900 truncate">{uploadedFile.name}</div>
-                      <div className="text-xs text-gray-500">{isUploadedFilePdf ? "PDF" : "Image"}</div>
+                      <div className="text-xs text-gray-500">{isUploadedFilePdf ? "PDF" : t("Image")}</div>
                     </div>
                     <button
                       className="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-full transition-colors"

@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { modelHubCall, PromptSpec } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 import { getPromptTableColumns } from "./PromptTableColumns";
 import { ModelGroupInfo } from "./prompt_utils";
@@ -27,8 +28,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No prompts yet</div>
-      <div className="text-sm text-muted-foreground">Add a prompt to start managing reusable templates.</div>
+      <div className="text-sm font-medium text-foreground">{t("No prompts yet")}</div>
+      <div className="text-sm text-muted-foreground">{t("Add a prompt to start managing reusable templates.")}</div>
     </div>
   );
 }
@@ -79,7 +80,7 @@ const PromptTable: React.FC<PromptTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading prompts…"
+      loadingMessage={t("Loading prompts…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { MCPServer, MCPUserEnvVarsStatus } from "@/components/mcp_tools/types";
 import { getMCPUserEnvVars, storeMCPUserEnvVars } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 const { Text, Title } = Typography;
 
@@ -38,12 +39,12 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
   const saveMutation = useMutation({
     mutationFn: (values: Record<string, string>) => storeMCPUserEnvVars(accessToken!, server!.server_id, values),
     onSuccess: (saved) => {
-      NotificationsManager.success("Credentials saved");
+      NotificationsManager.success(t("Credentials saved"));
       onSaved?.(saved);
       onClose();
     },
     onError: (err) => {
-      NotificationsManager.fromBackend(`Failed to save env vars: ${err instanceof Error ? err.message : String(err)}`);
+      NotificationsManager.fromBackend(t("Failed to save env vars: {0}", err instanceof Error ? err.message : String(err)));
     },
   });
 
@@ -56,7 +57,7 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
     saveMutation.mutate(trimmed);
   };
 
-  const displayName = server?.server_name || server?.alias || server?.server_id || "MCP Server";
+  const displayName = server?.server_name || server?.alias || server?.server_id || t("MCP Server");
   const required = status?.required ?? [];
   const isSaving = saveMutation.isPending;
 
@@ -74,9 +75,9 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
         <div>
           <div className="flex items-center gap-2">
             <Title level={5} style={{ margin: 0 }}>
-              Set your credentials
+              {t("Set your credentials")}
             </Title>
-            <Tag color="blue">Per-user</Tag>
+            <Tag color="blue">{t("Per-user")}</Tag>
           </div>
           <Text type="secondary" className="text-xs">
             {displayName}
@@ -90,9 +91,9 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
             <Spin />
           </div>
         ) : isError ? (
-          <Alert type="error" showIcon message="Failed to load env vars" />
+          <Alert type="error" showIcon message={t("Failed to load env vars")} />
         ) : required.length === 0 ? (
-          <Alert type="info" showIcon message="No per-user fields configured for this server." />
+          <Alert type="info" showIcon message={t("No per-user fields configured for this server.")} />
         ) : (
           <>
             <Text className="text-sm text-gray-600 block">
@@ -108,15 +109,15 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
                   label={
                     <span className="flex items-center gap-2">
                       <span className="font-mono text-sm font-semibold">{spec.name}</span>
-                      {spec.is_set && <Tag color="green">Set</Tag>}
+                      {spec.is_set && <Tag color="green">{t("Set")}</Tag>}
                     </span>
                   }
                   extra={spec.description || undefined}
-                  rules={spec.is_set ? undefined : [{ required: true, message: `${spec.name} is required` }]}
+                  rules={spec.is_set ? undefined : [{ required: true, message: t("{0} is required", spec.name) }]}
                 >
                   <Input.Password
                     placeholder={
-                      spec.is_set ? "Enter a new value to overwrite" : spec.description || `Enter your ${spec.name}`
+                      spec.is_set ? t("Enter a new value to overwrite") : spec.description || t("Enter your {0}", spec.name)
                     }
                     visibilityToggle
                   />
@@ -124,10 +125,10 @@ const UserEnvVarsModal: React.FC<UserEnvVarsModalProps> = ({ server, open, acces
               ))}
               <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
                 <Button onClick={onClose} disabled={isSaving}>
-                  Cancel
+                  {t("Cancel")}
                 </Button>
                 <Button type="primary" htmlType="submit" loading={isSaving}>
-                  Save Credentials
+                  {t("Save Credentials")}
                 </Button>
               </div>
             </Form>

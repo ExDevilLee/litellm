@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Modal, Typography } from "antd";
 import type { MemoryRow } from "@/components/networking";
+import { t } from "@/contexts/LanguageContext";
 
 const { Text } = Typography;
 
@@ -45,42 +46,44 @@ export const MemoryEditModal: React.FC<MemoryEditModalProps> = ({ open, mode, in
   return (
     <Modal
       open={open}
-      title={mode === "create" ? "Create memory" : `Edit ${initialRow?.key ?? ""}`}
+      title={mode === "create" ? t("Create memory") : t("Edit {0}", initialRow?.key ?? "")}
       onCancel={() => {
         form.resetFields();
         onClose();
       }}
       onOk={handleOk}
-      okText={mode === "create" ? "Create" : "Save"}
+      okText={mode === "create" ? t("Create") : t("Save")}
       confirmLoading={submitting}
       width={640}
       destroyOnClose
     >
       <Form form={form} layout="vertical">
         <Form.Item
-          label="Key"
+          label={t("Key")}
           name="key"
-          rules={[{ required: true, message: "Key is required" }]}
-          tooltip="Globally unique — two memories cannot share a key. Namespace your own keys if you need per-user isolation (e.g. user:123:notes)."
+          rules={[{ required: true, message: t("Key is required") }]}
+          tooltip={t(
+            "Globally unique — two memories cannot share a key. Namespace your own keys if you need per-user isolation (e.g. user:123:notes).",
+          )}
         >
-          <Input placeholder="e.g. user_role" disabled={mode === "edit"} />
+          <Input placeholder={t("e.g. user_role")} disabled={mode === "edit"} />
         </Form.Item>
         <Form.Item
-          label="Value"
+          label={t("Value")}
           name="value"
-          rules={[{ required: true, message: "Value is required" }]}
-          tooltip="Markdown/text injected into LLM context. Plain strings are fine."
+          rules={[{ required: true, message: t("Value is required") }]}
+          tooltip={t("Markdown/text injected into LLM context. Plain strings are fine.")}
         >
-          <Input.TextArea rows={8} placeholder="What the agent should remember…" />
+          <Input.TextArea rows={8} placeholder={t("What the agent should remember…")} />
         </Form.Item>
         <Form.Item
           label={
             <span>
-              Metadata <Text type="secondary">(optional JSON)</Text>
+              {t("Metadata")} <Text type="secondary">{t("(optional JSON)")}</Text>
             </span>
           }
           name="metadata"
-          tooltip="Optional structured metadata — must be valid JSON if provided."
+          tooltip={t("Optional structured metadata — must be valid JSON if provided.")}
         >
           <Input.TextArea
             rows={4}

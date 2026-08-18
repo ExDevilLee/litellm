@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Guardrail } from "@/components/guardrails/types";
+import { t } from "@/contexts/LanguageContext";
 
 import { getGuardrailTableColumns } from "./guardrailTableColumns";
 
@@ -24,8 +25,10 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No guardrails yet</div>
-      <div className="text-sm text-muted-foreground">Add a guardrail to start filtering requests and responses.</div>
+      <div className="text-sm font-medium text-foreground">{t("No guardrails yet")}</div>
+      <div className="text-sm text-muted-foreground">
+        {t("Add a guardrail to start filtering requests and responses.")}
+      </div>
     </div>
   );
 }
@@ -52,7 +55,7 @@ const GuardrailTable: React.FC<GuardrailTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading guardrails…"
+      loadingMessage={t("Loading guardrails…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

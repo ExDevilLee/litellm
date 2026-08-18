@@ -1,5 +1,6 @@
 import { Typography } from "antd";
 import React, { useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { CategoryFilter, PiiEntityList, QuickActions } from "./pii_components";
 import { PiiConfigurationProps } from "@/components/guardrails/types";
 
@@ -58,10 +59,10 @@ const PiiConfiguration: React.FC<PiiConfigurationProps> = ({
       <div className="flex justify-between items-center mb-5">
         <div className="flex items-center">
           <Title level={4} className="m-0! font-semibold text-gray-800">
-            Configure PII Protection
+            {t("Configure PII Protection")}
           </Title>
         </div>
-        <Text className="text-gray-500">{selectedEntities.length} items selected</Text>
+        <Text className="text-gray-500">{t("{0} items selected", selectedEntities.length)}</Text>
       </div>
 
       <div className="mb-6">

@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { createGuardrailCall, updateGuardrailCall, testCustomCodeGuardrail } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -338,15 +339,15 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   // Save guardrail (create or update)
   const handleSave = async () => {
     if (!guardrailName.trim()) {
-      NotificationsManager.fromBackend("Please enter a guardrail name");
+      NotificationsManager.fromBackend(t("Please enter a guardrail name"));
       return;
     }
     if (!code.trim()) {
-      NotificationsManager.fromBackend("Please enter custom code");
+      NotificationsManager.fromBackend(t("Please enter custom code"));
       return;
     }
     if (!accessToken) {
-      NotificationsManager.fromBackend("No access token available");
+      NotificationsManager.fromBackend(t("No access token available"));
       return;
     }
 
@@ -374,7 +375,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         }
 
         await updateGuardrailCall(accessToken, editData.guardrail_id, updateData);
-        NotificationsManager.success("Custom code guardrail updated successfully");
+        NotificationsManager.success(t("Custom code guardrail updated successfully"));
       } else {
         // Create new guardrail
         const guardrailData = {
@@ -389,15 +390,18 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         };
 
         await createGuardrailCall(accessToken, guardrailData);
-        NotificationsManager.success("Custom code guardrail created successfully");
+        NotificationsManager.success(t("Custom code guardrail created successfully"));
       }
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Failed to save guardrail:", error);
       NotificationsManager.fromBackend(
-        `Failed to ${isEditMode ? "update" : "create"} guardrail: ` +
-          (error instanceof Error ? error.message : String(error)),
+        t(
+          "Failed to {0} guardrail: {1}",
+          isEditMode ? "update" : "create",
+          error instanceof Error ? error.message : String(error),
+        ),
       );
     } finally {
       setIsSaving(false);
@@ -407,7 +411,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
   // Test guardrail using backend endpoint
   const handleTest = async () => {
     if (!accessToken) {
-      setTestResult({ error: "No access token available" });
+      setTestResult({ error: t("No access token available") });
       return;
     }
 
@@ -420,7 +424,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
       try {
         parsedInput = JSON.parse(testInput);
       } catch (e) {
-        setTestResult({ error: "Invalid test input JSON" });
+        setTestResult({ error: t("Invalid test input JSON") });
         setIsTesting(false);
         return;
       }
@@ -457,12 +461,12 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           error_type: response.error_type,
         });
       } else {
-        setTestResult({ error: "Unknown error occurred" });
+        setTestResult({ error: t("Unknown error occurred") });
       }
     } catch (error) {
       console.error("Failed to test custom code:", error);
       setTestResult({
-        error: error instanceof Error ? error.message : "Failed to test custom code",
+        error: error instanceof Error ? error.message : t("Failed to test custom code"),
       });
     } finally {
       setIsTesting(false);
@@ -485,31 +489,37 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
         {/* Header */}
         <div className="pb-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">
-            {isEditMode ? "Edit Custom Guardrail" : "Create Custom Guardrail"}
+            {isEditMode ? t("Edit Custom Guardrail") : t("Create Custom Guardrail")}
           </h2>
-          <p className="text-sm text-gray-500 mt-1">Define custom logic using Python-like syntax</p>
+          <p className="text-sm text-gray-500 mt-1">{t("Define custom logic using Python-like syntax")}</p>
         </div>
 
         {/* Top Controls */}
         <div className="flex items-center gap-4 py-4 border-b border-gray-100">
           <div className="flex-1 max-w-[200px]">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Guardrail Name</label>
-            <TextInput value={guardrailName} onValueChange={setGuardrailName} placeholder="e.g., block-pii-custom" />
+            <label className="block text-xs font-medium text-gray-600 mb-1">{t("Guardrail Name")}</label>
+            <TextInput
+              value={guardrailName}
+              onValueChange={setGuardrailName}
+              placeholder={t("e.g., block-pii-custom")}
+            />
           </div>
           <div className="w-[280px]">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Mode (can select multiple)</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">
+              {t("Mode (can select multiple)")}
+            </label>
             <Select
               mode="multiple"
               value={mode}
               onChange={setMode}
-              options={MODE_OPTIONS}
+              options={MODE_OPTIONS.map((o) => ({ ...o, label: t(o.label) }))}
               className="w-full"
               size="middle"
-              placeholder="Select modes"
+              placeholder={t("Select modes")}
             />
           </div>
           <div className="w-[180px]">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Template</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">{t("Template")}</label>
             <Select
               value={selectedTemplate}
               onChange={handleTemplateChange}
@@ -541,23 +551,23 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                     }}
                   >
                     <UsergroupAddOutlined />
-                    <span>Browse Community templates</span>
+                    <span>{t("Browse Community templates")}</span>
                     <ExportOutlined style={{ fontSize: "10px" }} />
                   </div>
                 </>
               )}
             >
-              <Select.OptGroup label="STANDARD">
+              <Select.OptGroup label={t("STANDARD")}>
                 {Object.entries(CODE_TEMPLATES).map(([key, template]) => (
                   <Select.Option key={key} value={key}>
-                    {template.name}
+                    {t(template.name)}
                   </Select.Option>
                 ))}
               </Select.OptGroup>
             </Select>
           </div>
           <div className="flex items-center gap-2 pt-5">
-            <span className="text-sm text-gray-600">Default On</span>
+            <span className="text-sm text-gray-600">{t("Default On")}</span>
             <Switch checked={defaultOn} onChange={setDefaultOn} />
           </div>
         </div>
@@ -567,8 +577,10 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           {/* Code Editor */}
           <div className="flex-2 flex flex-col min-w-0 overflow-y-auto">
             <div className="flex items-center justify-between mb-2 shrink-0">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Python Logic</span>
-              <span className="text-xs text-gray-400">Restricted environment (no imports)</span>
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                {t("Python Logic")}
+              </span>
+              <span className="text-xs text-gray-400">{t("Restricted environment (no imports)")}</span>
             </div>
             <div
               className="relative rounded-lg overflow-hidden border border-gray-700 bg-[#1e1e1e] shrink-0"
@@ -617,7 +629,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                 header={
                   <span className="flex items-center gap-2 text-sm font-medium">
                     <PlayCircleOutlined className="text-blue-500" />
-                    Test Your Guardrail
+                    {t("Test Your Guardrail")}
                   </span>
                 }
                 key="test"
@@ -625,54 +637,55 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                 <div className="space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-xs font-medium text-gray-600">Test Input (JSON)</label>
+                      <label className="block text-xs font-medium text-gray-600">{t("Test Input (JSON)")}</label>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-500">Load example:</span>
+                        <span className="text-xs text-gray-500">{t("Load example:")}</span>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.pre_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 transition-colors"
                         >
-                          Pre-call
+                          {t("Pre-call")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.pre_mcp_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors"
                         >
-                          Pre MCP
+                          {t("Pre MCP")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setTestInput(JSON.stringify(TEST_INPUT_EXAMPLES.post_call.data, null, 2))}
                           className="px-2 py-1 text-xs rounded-sm border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
                         >
-                          Post-call
+                          {t("Post-call")}
                         </button>
                       </div>
                     </div>
                     <div className="mb-2 p-2 bg-gray-50 rounded-sm text-xs text-gray-600 border border-gray-200">
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                         <div>
-                          <strong>texts</strong>: Message content (always)
+                          <strong>texts</strong>: {t("Message content (always)")}
                         </div>
                         <div>
-                          <strong>images</strong>: Base64 images (vision)
+                          <strong>images</strong>: {t("Base64 images (vision)")}
                         </div>
                         <div>
-                          <strong>tools</strong>: Tool definitions <span className="text-orange-600">(pre_call)</span>,
-                          MCP as OpenAI tool <span className="text-purple-600">(pre_mcp_call)</span>
+                          <strong>tools</strong>: {t("Tool definitions")}{" "}
+                          <span className="text-orange-600">{t("(pre_call)")}</span>, {t("MCP as OpenAI tool")}{" "}
+                          <span className="text-purple-600">{t("(pre_mcp_call)")}</span>
                         </div>
                         <div>
-                          <strong>tool_calls</strong>: LLM tool calls{" "}
-                          <span className="text-green-600">(post_call)</span>
+                          <strong>tool_calls</strong>: {t("LLM tool calls")}{" "}
+                          <span className="text-green-600">{t("(post_call)")}</span>
                         </div>
                         <div>
-                          <strong>structured_messages</strong>: Full messages{" "}
-                          <span className="text-orange-600">(pre_call)</span>
+                          <strong>structured_messages</strong>: {t("Full messages")}{" "}
+                          <span className="text-orange-600">{t("(pre_call)")}</span>
                         </div>
                         <div>
-                          <strong>model</strong>: Model name (always)
+                          <strong>model</strong>: {t("Model name (always)")}
                         </div>
                       </div>
                     </div>
@@ -686,7 +699,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                   </div>
                   <div className="flex items-center gap-3">
                     <Button size="xs" onClick={handleTest} disabled={isTesting} icon={PlayCircleOutlined}>
-                      {isTesting ? "Running..." : "Run Test"}
+                      {isTesting ? t("Running...") : t("Run Test")}
                     </Button>
                     {testResult && (
                       <div
@@ -710,15 +723,15 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                           </>
                         ) : testResult.action === "allow" ? (
                           <>
-                            <CheckCircleOutlined /> Allowed
+                            <CheckCircleOutlined /> {t("Allowed")}
                           </>
                         ) : testResult.action === "block" ? (
                           <>
-                            <CloseCircleOutlined /> Blocked: {testResult.reason}
+                            <CloseCircleOutlined /> {t("Blocked: {0}", testResult.reason)}
                           </>
                         ) : testResult.action === "modify" ? (
                           <>
-                            <CheckCircleOutlined /> Modified
+                            <CheckCircleOutlined /> {t("Modified")}
                             {testResult.texts && testResult.texts.length > 0 && (
                               <span className="text-xs text-gray-500 ml-1">
                                 → {testResult.texts[0].substring(0, 50)}
@@ -728,7 +741,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                           </>
                         ) : (
                           <>
-                            <CheckCircleOutlined /> {testResult.action || "Unknown"}
+                            <CheckCircleOutlined /> {t(testResult.action || "Unknown")}
                           </>
                         )}
                       </div>
@@ -744,8 +757,10 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                   <UsergroupAddOutlined className="text-blue-600 text-lg" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-gray-900">Built a useful guardrail?</div>
-                  <div className="text-xs text-gray-600">Share it with the community and help others build faster</div>
+                  <div className="text-sm font-medium text-gray-900">{t("Built a useful guardrail?")}</div>
+                  <div className="text-xs text-gray-600">
+                    {t("Share it with the community and help others build faster")}
+                  </div>
                 </div>
               </div>
               <Button
@@ -754,7 +769,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                 icon={ExportOutlined}
                 className="bg-blue-600 hover:bg-blue-700 text-white border-0"
               >
-                Contribute Template
+                {t("Contribute Template")}
               </Button>
             </div>
           </div>
@@ -763,9 +778,9 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
           <div className="w-[300px] shrink-0 overflow-auto border-l border-gray-200 pl-6">
             <div className="flex items-center gap-2 mb-3">
               <CodeOutlined className="text-blue-500" />
-              <span className="font-semibold text-gray-700">Available Primitives</span>
+              <span className="font-semibold text-gray-700">{t("Available Primitives")}</span>
             </div>
-            <p className="text-xs text-gray-500 mb-3">Click to copy functions to clipboard</p>
+            <p className="text-xs text-gray-500 mb-3">{t("Click to copy functions to clipboard")}</p>
 
             <Collapse
               defaultActiveKey={["Return Values"]}
@@ -774,7 +789,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
             >
               {Object.entries(PRIMITIVES).map(([category, primitives]) => (
                 <Panel
-                  header={<span className="text-sm font-medium text-gray-700">{category}</span>}
+                  header={<span className="text-sm font-medium text-gray-700">{t(category)}</span>}
                   key={category}
                   className="bg-white mb-2 rounded-lg border border-gray-200"
                 >
@@ -789,12 +804,12 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
                       >
                         {copiedPrimitive === p.name ? (
                           <span className="flex items-center gap-1 text-xs font-mono text-green-700">
-                            <CheckCircleOutlined /> Copied!
+                            <CheckCircleOutlined /> {t("Copied!")}
                           </span>
                         ) : (
                           <>
                             <div className="text-xs font-mono text-gray-800">{p.name}</div>
-                            <div className="text-[10px] text-gray-500 mt-0.5">{p.desc}</div>
+                            <div className="text-[10px] text-gray-500 mt-0.5">{t(p.desc)}</div>
                           </>
                         )}
                       </button>
@@ -808,10 +823,10 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-200">
-          <span className="text-xs text-gray-400">Changes are auto-saved to local draft</span>
+          <span className="text-xs text-gray-400">{t("Changes are auto-saved to local draft")}</span>
           <div className="flex items-center gap-3">
             <Button variant="secondary" onClick={onClose}>
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button
               onClick={handleSave}
@@ -819,7 +834,7 @@ const CustomCodeModal: React.FC<CustomCodeModalProps> = ({ visible, onClose, onS
               disabled={isSaving || !guardrailName.trim()}
               icon={SaveOutlined}
             >
-              {isEditMode ? "Update Guardrail" : "Save Guardrail"}
+              {isEditMode ? t("Update Guardrail") : t("Save Guardrail")}
             </Button>
           </div>
         </div>

@@ -4,6 +4,7 @@
  */
 
 import { Select, Spin } from "antd";
+import { t } from "@/contexts/LanguageContext";
 import { SelectorOption, EndpointConfig } from "../endpoint_config";
 
 interface UnifiedSelectorProps {
@@ -18,7 +19,13 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
   return (
     <Select
       value={value || undefined}
-      placeholder={loading ? `Loading ${config.selectorLabel.toLowerCase()}s...` : config.selectorPlaceholder}
+      placeholder={
+        loading
+          ? config.selectorType === "agent"
+            ? t("Loading agents...")
+            : t("Loading models...")
+          : t(config.selectorPlaceholder)
+      }
       onChange={onChange}
       loading={loading}
       showSearch
@@ -30,8 +37,10 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
           <div className="flex items-center justify-center py-2">
             <Spin size="small" />
           </div>
+        ) : config.selectorType === "agent" ? (
+          t("No agents available")
         ) : (
-          `No ${config.selectorLabel.toLowerCase()}s available`
+          t("No models available")
         )
       }
     />

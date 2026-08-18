@@ -1,5 +1,6 @@
 import { CostEstimateResponse } from "../types";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { t } from "@/contexts/LanguageContext";
 import { MultiModelResult } from "./types";
 
 const formatCostForExport = (value: number | null | undefined): string => {
@@ -66,7 +67,7 @@ const generateModelSection = (result: CostEstimateResponse): string => {
 export const exportMultiToPDF = (multiResult: MultiModelResult): void => {
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    alert("Please allow popups to export PDF");
+    alert(t("Please allow popups to export PDF"));
     return;
   }
 

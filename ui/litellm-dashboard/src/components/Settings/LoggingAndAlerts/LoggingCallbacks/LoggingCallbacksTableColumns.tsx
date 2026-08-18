@@ -5,6 +5,7 @@ import { MoreHorizontal, Pencil, Play, Trash2 } from "lucide-react";
 
 import { StatusBadge, type StatusTone } from "@/components/shared/table_cells";
 import { buttonVariants } from "@/components/ui/button";
+import { t } from "@/contexts/LanguageContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +54,7 @@ function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowA
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open callback actions"
+        aria-label={t("Open callback actions")}
         data-testid={`callback-actions-${callback.name}-${callbackRowMode(callback)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -62,16 +63,16 @@ function CallbackRowActions({ callback, onTest, onEdit, onDelete }: CallbackRowA
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem data-testid="callback-action-test" onClick={() => void onTest(callback)}>
           <Play />
-          Test
+          {t("Test")}
         </DropdownMenuItem>
         <DropdownMenuItem data-testid="callback-action-edit" onClick={() => onEdit(callback)}>
           <Pencil />
-          Edit
+          {t("Edit")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" data-testid="callback-action-delete" onClick={() => onDelete(callback)}>
           <Trash2 />
-          Delete
+          {t("Delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -94,8 +95,8 @@ export const getLoggingCallbacksTableColumns = ({
   {
     id: "name",
     accessorKey: "name",
-    meta: { title: "Callback Name" },
-    header: "Callback Name",
+    meta: { title: t("Callback Name") },
+    header: t("Callback Name"),
     enableSorting: false,
     cell: ({ row }) => {
       const id = row.original.name;
@@ -109,19 +110,19 @@ export const getLoggingCallbacksTableColumns = ({
   },
   {
     id: "mode",
-    meta: { title: "Mode", skeleton: "badge" },
-    header: "Mode",
+    meta: { title: t("Mode"), skeleton: "badge" },
+    header: t("Mode"),
     size: 240,
     enableSorting: false,
     cell: ({ row }) => {
       const mode = callbackRowMode(row.original);
-      return <StatusBadge tone={callbackModeTone(mode)} label={CALLBACK_MODE_LABELS[mode] || mode} />;
+      return <StatusBadge tone={callbackModeTone(mode)} label={t(CALLBACK_MODE_LABELS[mode] || mode)} />;
     },
   },
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("Actions")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

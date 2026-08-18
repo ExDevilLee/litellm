@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Plus, Upload } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 import { getPromptsList, PromptSpec, ListPromptsResponse, deletePromptCall } from "@/components/networking";
 import PromptTable from "./PromptTable";
 import PromptInfoView from "./prompt_info";
@@ -121,11 +122,11 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
     setIsDeleting(true);
     try {
       await deletePromptCall(accessToken, promptToDelete.id);
-      NotificationsManager.success(`Prompt "${promptToDelete.name}" deleted successfully`);
+      NotificationsManager.success(t('Prompt "{0}" deleted successfully', promptToDelete.name));
       fetchPrompts(); // Refresh the list
     } catch (error) {
       console.error("Error deleting prompt:", error);
-      NotificationsManager.fromBackend("Failed to delete prompt");
+      NotificationsManager.fromBackend(t("Failed to delete prompt"));
     } finally {
       setIsDeleting(false);
       setPromptToDelete(null);
@@ -162,11 +163,11 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
                 <>
                   <Button onClick={handleAddPrompt} disabled={!accessToken}>
                     <Plus />
-                    Add New Prompt
+                    {t("Add New Prompt")}
                   </Button>
                   <Button onClick={handleAddPromptFromFile} disabled={!accessToken} variant="secondary">
                     <Upload />
-                    Upload .prompt File
+                    {t("Upload .prompt File")}
                   </Button>
                 </>
               )}
@@ -177,13 +178,13 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
               onValueChange={(value) => setSelectedEnvironment((value as string | null) ?? undefined)}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={ALL_ENVIRONMENTS_LABEL} />
+                <SelectValue placeholder={t(ALL_ENVIRONMENTS_LABEL)} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={null}>{ALL_ENVIRONMENTS_LABEL}</SelectItem>
+                <SelectItem value={null}>{t(ALL_ENVIRONMENTS_LABEL)}</SelectItem>
                 {ENVIRONMENT_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.label)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -217,15 +218,15 @@ const PromptsPanel: React.FC<PromptsProps> = ({ accessToken, userRole }) => {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Prompt</AlertDialogTitle>
+              <AlertDialogTitle>{t("Delete Prompt")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete prompt: {promptToDelete.name} ? This action cannot be undone.
+                {t("Are you sure you want to delete prompt: {0} ? This action cannot be undone.", promptToDelete.name)}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isDeleting}>{t("Cancel")}</AlertDialogCancel>
               <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
-                Delete
+                {t("Delete")}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

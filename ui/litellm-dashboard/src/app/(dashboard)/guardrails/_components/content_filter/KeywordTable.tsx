@@ -1,6 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Select, Table } from "antd";
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 
 const { Option } = Select;
 
@@ -20,12 +21,12 @@ interface KeywordTableProps {
 const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, onRemove }) => {
   const columns = [
     {
-      title: "Keyword",
+      title: t("Keyword"),
       dataIndex: "keyword",
       key: "keyword",
     },
     {
-      title: "Action",
+      title: t("Action"),
       dataIndex: "action",
       key: "action",
       width: 150,
@@ -36,13 +37,13 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
           style={{ width: 120 }}
           size="small"
         >
-          <Option value="BLOCK">Block</Option>
-          <Option value="MASK">Mask</Option>
+          <Option value="BLOCK">{t("Block")}</Option>
+          <Option value="MASK">{t("Mask")}</Option>
         </Select>
       ),
     },
     {
-      title: "Description",
+      title: t("Description"),
       dataIndex: "description",
       key: "description",
       render: (desc: string) => desc || "-",
@@ -53,14 +54,14 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       width: 100,
       render: (_: any, record: BlockedWord) => (
         <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => onRemove(record.id)}>
-          Delete
+          {t("Delete")}
         </Button>
       ),
     },
   ];
 
   if (keywords.length === 0) {
-    return <div style={{ textAlign: "center", padding: "40px 0", color: "#999" }}>No keywords added.</div>;
+    return <div style={{ textAlign: "center", padding: "40px 0", color: "#999" }}>{t("No keywords added.")}</div>;
   }
 
   return <Table dataSource={keywords} columns={columns} rowKey="id" pagination={false} size="small" />;

@@ -1,6 +1,7 @@
 import React from "react";
 import { Collapse } from "antd";
 import type { MCPEvent } from "@/components/mcp_tools/types";
+import { t } from "@/contexts/LanguageContext";
 
 const { Panel } = Collapse;
 
@@ -165,7 +166,7 @@ const MCPEventsDisplay: React.FC<MCPEventsDisplayProps> = ({ events, className }
         >
           {/* List Tools Panel */}
           {toolsEvent && (
-            <Panel header="List tools" key="list-tools">
+            <Panel header={t("List tools")} key="list-tools">
               <div>
                 {toolsEvent.item?.tools?.map((tool, index) => (
                   <div key={index} className="tool-item">
@@ -178,11 +179,11 @@ const MCPEventsDisplay: React.FC<MCPEventsDisplayProps> = ({ events, className }
 
           {/* MCP Call Panels */}
           {mcpCallEvents.map((callEvent, index) => (
-            <Panel header={callEvent.item?.name || "Tool call"} key={`mcp-call-${index}`}>
+            <Panel header={callEvent.item?.name || t("Tool call")} key={`mcp-call-${index}`}>
               <div>
                 {/* Request section */}
                 <div className="mcp-section">
-                  <div className="mcp-section-header">Request</div>
+                  <div className="mcp-section-header">{t("Request")}</div>
                   <div className="mcp-code-block">
                     {callEvent.item?.arguments && (
                       <pre className="mcp-json">
@@ -201,14 +202,14 @@ const MCPEventsDisplay: React.FC<MCPEventsDisplayProps> = ({ events, className }
                 {/* Approved section */}
                 <div className="mcp-section">
                   <div className="mcp-approved">
-                    <span className="mcp-checkmark">✓</span> Approved
+                    <span className="mcp-checkmark">✓</span> {t("Approved")}
                   </div>
                 </div>
 
                 {/* Response section */}
                 {callEvent.item?.output && (
                   <div className="mcp-section">
-                    <div className="mcp-section-header">Response</div>
+                    <div className="mcp-section-header">{t("Response")}</div>
                     <div className="mcp-response-content">{callEvent.item.output}</div>
                   </div>
                 )}

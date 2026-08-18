@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { fetchSearchTools } from "../networking";
+import { t } from "@/contexts/LanguageContext";
 
 export interface SearchToolSelectorProps {
   onChange: (selected: string[]) => void;
@@ -16,7 +17,7 @@ const SearchToolSelector: React.FC<SearchToolSelectorProps> = ({
   value,
   className,
   accessToken,
-  placeholder = "Select search tools (optional)",
+  placeholder = t("Select search tools (optional)"),
   disabled = false,
 }) => {
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);

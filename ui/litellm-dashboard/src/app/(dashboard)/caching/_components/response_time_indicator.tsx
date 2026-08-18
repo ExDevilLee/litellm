@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 
 interface ResponseTimeIndicatorProps {
   responseTimeMs: number | null;
@@ -18,7 +19,7 @@ export const ResponseTimeIndicator: React.FC<ResponseTimeIndicatorProps> = ({ re
           strokeLinejoin="round"
         />
       </svg>
-      <span>{responseTimeMs.toFixed(0)}ms</span>
+      <span>{t("{0}ms", responseTimeMs.toFixed(0))}</span>
     </div>
   );
 };

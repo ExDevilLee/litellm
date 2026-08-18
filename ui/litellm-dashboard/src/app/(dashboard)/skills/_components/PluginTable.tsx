@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Plugin } from "@/components/claude_code_plugins/types";
+import { t } from "@/contexts/LanguageContext";
 
 import { getPluginTableColumns } from "./PluginTableColumns";
 
@@ -25,8 +26,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No skills found</div>
-      <div className="text-sm text-muted-foreground">Add one to get started.</div>
+      <div className="text-sm font-medium text-foreground">{t("No skills found")}</div>
+      <div className="text-sm text-muted-foreground">{t("Add one to get started.")}</div>
     </div>
   );
 }
@@ -48,7 +49,7 @@ const PluginTable: React.FC<PluginTableProps> = ({ pluginsList, isLoading, onDel
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading skills…"
+      loadingMessage={t("Loading skills…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

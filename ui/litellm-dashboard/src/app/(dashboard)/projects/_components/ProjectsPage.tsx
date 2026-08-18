@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { useProjects } from "@/app/(dashboard)/hooks/projects/useProjects";
 import { useTeams } from "@/app/(dashboard)/hooks/teams/useTeams";
 import { PlusOutlined } from "@ant-design/icons";
@@ -61,19 +62,19 @@ export function ProjectsPage() {
       <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
         <Space direction="vertical" size={0}>
           <Title level={2} style={{ margin: 0 }}>
-            Projects
+            {t("Projects")}
           </Title>
-          <Text type="secondary">Manage projects within your teams</Text>
+          <Text type="secondary">{t("Manage projects within your teams")}</Text>
         </Space>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsCreateModalVisible(true)}>
-          Create Project
+          {t("Create Project")}
         </Button>
       </Flex>
 
       <Flex align="center" style={{ marginBottom: 12 }}>
         <Input
           prefix={<SearchIcon size={16} />}
-          placeholder="Search projects by name, ID, description, or team..."
+          placeholder={t("Search projects by name, ID, description, or team...")}
           style={{ maxWidth: 400 }}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}

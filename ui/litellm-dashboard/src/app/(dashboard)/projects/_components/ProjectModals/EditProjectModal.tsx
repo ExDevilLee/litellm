@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Modal, Form, Button, Typography } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import MessageManager from "@/components/molecules/message_manager";
+import { t } from "@/contexts/LanguageContext";
 import { ProjectResponse } from "@/app/(dashboard)/hooks/projects/useProjects";
 import { useUpdateProject, ProjectUpdateParams } from "@/app/(dashboard)/hooks/projects/useUpdateProject";
 import { ProjectBaseForm, ProjectFormValues } from "./ProjectBaseForm";
@@ -72,12 +73,12 @@ export function EditProjectModal({ isOpen, project, onClose, onSuccess }: EditPr
         { projectId: project.project_id, params },
         {
           onSuccess: () => {
-            MessageManager.success("Project updated successfully");
+            MessageManager.success(t("Project updated successfully"));
             onSuccess?.();
             onClose();
           },
           onError: (error) => {
-            MessageManager.error(error.message || "Failed to update project");
+            MessageManager.error(error.message || t("Failed to update project"));
           },
         },
       );
@@ -90,7 +91,7 @@ export function EditProjectModal({ isOpen, project, onClose, onSuccess }: EditPr
     <Modal
       title={
         <Typography.Text strong style={{ fontSize: 18 }}>
-          Edit Project
+          {t("Edit Project")}
         </Typography.Text>
       }
       open={isOpen}
@@ -99,7 +100,7 @@ export function EditProjectModal({ isOpen, project, onClose, onSuccess }: EditPr
       destroyOnHidden
       footer={[
         <Button key="cancel" onClick={onClose}>
-          Cancel
+          {t("Cancel")}
         </Button>,
         <Button
           key="submit"
@@ -108,7 +109,7 @@ export function EditProjectModal({ isOpen, project, onClose, onSuccess }: EditPr
           loading={updateMutation.isPending}
           onClick={handleSubmit}
         >
-          Save Changes
+          {t("Save Changes")}
         </Button>,
       ]}
     >

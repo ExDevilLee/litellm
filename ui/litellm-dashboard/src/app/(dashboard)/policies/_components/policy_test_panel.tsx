@@ -3,6 +3,7 @@ import { Form, Select, Alert, Tag, Empty, Typography } from "antd";
 import { Button } from "@tremor/react";
 import { resolvePoliciesCall, teamListCall, keyListCall, modelAvailableCall } from "@/components/networking";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { t } from "@/contexts/LanguageContext";
 
 const { Text } = Typography;
 
@@ -99,46 +100,45 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
     <div>
       <div className="bg-white border rounded-lg p-6 mb-6">
         <div className="mb-5">
-          <h3 className="text-base font-semibold mb-1">Policy Simulator</h3>
+          <h3 className="text-base font-semibold mb-1">{t("Policy Simulator")}</h3>
           <Text type="secondary">
-            Simulate a request to see which policies and guardrails would apply. Select a team, key, model, or tags
-            below and click &quot;Simulate&quot; to see the results.
+            {t('Simulate a request to see which policies and guardrails would apply. Select a team, key, model, or tags below and click "Simulate" to see the results.')}
           </Text>
         </div>
 
         <Form form={form} layout="vertical">
           <div className="grid grid-cols-2 gap-4">
-            <Form.Item name="team_alias" label="Team Alias" className="mb-3">
+            <Form.Item name="team_alias" label={t("Team Alias")} className="mb-3">
               <Select
                 showSearch
                 allowClear
-                placeholder="Select or type a team alias"
+                placeholder={t("Select or type a team alias")}
                 options={availableTeams.map((t) => ({ label: t, value: t }))}
                 filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               />
             </Form.Item>
-            <Form.Item name="key_alias" label="Key Alias" className="mb-3">
+            <Form.Item name="key_alias" label={t("Key Alias")} className="mb-3">
               <Select
                 showSearch
                 allowClear
-                placeholder="Select or type a key alias"
+                placeholder={t("Select or type a key alias")}
                 options={availableKeys.map((k) => ({ label: k, value: k }))}
                 filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               />
             </Form.Item>
-            <Form.Item name="model" label="Model" className="mb-3">
+            <Form.Item name="model" label={t("Model")} className="mb-3">
               <Select
                 showSearch
                 allowClear
-                placeholder="Select or type a model"
+                placeholder={t("Select or type a model")}
                 options={availableModels.map((m) => ({ label: m, value: m }))}
                 filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               />
             </Form.Item>
-            <Form.Item name="tags" label="Tags" className="mb-3">
+            <Form.Item name="tags" label={t("Tags")} className="mb-3">
               <Select
                 mode="tags"
-                placeholder="Type a tag and press Enter"
+                placeholder={t("Type a tag and press Enter")}
                 tokenSeparators={[",", " "]}
                 notFoundContent={null}
                 suffixIcon={null}
@@ -148,10 +148,10 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
           </div>
           <div className="flex space-x-2">
             <Button onClick={handleTest} loading={isLoading} disabled={!accessToken}>
-              Simulate
+              {t("Simulate")}
             </Button>
             <Button variant="secondary" onClick={handleReset}>
-              Reset
+              {t("Reset")}
             </Button>
           </div>
         </Form>
@@ -175,10 +175,9 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
               />
             </svg>
           </div>
-          <p className="text-sm font-medium text-gray-600 mb-1">No simulation run yet</p>
+          <p className="text-sm font-medium text-gray-600 mb-1">{t("No simulation run yet")}</p>
           <p className="text-xs text-gray-400">
-            Fill in one or more fields above and click &quot;Simulate&quot; to see which policies and guardrails would
-            apply to that request.
+            {t('Fill in one or more fields above and click "Simulate" to see which policies and guardrails would apply to that request.')}
           </p>
         </div>
       )}
@@ -186,11 +185,11 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
       {hasSearched && result && (
         <div className="bg-white border rounded-lg p-6">
           {result.matched_policies.length === 0 ? (
-            <Empty description="No policies matched this context" />
+            <Empty description={t("No policies matched this context")} />
           ) : (
             <>
               <div className="mb-4">
-                <p className="text-sm font-semibold mb-2">Effective Guardrails</p>
+                <p className="text-sm font-semibold mb-2">{t("Effective Guardrails")}</p>
                 <div className="flex flex-wrap gap-1">
                   {result.effective_guardrails.length > 0 ? (
                     result.effective_guardrails.map((g) => (
@@ -199,19 +198,19 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                       </Tag>
                     ))
                   ) : (
-                    <span className="text-gray-400 text-sm">None</span>
+                    <span className="text-gray-400 text-sm">{t("None")}</span>
                   )}
                 </div>
               </div>
 
               <div>
-                <p className="text-sm font-semibold mb-2">Matched Policies</p>
+                <p className="text-sm font-semibold mb-2">{t("Matched Policies")}</p>
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="text-left py-2 pr-4">Policy</th>
-                      <th className="text-left py-2 pr-4">Matched Via</th>
-                      <th className="text-left py-2">Guardrails Added</th>
+                      <th className="text-left py-2 pr-4">{t("Policy")}</th>
+                      <th className="text-left py-2 pr-4">{t("Matched Via")}</th>
+                      <th className="text-left py-2">{t("Guardrails Added")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -231,7 +230,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
                               ))}
                             </div>
                           ) : (
-                            <span className="text-gray-400">None</span>
+                            <span className="text-gray-400">{t("None")}</span>
                           )}
                         </td>
                       </tr>
@@ -245,7 +244,7 @@ const PolicyTestPanel: React.FC<PolicyTestPanelProps> = ({ accessToken }) => {
       )}
 
       {hasSearched && !result && !isLoading && (
-        <Alert message="Error" description="Failed to resolve policies. Check the proxy logs." type="error" showIcon />
+        <Alert message={t("Error")} description={t("Failed to resolve policies. Check the proxy logs.")} type="error" showIcon />
       )}
     </div>
   );

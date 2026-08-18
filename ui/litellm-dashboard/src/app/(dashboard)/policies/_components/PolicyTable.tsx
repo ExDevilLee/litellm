@@ -6,6 +6,7 @@ import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Policy } from "@/components/policies/types";
+import { t } from "@/contexts/LanguageContext";
 
 import { getPolicyTableColumns, PolicyRow } from "./PolicyTableColumns";
 
@@ -43,9 +44,9 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No policies found</div>
+      <div className="text-sm font-medium text-foreground">{t("No policies found")}</div>
       <div className="text-sm text-muted-foreground">
-        Create a policy to bundle guardrails and apply them across teams.
+        {t("Create a policy to bundle guardrails and apply them across teams.")}
       </div>
     </div>
   );
@@ -77,7 +78,7 @@ const PolicyTable: React.FC<PolicyTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading policies…"
+      loadingMessage={t("Loading policies…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

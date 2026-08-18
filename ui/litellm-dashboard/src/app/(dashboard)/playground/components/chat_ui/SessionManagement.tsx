@@ -3,6 +3,7 @@ import { Switch, Tooltip } from "antd";
 import { InfoCircleOutlined, CopyOutlined } from "@ant-design/icons";
 import { EndpointType } from "@/components/chat_ui/mode_endpoint_mapping";
 import NotificationsManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 interface SessionManagementProps {
   endpointType: string;
@@ -24,16 +25,16 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
   const handleCopySessionId = () => {
     if (responsesSessionId) {
       navigator.clipboard.writeText(responsesSessionId);
-      NotificationsManager.success("Response ID copied to clipboard!");
+      NotificationsManager.success(t("Response ID copied to clipboard!"));
     }
   };
 
   const getSessionDisplay = () => {
     if (!responsesSessionId) {
-      return useApiSessionManagement ? "API Session: Ready" : "UI Session: Ready";
+      return useApiSessionManagement ? t("API Session: Ready") : t("UI Session: Ready");
     }
 
-    const sessionPrefix = useApiSessionManagement ? "Response ID" : "UI Session";
+    const sessionPrefix = useApiSessionManagement ? t("Response ID") : t("UI Session");
     const truncatedId = responsesSessionId.slice(0, 10);
     return `${sessionPrefix}: ${truncatedId}...`;
   };
@@ -41,13 +42,13 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
   const getSessionDescription = () => {
     if (!responsesSessionId) {
       return useApiSessionManagement
-        ? "LiteLLM will manage session using previous_response_id"
-        : "UI will manage session using chat history";
+        ? t("LiteLLM will manage session using previous_response_id")
+        : t("UI will manage session using chat history");
     }
 
     return useApiSessionManagement
-      ? "LiteLLM API session active - context maintained server-side"
-      : "UI session active - context maintained client-side";
+      ? t("LiteLLM API session active - context maintained server-side")
+      : t("UI session active - context maintained client-side");
   };
 
   return (
@@ -55,8 +56,8 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
       {/* Session Management Toggle */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">Session Management</span>
-          <Tooltip title="Choose between LiteLLM API session management (using previous_response_id) or UI-based session management (using chat history)">
+          <span className="text-sm font-medium text-gray-700">{t("Session Management")}</span>
+          <Tooltip title={t("Choose between LiteLLM API session management (using previous_response_id) or UI-based session management (using chat history)")}>
             <InfoCircleOutlined className="text-gray-400" style={{ fontSize: "12px" }} />
           </Tooltip>
         </div>
@@ -86,7 +87,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
             <Tooltip
               title={
                 <div className="text-xs">
-                  <div className="mb-1">Copy response ID to continue session:</div>
+                  <div className="mb-1">{t("Copy response ID to continue session:")}</div>
                   <div className="bg-gray-800 text-gray-100 p-2 rounded-sm font-mono text-xs whitespace-pre-wrap">
                     {`curl -X POST "your-proxy-url/v1/responses" \\
   -H "Authorization: Bearer your-api-key" \\

@@ -26,6 +26,7 @@ import {
 } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 import TeamDropdown from "@/components/common_components/team_dropdown";
+import { t } from "@/contexts/LanguageContext";
 import { useRegisterGuardrail } from "@/app/(dashboard)/hooks/guardrails/useRegisterGuardrail";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
 import { isProxyAdminRole } from "@/utils/roles";
@@ -253,12 +254,12 @@ function GuardrailCard({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${teamColor}`}>Team: {g.team}</span>
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${teamColor}`}>{t("Team: {0}", g.team)}</span>
             <span
               className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-              {status.label}
+              {t(status.label)}
             </span>
           </div>
           <h3 className="text-sm font-semibold text-gray-900 mb-1">{g.name}</h3>
@@ -269,16 +270,16 @@ function GuardrailCard({
           </div>
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <span>
-              Model: <span className="font-medium text-gray-700">{g.model}</span>
+              {t("Model")}: <span className="font-medium text-gray-700">{g.model}</span>
             </span>
             <span>
-              Submitted: <span className="font-medium text-gray-700">{g.submittedAt}</span>
+              {t("Submitted")}: <span className="font-medium text-gray-700">{g.submittedAt}</span>
             </span>
           </div>
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 whitespace-nowrap">Forward API Key</span>
+            <span className="text-xs text-gray-500 whitespace-nowrap">{t("Forward API Key")}</span>
             <Toggle enabled={g.forwardKey} onToggle={onToggleForwardKey} disabled={!isAdmin} />
           </div>
           <div className="flex items-center gap-2 mt-1">
@@ -287,7 +288,7 @@ function GuardrailCard({
               onClick={onSelect}
               className="text-xs border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors font-medium"
             >
-              {isSelected ? "Close" : "Review"}
+              {isSelected ? t("Close") : t("Review")}
             </button>
             {isAdmin && g.status === "pending" && (
               <>
@@ -296,14 +297,14 @@ function GuardrailCard({
                   onClick={onApprove}
                   className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md transition-colors font-medium"
                 >
-                  Approve
+                  {t("Approve")}
                 </button>
                 <button
                   type="button"
                   onClick={onReject}
                   className="text-xs border border-red-300 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md transition-colors font-medium"
                 >
-                  Reject
+                  {t("Reject")}
                 </button>
               </>
             )}
@@ -317,7 +318,7 @@ function GuardrailCard({
           className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors"
         >
           {isHeadersExpanded ? <ChevronUpIcon className="h-3.5 w-3.5" /> : <ChevronDownIcon className="h-3.5 w-3.5" />}
-          Static headers
+          {t("Static headers")}
           {g.customHeaders.length > 0 && (
             <span className="ml-1 bg-gray-100 text-gray-600 rounded-full px-1.5 py-0.5 text-xs">
               {g.customHeaders.length}
@@ -327,7 +328,7 @@ function GuardrailCard({
         {isHeadersExpanded && (
           <div className="mt-2">
             {g.customHeaders.length === 0 ? (
-              <p className="text-xs text-gray-400 italic">No static headers configured.</p>
+              <p className="text-xs text-gray-400 italic">{t("No static headers configured.")}</p>
             ) : (
               <div className="space-y-1">
                 {g.customHeaders.map((h, i) => (
@@ -392,17 +393,17 @@ function DetailPanel({
         <div className="flex items-start justify-between mb-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${teamColor}`}>Team: {g.team}</span>
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${teamColor}`}>{t("Team: {0}", g.team)}</span>
               <span
                 className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-                {status.label}
+                {t(status.label)}
               </span>
             </div>
             <h2 className="text-base font-semibold text-gray-900">{g.name}</h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Submitted by {g.submittedBy} on {g.submittedAt}
+              {t("Submitted by {0} on {1}", g.submittedBy, g.submittedAt)}
             </p>
           </div>
           <button
@@ -416,7 +417,7 @@ function DetailPanel({
         </div>
         <p className="text-sm text-gray-600 mb-5">{g.description}</p>
         <div className="space-y-4">
-          <ConfigRow label="Endpoint">
+          <ConfigRow label={t("Endpoint")}>
             <div className="flex items-center gap-1.5">
               <code className="text-xs font-mono text-gray-700 break-all">{g.endpoint}</code>
               <a
@@ -429,7 +430,7 @@ function DetailPanel({
               </a>
             </div>
           </ConfigRow>
-          <ConfigRow label="Method">
+          <ConfigRow label={t("Method")}>
             <span className="text-xs font-mono font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-sm">
               {g.method}
             </span>
@@ -438,7 +439,7 @@ function DetailPanel({
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1.5">
                 <KeyIcon className="h-3.5 w-3.5 text-blue-500" />
-                <span className="text-xs font-semibold text-blue-800">Forward LiteLLM API Key</span>
+                <span className="text-xs font-semibold text-blue-800">{t("Forward LiteLLM API Key")}</span>
               </div>
               <Toggle enabled={g.forwardKey} onToggle={onToggleForwardKey} disabled={!isAdmin} />
             </div>
@@ -451,16 +452,16 @@ function DetailPanel({
           </div>
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-xs font-semibold text-gray-700">Static headers</span>
+              <span className="text-xs font-semibold text-gray-700">{t("Static headers")}</span>
               {g.customHeaders.length > 0 && (
                 <span className="bg-gray-100 text-gray-600 rounded-full px-1.5 py-0.5 text-xs">
                   {g.customHeaders.length}
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-400 mb-2">Sent with every request to the guardrail.</p>
+            <p className="text-xs text-gray-400 mb-2">{t("Sent with every request to the guardrail.")}</p>
             {g.customHeaders.length === 0 ? (
-              <p className="text-xs text-gray-400 italic mb-2">No static headers configured.</p>
+              <p className="text-xs text-gray-400 italic mb-2">{t("No static headers configured.")}</p>
             ) : (
               <ul className="list-none space-y-1 mb-2">
                 {g.customHeaders.map((h, i) => (
@@ -491,7 +492,7 @@ function DetailPanel({
                   type="text"
                   value={newStaticHeaderKey}
                   onChange={(e) => setNewStaticHeaderKey(e.target.value)}
-                  placeholder="Header name (e.g. X-API-Key)"
+                  placeholder={t("Header name (e.g. X-API-Key)")}
                   className="flex-1 min-w-0 text-xs font-mono border border-gray-200 rounded-sm px-2 py-1.5 text-gray-700 placeholder-gray-400 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -510,7 +511,7 @@ function DetailPanel({
                   type="text"
                   value={newStaticHeaderValue}
                   onChange={(e) => setNewStaticHeaderValue(e.target.value)}
-                  placeholder="Value"
+                  placeholder={t("Value")}
                   className="flex-1 min-w-0 text-xs font-mono border border-gray-200 rounded-sm px-2 py-1.5 text-gray-700 placeholder-gray-400 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -538,14 +539,14 @@ function DetailPanel({
                   }}
                   className="text-xs font-medium text-blue-600 hover:text-blue-700 border border-blue-200 bg-blue-50 hover:bg-blue-100 px-2 py-1.5 rounded-sm transition-colors shrink-0"
                 >
-                  Add
+                  {t("Add")}
                 </button>
               </div>
             )}
           </div>
           <div>
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-xs font-semibold text-gray-700">Forward client headers</span>
+              <span className="text-xs font-semibold text-gray-700">{t("Forward client headers")}</span>
               {g.extraHeaders.length > 0 && (
                 <span className="bg-gray-100 text-gray-600 rounded-full px-1.5 py-0.5 text-xs">
                   {g.extraHeaders.length}
@@ -553,10 +554,10 @@ function DetailPanel({
               )}
             </div>
             <p className="text-xs text-gray-400 mb-2">
-              Allowed header names to forward from the client request to the guardrail (e.g. x-request-id).
+              {t("Allowed header names to forward from the client request to the guardrail (e.g. x-request-id).")}
             </p>
             {g.extraHeaders.length === 0 ? (
-              <p className="text-xs text-gray-400 italic mb-2">No forward client headers configured.</p>
+              <p className="text-xs text-gray-400 italic mb-2">{t("No forward client headers configured.")}</p>
             ) : (
               <ul className="list-none space-y-1 mb-2">
                 {g.extraHeaders.map((name, i) => (
@@ -585,7 +586,7 @@ function DetailPanel({
                   type="text"
                   value={newExtraHeader}
                   onChange={(e) => setNewExtraHeader(e.target.value)}
-                  placeholder="e.g. x-request-id"
+                  placeholder={t("e.g. x-request-id")}
                   className="flex-1 min-w-0 text-xs font-mono border border-gray-200 rounded-sm px-2 py-1.5 text-gray-700 placeholder-gray-400 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -609,7 +610,7 @@ function DetailPanel({
                   }}
                   className="text-xs font-medium text-blue-600 hover:text-blue-700 border border-blue-200 bg-blue-50 hover:bg-blue-100 px-2 py-1.5 rounded-sm transition-colors"
                 >
-                  Add
+                  {t("Add")}
                 </button>
               </div>
             )}
@@ -620,7 +621,7 @@ function DetailPanel({
               onClick={() => setConfigExpanded(!configExpanded)}
               className="w-full flex items-center justify-between px-3 py-2 text-left text-xs font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
             >
-              <span>Equivalent config</span>
+              <span>{t("Equivalent config")}</span>
               {configExpanded ? (
                 <ChevronUpIcon className="h-3.5 w-3.5 text-gray-500" />
               ) : (
@@ -656,7 +657,7 @@ function DetailPanel({
             className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium py-2 rounded-md transition-colors"
           >
             <ExternalLinkIcon className="h-4 w-4" />
-            Test Endpoint
+            {t("Test Endpoint")}
           </button>
           {isAdmin && g.status === "pending" && (
             <div className="flex gap-2">
@@ -666,7 +667,7 @@ function DetailPanel({
                 className="flex-1 flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-2 rounded-md transition-colors"
               >
                 <CheckIcon className="h-4 w-4" />
-                Approve
+                {t("Approve")}
               </button>
               <button
                 type="button"
@@ -674,7 +675,7 @@ function DetailPanel({
                 className="flex-1 flex items-center justify-center gap-1.5 border border-red-300 text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-md transition-colors"
               >
                 <XIcon className="h-4 w-4" />
-                Reject
+                {t("Reject")}
               </button>
             </div>
           )}
@@ -708,14 +709,14 @@ function ConfirmDialog({ action, guardrailName, onConfirm, onCancel }: ConfirmDi
           )}
         </div>
         <h3 className="text-base font-semibold text-gray-900 mb-1">
-          {isApprove ? "Approve Guardrail" : "Reject Guardrail"}
+          {isApprove ? t("Approve Guardrail") : t("Reject Guardrail")}
         </h3>
         <p className="text-sm text-gray-500 mb-5">
-          Are you sure you want to {action}{" "}
+          {t("Are you sure you want to")} {action}{" "}
           <span className="font-medium text-gray-700">&quot;{guardrailName}&quot;</span>?{" "}
           {isApprove
-            ? "This will make it active and available for use."
-            : "This will mark it as rejected and notify the team."}
+            ? t("This will make it active and available for use.")
+            : t("This will mark it as rejected and notify the team.")}
         </p>
         <div className="flex gap-3">
           <button
@@ -723,7 +724,7 @@ function ConfirmDialog({ action, guardrailName, onConfirm, onCancel }: ConfirmDi
             onClick={onCancel}
             className="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium py-2 rounded-md transition-colors"
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="button"
@@ -732,7 +733,7 @@ function ConfirmDialog({ action, guardrailName, onConfirm, onCancel }: ConfirmDi
               isApprove ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"
             }`}
           >
-            {isApprove ? "Approve" : "Reject"}
+            {isApprove ? t("Approve") : t("Reject")}
           </button>
         </div>
       </div>
@@ -786,7 +787,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
       setGuardrails(res.submissions.map(submissionToTeamGuardrail));
       setSummary(res.summary);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load submissions");
+      setError(err instanceof Error ? err.message : t("Failed to load submissions"));
       setGuardrails([]);
     } finally {
       setIsLoading(false);
@@ -814,9 +815,9 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
         litellm_params: { forward_api_key: newValue },
       });
       setGuardrails((prev) => prev.map((x) => (x.id === id ? { ...x, forwardKey: newValue } : x)));
-      NotificationsManager.success(newValue ? "Forward API key enabled" : "Forward API key disabled");
+      NotificationsManager.success(newValue ? t("Forward API key enabled") : t("Forward API key disabled"));
     } catch {
-      NotificationsManager.fromBackend("Failed to update forward API key");
+      NotificationsManager.fromBackend(t("Failed to update forward API key"));
     }
   }
 
@@ -840,9 +841,9 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             : x,
         ),
       );
-      NotificationsManager.success("Static headers updated");
+      NotificationsManager.success(t("Static headers updated"));
     } catch {
-      NotificationsManager.fromBackend("Failed to update static headers");
+      NotificationsManager.fromBackend(t("Failed to update static headers"));
     }
   }
 
@@ -853,9 +854,9 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
         litellm_params: { extra_headers: extraHeaders },
       });
       setGuardrails((prev) => prev.map((x) => (x.id === id ? { ...x, extraHeaders } : x)));
-      NotificationsManager.success("Forward client headers updated");
+      NotificationsManager.success(t("Forward client headers updated"));
     } catch {
-      NotificationsManager.fromBackend("Failed to update forward client headers");
+      NotificationsManager.fromBackend(t("Failed to update forward client headers"));
     }
   }
 
@@ -866,9 +867,9 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
       setConfirmAction(null);
       if (selectedId === id) setSelectedId(null);
       await fetchSubmissions();
-      NotificationsManager.success("Guardrail approved");
+      NotificationsManager.success(t("Guardrail approved"));
     } catch {
-      NotificationsManager.fromBackend("Failed to approve guardrail");
+      NotificationsManager.fromBackend(t("Failed to approve guardrail"));
     }
   }
 
@@ -879,9 +880,9 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
       setConfirmAction(null);
       if (selectedId === id) setSelectedId(null);
       await fetchSubmissions();
-      NotificationsManager.success("Guardrail rejected");
+      NotificationsManager.success(t("Guardrail rejected"));
     } catch {
-      NotificationsManager.fromBackend("Failed to reject guardrail");
+      NotificationsManager.fromBackend(t("Failed to reject guardrail"));
     }
   }
 
@@ -898,17 +899,17 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
     <div className="flex h-full">
       <div className={`flex-1 min-w-0 p-6 overflow-auto ${selected ? "border-r border-gray-200" : ""}`}>
         <div className="grid grid-cols-4 gap-4 mb-6">
-          <StatCard label="Total Submitted" value={totalCount} color="text-gray-900" />
-          <StatCard label="Pending Review" value={pendingCount} color="text-yellow-600" />
-          <StatCard label="Active" value={activeCount} color="text-green-600" />
-          <StatCard label="Rejected" value={rejectedCount} color="text-red-600" />
+          <StatCard label={t("Total Submitted")} value={totalCount} color="text-gray-900" />
+          <StatCard label={t("Pending Review")} value={pendingCount} color="text-yellow-600" />
+          <StatCard label={t("Active")} value={activeCount} color="text-green-600" />
+          <StatCard label={t("Rejected")} value={rejectedCount} color="text-red-600" />
         </div>
         <div className="flex items-center gap-3 mb-5">
           <div className="relative flex-1 max-w-xs">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search guardrails..."
+              placeholder={t("Search guardrails...")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-hidden focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -919,10 +920,10 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
             className="border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-700 focus:outline-hidden focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
           >
-            <option value="all">All Status</option>
-            <option value="pending">Pending Review</option>
-            <option value="active">Active</option>
-            <option value="rejected">Rejected</option>
+            <option value="all">{t("All Status")}</option>
+            <option value="pending">{t("Pending Review")}</option>
+            <option value="active">{t("Active")}</option>
+            <option value="rejected">{t("Rejected")}</option>
           </select>
           <button
             type="button"
@@ -930,14 +931,14 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             className="ml-auto flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
           >
             <PlusIcon className="h-4 w-4" />
-            Add Guardrail
+            {t("Add Guardrail")}
           </button>
         </div>
         <div className="space-y-3">
-          {isLoading && <div className="text-center py-12 text-gray-500 text-sm">Loading submissions…</div>}
+          {isLoading && <div className="text-center py-12 text-gray-500 text-sm">{t("Loading submissions…")}</div>}
           {error && <div className="text-center py-12 text-red-600 text-sm">{error}</div>}
           {!isLoading && !error && filtered.length === 0 && (
-            <div className="text-center py-12 text-gray-400 text-sm">No guardrails match your filters.</div>
+            <div className="text-center py-12 text-gray-400 text-sm">{t("No guardrails match your filters.")}</div>
           )}
           {!isLoading &&
             !error &&
@@ -981,17 +982,17 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
       )}
 
       <Modal
-        title="Submit Guardrail for Review"
+        title={t("Submit Guardrail for Review")}
         open={isSubmitModalOpen}
         onCancel={() => {
           setIsSubmitModalOpen(false);
           submitForm.resetFields();
         }}
         onOk={() => submitForm.submit()}
-        okText="Submit for Review"
+        okText={t("Submit for Review")}
       >
         <div className="rounded-md bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800 mb-4">
-          Your guardrail will be sent for admin review before it becomes active.
+          {t("Your guardrail will be sent for admin review before it becomes active.")}
         </div>
         <Form
           form={submitForm}
@@ -1011,7 +1012,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
                 litellm_params,
                 guardrail_info: values.guardrail_info ? JSON.parse(values.guardrail_info) : undefined,
               });
-              NotificationsManager.success("Guardrail submitted for review");
+              NotificationsManager.success(t("Guardrail submitted for review"));
               setIsSubmitModalOpen(false);
               submitForm.resetFields();
               fetchSubmissions();
@@ -1020,37 +1021,39 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             }
           }}
         >
-          <Form.Item label="Team" name="team_id" rules={[{ required: true, message: "Select a team" }]}>
+          <Form.Item label={t("Team")} name="team_id" rules={[{ required: true, message: t("Select a team") }]}>
             <TeamDropdown />
           </Form.Item>
           <Form.Item
-            label="Guardrail Name"
+            label={t("Guardrail Name")}
             name="guardrail_name"
-            rules={[{ required: true, message: "Enter a guardrail name" }]}
+            rules={[{ required: true, message: t("Enter a guardrail name") }]}
           >
-            <Input placeholder="e.g. pii-detection" />
+            <Input placeholder={t("e.g. pii-detection")} />
           </Form.Item>
-          <Form.Item label="Mode" name="mode" rules={[{ required: true, message: "Select a mode" }]}>
+          <Form.Item label={t("Mode")} name="mode" rules={[{ required: true, message: t("Select a mode") }]}>
             <Select>
-              <Select.Option value="pre_call">Pre Call</Select.Option>
-              <Select.Option value="post_call">Post Call</Select.Option>
-              <Select.Option value="during_call">During Call</Select.Option>
+              <Select.Option value="pre_call">{t("Pre Call")}</Select.Option>
+              <Select.Option value="post_call">{t("Post Call")}</Select.Option>
+              <Select.Option value="during_call">{t("During Call")}</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item
-            label="API Base URL"
+            label={t("API Base URL")}
             name="api_base"
             rules={[
-              { required: true, message: "Enter the API base URL" },
-              { type: "url", message: "Must be a valid URL" },
+              { required: true, message: t("Enter the API base URL") },
+              { type: "url", message: t("Must be a valid URL") },
             ]}
           >
             <Input placeholder="https://your-guardrail-api.com/v1/check" className="font-mono" />
           </Form.Item>
           <Form.Item
-            label="Additional litellm_params (optional)"
+            label={t("Additional litellm_params (optional)")}
             name="extra_litellm_params"
-            tooltip="JSON object merged into litellm_params. e.g. forward_api_key, headers, model, unreachable_fallback"
+            tooltip={t(
+              "JSON object merged into litellm_params. e.g. forward_api_key, headers, model, unreachable_fallback"
+            )}
             rules={[
               {
                 validator: (_, value) => {
@@ -1058,11 +1061,11 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
                   try {
                     const parsed = JSON.parse(value);
                     if (typeof parsed !== "object" || Array.isArray(parsed)) {
-                      return Promise.reject("Must be a JSON object");
+                      return Promise.reject(t("Must be a JSON object"));
                     }
                     return Promise.resolve();
                   } catch {
-                    return Promise.reject("Invalid JSON");
+                    return Promise.reject(t("Invalid JSON"));
                   }
                 },
               },
@@ -1075,7 +1078,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
             />
           </Form.Item>
           <Form.Item
-            label="Guardrail Info (optional)"
+            label={t("Guardrail Info (optional)")}
             name="guardrail_info"
             rules={[
               {
@@ -1085,7 +1088,7 @@ export function TeamGuardrailsTab({ accessToken }: TeamGuardrailsTabProps) {
                     JSON.parse(value);
                     return Promise.resolve();
                   } catch {
-                    return Promise.reject("Invalid JSON");
+                    return Promise.reject(t("Invalid JSON"));
                   }
                 },
               },

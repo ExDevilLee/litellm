@@ -9,6 +9,7 @@ import { fetchDiscoverableMCPServers } from "@/components/networking";
 import { DiscoverableMCPServer, DiscoverMCPServersResponse } from "@/components/mcp_tools/types";
 import { mcpLogoImg } from "./CreateMCPServer";
 import { resolveLogoSrc } from "@/lib/assetPaths";
+import { t } from "@/contexts/LanguageContext";
 
 interface MCPDiscoveryProps {
   isVisible: boolean;
@@ -59,7 +60,7 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
           setCategories(data.categories || []);
         })
         .catch((err: Error) => {
-          setError(err.message || "Failed to load MCP servers");
+          setError(err.message || t("Failed to load MCP servers"));
         })
         .finally(() => {
           setLoading(false);
@@ -108,10 +109,10 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
           <div className="flex items-center justify-between border-b border-border pb-4">
             <div className="flex items-center space-x-3">
               <img src={resolveLogoSrc(mcpLogoImg)} alt="MCP Logo" className="mr-2 size-5 object-contain" />
-              <DialogTitle className="text-xl font-semibold">Add MCP Server</DialogTitle>
+              <DialogTitle className="text-xl font-semibold">{t("Add MCP Server")}</DialogTitle>
             </div>
             <Button variant="link" size="sm" className="mr-8" onClick={onCustomServer}>
-              + Custom Server
+              + {t("Custom Server")}
             </Button>
           </div>
         </DialogHeader>
@@ -128,7 +129,7 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
                   variant={isSelected ? "default" : "outline"}
                   onClick={() => setSelectedCategory(cat)}
                 >
-                  {cat}
+                  {cat === "All" ? t("All") : cat}
                 </Button>
               );
             })}
@@ -140,7 +141,7 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
               <Search className="size-4 text-muted-foreground" />
             </InputGroupAddon>
             <InputGroupInput
-              placeholder="Search servers..."
+              placeholder={t("Search servers...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -157,16 +158,16 @@ const MCPDiscovery: React.FC<MCPDiscoveryProps> = ({
 
           {error && (
             <div className="py-8 text-center text-muted-foreground">
-              <p className="text-sm">Failed to load servers: {error}</p>
+              <p className="text-sm">{t("Failed to load servers: {0}", error)}</p>
             </div>
           )}
 
           {!loading && !error && filteredServers.length === 0 && (
             <div className="py-8 text-center text-muted-foreground">
               <p className="text-sm">
-                No servers found.{" "}
+                {t("No servers found.")}{" "}
                 <Button variant="link" size="sm" onClick={onCustomServer}>
-                  Add a custom server
+                  {t("Add a custom server")}
                 </Button>
               </p>
             </div>

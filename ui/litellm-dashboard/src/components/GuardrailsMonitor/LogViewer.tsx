@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { uiSpendLogsCall } from "@/components/networking";
 import { LogDetailsDrawer } from "@/components/view_logs/LogDetailsDrawer";
 import type { LogEntry as ViewLogsLogEntry } from "@/components/view_logs/columns";
+import { t } from "@/contexts/LanguageContext";
 import type { LogEntry } from "./mockData";
 
 const actionConfig: Record<
@@ -109,14 +110,14 @@ export function LogViewer({
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
             <h3 className="text-base font-semibold text-gray-900">
-              {guardrailName ? `Logs — ${guardrailName}` : "Request Logs"}
+              {guardrailName ? t("Logs — {0}", guardrailName) : t("Request Logs")}
             </h3>
             <p className="text-xs text-gray-500 mt-0.5">
               {logsLoading
-                ? "Loading…"
+                ? t("Loading…")
                 : logs.length > 0
-                  ? `Showing ${displayLogs.length} of ${total} entries`
-                  : "No logs for this period. Select a guardrail and date range."}
+                  ? t("Showing {0} of {1} entries", displayLogs.length, total)
+                  : t("No logs for this period. Select a guardrail and date range.")}
             </p>
           </div>
           {logs.length > 0 && (
@@ -129,13 +130,13 @@ export function LogViewer({
                     size="small"
                     onClick={() => setActiveFilter(f)}
                   >
-                    {f.charAt(0).toUpperCase() + f.slice(1)}
+                    {t(f.charAt(0).toUpperCase() + f.slice(1))}
                   </Button>
                 ))}
               </div>
               <div className="h-4 w-px bg-gray-200" />
               <div className="flex items-center gap-1">
-                <span className="text-xs text-gray-500 mr-1">Sample:</span>
+                <span className="text-xs text-gray-500 mr-1">{t("Sample:")}</span>
                 {sampleSizes.map((size) => (
                   <Button
                     key={size}
@@ -158,7 +159,9 @@ export function LogViewer({
         </div>
       )}
       {!logsLoading && displayLogs.length === 0 && (
-        <div className="py-12 text-center text-sm text-gray-500">No logs to display. Adjust filters or date range.</div>
+        <div className="py-12 text-center text-sm text-gray-500">
+          {t("No logs to display. Adjust filters or date range.")}
+        </div>
       )}
       {!logsLoading && displayLogs.length > 0 && (
         <div className="divide-y divide-gray-100">
@@ -178,7 +181,7 @@ export function LogViewer({
                     <span
                       className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-sm border ${config.bg} ${config.color} ${config.border}`}
                     >
-                      {config.label}
+                      {t(config.label)}
                     </span>
                     <span className="text-xs text-gray-400">{log.timestamp}</span>
                     <span className="text-xs text-gray-400">·</span>

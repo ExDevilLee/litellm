@@ -2,6 +2,7 @@ import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
 import NotificationManager from "@/components/molecules/notifications_manager";
 import type { OpenAIVoice } from "../components/chat_ui/chatConstants";
+import { t } from "@/contexts/LanguageContext";
 
 export async function makeOpenAIAudioSpeechRequest(
   input: string,
@@ -49,7 +50,7 @@ export async function makeOpenAIAudioSpeechRequest(
   } catch (error) {
     if (signal?.aborted) {
     } else {
-      NotificationManager.fromBackend(`Error occurred while generating speech. Please try again. Error: ${error}`);
+      NotificationManager.fromBackend(t("Error occurred while generating speech. Please try again. Error: {0}", String(error)));
     }
     throw error; // Re-throw to allow the caller to handle the error
   }

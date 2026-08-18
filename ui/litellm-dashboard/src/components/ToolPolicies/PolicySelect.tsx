@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { t } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/cva.config";
 
 export const INPUT_POLICY_OPTIONS = [
@@ -56,7 +57,7 @@ export const PolicySelect: React.FC<PolicySelectProps> = ({
           <SelectItem key={o.value} value={o.value}>
             <span className="inline-flex items-center gap-1.5">
               <span className={cn("size-2 shrink-0 rounded-full", o.dot)} />
-              {o.label}
+              {t(o.label)}
             </span>
           </SelectItem>
         ))}

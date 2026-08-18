@@ -1,5 +1,6 @@
 import { AgentHubData, getAgentHubTableColumns } from "@/components/AIHub/AgentHubTableColumns";
 import MakeAgentPublicForm from "@/components/AIHub/forms/MakeAgentPublicForm";
+import { t } from "@/contexts/LanguageContext";
 import MakeMCPPublicForm from "@/components/AIHub/forms/MakeMCPPublicForm";
 import MakeModelPublicForm from "@/components/AIHub/forms/MakeModelPublicForm";
 import { getMCPHubTableColumns, MCPServerData } from "@/components/AIHub/MCPHubTableColumns";
@@ -393,23 +394,23 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({ accessToken, publicPage, 
           {/* Header with Title, Description and URL */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex flex-col items-start">
-              <Title className="text-center">AI Hub</Title>
+              <Title className="text-center">{t("AI Hub")}</Title>
               {isAdminRole(userRole || "") ? (
                 <p className="text-sm text-gray-600">
-                  Make models, agents, and MCP servers public for developers to know what&apos;s available.
+                  {t("Make models, agents, and MCP servers public for developers to know what's available.")}
                 </p>
               ) : (
-                <p className="text-sm text-gray-600">A list of all public model names personally available to you.</p>
+                <p className="text-sm text-gray-600">{t("A list of all public model names personally available to you.")}</p>
               )}
             </div>
             <div className="flex items-center space-x-4">
-              <Text>Model Hub URL:</Text>
+              <Text>{t("Model Hub URL:")}</Text>
               <div className="flex items-center bg-gray-200 px-2 py-1 rounded-sm">
                 <Text className="mr-2">{`${getProxyBaseUrl()}/ui/model_hub_table`}</Text>
                 <button
                   onClick={() => void copyToClipboard(`${getProxyBaseUrl()}/ui/model_hub_table`)}
                   className="p-1 hover:bg-gray-300 rounded-sm transition-colors"
-                  title="Copy URL"
+                  title={t("Copy URL")}
                 >
                   <Copy size={16} className="text-gray-600" />
                 </button>
@@ -427,10 +428,10 @@ const ModelHubTable: React.FC<ModelHubTableProps> = ({ accessToken, publicPage, 
           {/* Tab System for Model Hub, Agent Hub, MCP Hub, and Plugin Marketplace */}
           <TabGroup>
             <TabList className="mb-4">
-              <Tab>Model Hub</Tab>
-              <Tab>Agent Hub</Tab>
-              <Tab>MCP Hub</Tab>
-              <Tab>Skill Hub</Tab>
+              <Tab>{t("Model Hub")}</Tab>
+              <Tab>{t("Agent Hub")}</Tab>
+              <Tab>{t("MCP Hub")}</Tab>
+              <Tab>{t("Skill Hub")}</Tab>
             </TabList>
 
             <TabPanels>

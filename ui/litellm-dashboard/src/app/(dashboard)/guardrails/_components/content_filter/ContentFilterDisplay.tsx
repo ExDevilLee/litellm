@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Card, Text, Badge } from "@tremor/react";
 import PatternTable from "./PatternTable";
 import KeywordTable from "./KeywordTable";
@@ -67,8 +68,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
       {categories.length > 0 && (
         <Card className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <Text className="text-lg font-semibold">Content Categories</Text>
-            <Badge color="blue">{categories.length} categories configured</Badge>
+            <Text className="text-lg font-semibold">{t("Content Categories")}</Text>
+            <Badge color="blue">{t("{0} categories configured", categories.length)}</Badge>
           </div>
           <CategoryTable
             categories={categories}
@@ -83,8 +84,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
       {patterns.length > 0 && (
         <Card className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <Text className="text-lg font-semibold">Pattern Detection</Text>
-            <Badge color="blue">{patterns.length} patterns configured</Badge>
+            <Text className="text-lg font-semibold">{t("Pattern Detection")}</Text>
+            <Badge color="blue">{t("{0} patterns configured", patterns.length)}</Badge>
           </div>
           <PatternTable
             patterns={patterns}
@@ -97,8 +98,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
       {blockedWords.length > 0 && (
         <Card className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <Text className="text-lg font-semibold">Blocked Keywords</Text>
-            <Badge color="blue">{blockedWords.length} keywords configured</Badge>
+            <Text className="text-lg font-semibold">{t("Blocked Keywords")}</Text>
+            <Badge color="blue">{t("{0} keywords configured", blockedWords.length)}</Badge>
           </div>
           <KeywordTable
             keywords={blockedWords}

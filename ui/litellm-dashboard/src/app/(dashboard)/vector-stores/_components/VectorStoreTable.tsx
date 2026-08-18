@@ -5,6 +5,7 @@ import { Inbox } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 import { VectorStore } from "@/components/vector_store_management/types";
 
 import { getVectorStoreTableColumns } from "./VectorStoreTableColumns";
@@ -25,9 +26,9 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No vector stores</div>
+      <div className="text-sm font-medium text-foreground">{t("No vector stores")}</div>
       <div className="text-sm text-muted-foreground">
-        Connect a vector store to enable retrieval-augmented generation.
+        {t("Connect a vector store to enable retrieval-augmented generation.")}
       </div>
     </div>
   );
@@ -47,7 +48,7 @@ const VectorStoreTable: React.FC<VectorStoreTableProps> = ({ data, onView, onEdi
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading vector stores…"
+      loadingMessage={t("Loading vector stores…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

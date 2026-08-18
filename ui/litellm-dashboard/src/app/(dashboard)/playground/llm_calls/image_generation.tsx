@@ -1,6 +1,7 @@
 import openai from "openai";
 import { getProxyBaseUrl } from "@/components/networking";
 import NotificationManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 
 export async function makeOpenAIImageGenerationRequest(
   prompt: string,
@@ -51,7 +52,7 @@ export async function makeOpenAIImageGenerationRequest(
   } catch (error) {
     if (signal?.aborted) {
     } else {
-      NotificationManager.fromBackend(`Error occurred while generating image. Please try again. Error: ${error}`);
+      NotificationManager.fromBackend(t("Error occurred while generating image. Please try again. Error: {0}", String(error)));
     }
     throw error; // Re-throw to allow the caller to handle the error
   }

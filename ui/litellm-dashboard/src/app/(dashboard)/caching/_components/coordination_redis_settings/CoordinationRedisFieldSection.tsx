@@ -2,6 +2,7 @@ import React from "react";
 import CoordinationRedisFormField from "./CoordinationRedisFormField";
 import { fieldsForSection } from "./coordinationRedisUtils";
 import { CoordinationRedisType, CoordinationSection } from "./coordinationRedisFields";
+import { t } from "@/contexts/LanguageContext";
 
 interface CoordinationRedisFieldSectionProps {
   title: string;
@@ -29,7 +30,7 @@ const CoordinationRedisFieldSection: React.FC<CoordinationRedisFieldSectionProps
 
   return (
     <div className="space-y-6">
-      <Heading className="text-sm font-medium text-gray-900">{title}</Heading>
+      <Heading className="text-sm font-medium text-gray-900">{t(title)}</Heading>
       <div className={`grid ${gridCols}`}>
         {fields.map((field) => (
           <CoordinationRedisFormField

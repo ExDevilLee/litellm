@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
 import { Button } from "@/components/ui/button";
+import { t } from "@/contexts/LanguageContext";
 
 import {
   AvailableCallbacks,
@@ -30,9 +31,9 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No callbacks configured</div>
+      <div className="text-sm font-medium text-foreground">{t("No callbacks configured")}</div>
       <div className="text-sm text-muted-foreground">
-        Add your first callback to start logging data to external services.
+        {t("Add your first callback to start logging data to external services.")}
       </div>
     </div>
   );
@@ -54,11 +55,11 @@ export const LoggingCallbacksTable: React.FC<LoggingCallbacksProps> = ({
 
   return (
     <div className="mt-4 flex w-full flex-col gap-4">
-      <h3 className="text-lg font-semibold tracking-tight text-foreground">Active Logging Callbacks</h3>
+      <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("Active Logging Callbacks")}</h3>
       <div>
         <Button onClick={onAdd}>
           <Plus />
-          Add Callback
+          {t("Add Callback")}
         </Button>
       </div>
       <DataTable
@@ -66,7 +67,7 @@ export const LoggingCallbacksTable: React.FC<LoggingCallbacksProps> = ({
         columns={columns}
         getRowId={(callback, index) => `${callback.name || index}-${callbackRowMode(callback)}`}
         isLoading={isLoading}
-        loadingMessage="Loading callbacks…"
+        loadingMessage={t("Loading callbacks…")}
         noDataMessage={<EmptyState />}
         size="compact"
       />

@@ -4,6 +4,7 @@ import { Select } from "antd";
 import { PlusIcon, TrashIcon, GripVerticalIcon } from "lucide-react";
 import VariableTextArea from "../variable_textarea";
 import { Message } from "./types";
+import { t } from "@/contexts/LanguageContext";
 
 const { Option } = Select;
 
@@ -51,10 +52,10 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
   return (
     <Card className="p-3">
       <div className="mb-2">
-        <Text className="text-sm font-medium">Prompt messages</Text>
+        <Text className="text-sm font-medium">{t("Prompt messages")}</Text>
         <Text className="text-gray-500 text-xs mt-1">
-          Use <code className="bg-gray-100 px-1 rounded-sm text-xs">{"{{variable}}"}</code> syntax for template
-          variables
+          {t("Use")} <code className="bg-gray-100 px-1 rounded-sm text-xs">{"{{variable}}"}</code>{" "}
+          {t("syntax for template variables")}
         </Text>
       </div>
       <div className="space-y-2">
@@ -78,9 +79,9 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 size="small"
                 bordered={false}
               >
-                <Option value="user">User</Option>
-                <Option value="assistant">Assistant</Option>
-                <Option value="system">System</Option>
+                <Option value="user">{t("User")}</Option>
+                <Option value="assistant">{t("Assistant")}</Option>
+                <Option value="system">{t("System")}</Option>
               </Select>
               <div className="flex items-center gap-1">
                 {messages.length > 1 && (
@@ -98,7 +99,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 value={message.content}
                 onChange={(value) => onUpdateMessage(index, "content", value)}
                 rows={3}
-                placeholder="Enter prompt content..."
+                placeholder={t("Enter prompt content...")}
               />
             </div>
           </div>
@@ -106,7 +107,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
       </div>
       <button onClick={onAddMessage} className="mt-2 text-xs text-blue-600 hover:text-blue-700 flex items-center">
         <PlusIcon size={14} className="mr-1" />
-        Add message
+        {t("Add message")}
       </button>
     </Card>
   );
