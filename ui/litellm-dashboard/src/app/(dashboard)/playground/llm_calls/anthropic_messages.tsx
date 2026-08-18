@@ -5,6 +5,7 @@ import { buildMcpToolBlocks } from "@/components/llm_calls/mcp_tool_blocks";
 import { MCPServer, MCPToolset } from "@/components/mcp_tools/types";
 import { getProxyBaseUrl } from "@/components/networking";
 import NotificationManager from "@/components/molecules/notifications_manager";
+import { t } from "@/contexts/LanguageContext";
 import { extractPromptCacheTokens } from "@/utils/promptCacheUsage";
 
 export async function makeAnthropicMessagesRequest(
@@ -28,7 +29,7 @@ export async function makeAnthropicMessagesRequest(
   mcpToolsets?: MCPToolset[],
 ) {
   if (!accessToken) {
-    throw new Error("Virtual Key is required");
+    throw new Error(t("Virtual Key is required"));
   }
 
   const isLocal = process.env.NODE_ENV === "development";
@@ -119,7 +120,7 @@ export async function makeAnthropicMessagesRequest(
     if (signal?.aborted) {
     } else {
       NotificationManager.fromBackend(
-        `Error occurred while generating model response. Please try again. Error: ${error}`,
+        `${t("Error occurred while generating model response. Please try again.")} ${t("Error")}: ${error}`,
       );
     }
     throw error;

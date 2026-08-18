@@ -1,5 +1,6 @@
 import React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
+import { t } from "@/contexts/LanguageContext";
 import { Meter, MeterIndicator, MeterTrack } from "@/components/ui/meter";
 import { DataTable } from "@/components/shared/DataTable";
 import { MoneyCell } from "@/components/shared/table_cells";
@@ -39,12 +40,12 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
 
   const columns: ColumnDef<EndpointRow>[] = [
     {
-      header: "Endpoint",
+      header: t("Endpoint"),
       accessorKey: "endpoint",
       cell: ({ row }) => <span className="font-medium">{row.original.endpoint}</span>,
     },
     {
-      header: "Successful / Failed",
+      header: t("Successful / Failed"),
       id: "requests",
       cell: ({ row }) => {
         const record = row.original;
@@ -56,7 +57,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
         return (
           <div className="flex items-center space-x-3">
             <div className="flex-1 relative">
-              <Meter value={successPercentage} max={totalPercentage || 100} aria-label="Successful requests">
+              <Meter value={successPercentage} max={totalPercentage || 100} aria-label={t("Successful requests")}>
                 <MeterTrack className={failurePercentage > 0 ? "bg-red-500" : undefined}>
                   <MeterIndicator className="bg-green-500" />
                 </MeterTrack>
@@ -72,13 +73,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Request",
+      header: t("Total Request"),
       accessorKey: "api_requests",
       meta: { numeric: true },
       cell: ({ row }) => row.original.api_requests.toLocaleString(),
     },
     {
-      header: "Success Rate",
+      header: t("Success Rate"),
       accessorKey: "successRate",
       meta: { numeric: true },
       cell: ({ row }) => {
@@ -100,13 +101,13 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       },
     },
     {
-      header: "Total Tokens",
+      header: t("Total Tokens"),
       accessorKey: "total_tokens",
       meta: { numeric: true },
       cell: ({ row }) => row.original.total_tokens.toLocaleString(),
     },
     {
-      header: "Spend",
+      header: t("Spend"),
       accessorKey: "spend",
       meta: { numeric: true },
       cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
@@ -118,7 +119,7 @@ const EndpointUsageTable: React.FC<EndpointUsageTableProps> = ({ endpointData })
       columns={columns}
       data={dataSource}
       getRowId={(row) => row.key}
-      noDataMessage="No endpoint usage data"
+      noDataMessage={t("No endpoint usage data")}
       size="compact"
     />
   );

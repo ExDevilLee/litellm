@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import type { MCPEvent } from "@/components/mcp_tools/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/cva.config";
+import { t } from "@/contexts/LanguageContext";
 
 interface MCPEventsDisplayProps {
   events: MCPEvent[];
@@ -85,7 +86,7 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
         {toolsEvent && (
           <MCPEventPanel
             panelKey="list-tools"
-            title="List tools"
+            title={t("List tools")}
             open={openKeys.has("list-tools")}
             onOpenChange={(open) => toggleKey("list-tools", open)}
           >
@@ -105,13 +106,13 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
             <MCPEventPanel
               key={key}
               panelKey={key}
-              title={callEvent.item?.name || "Tool call"}
+              title={callEvent.item?.name || t("Tool call")}
               open={openKeys.has(key)}
               onOpenChange={(open) => toggleKey(key, open)}
             >
               <div>
                 <div className="relative z-[1] mb-3 bg-white last:mb-0">
-                  <div className="mb-1 text-[13px] font-medium text-gray-500">Request</div>
+                  <div className="mb-1 text-[13px] font-medium text-gray-500">{t("Request")}</div>
                   <div className="rounded-md border border-gray-100 bg-gray-50 p-2 text-xs">
                     {callEvent.item?.arguments && (
                       <pre className="m-0 whitespace-pre-wrap break-words font-mono text-gray-700">
@@ -126,13 +127,13 @@ function MCPEventsPanels({ toolsEvent, mcpCallEvents, defaultOpenKeys }: MCPEven
                     <span className="mr-1.5 font-bold text-emerald-500" aria-hidden="true">
                       ✓
                     </span>
-                    Approved
+                    {t("Approved")}
                   </div>
                 </div>
 
                 {callEvent.item?.output && (
                   <div className="relative z-[1] mb-3 bg-white last:mb-0">
-                    <div className="mb-1 text-[13px] font-medium text-gray-500">Response</div>
+                    <div className="mb-1 text-[13px] font-medium text-gray-500">{t("Response")}</div>
                     <div className="whitespace-pre-wrap font-mono text-[13px] leading-normal text-gray-700">
                       {callEvent.item.output}
                     </div>

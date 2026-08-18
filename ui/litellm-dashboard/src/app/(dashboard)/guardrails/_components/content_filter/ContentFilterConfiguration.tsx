@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Plus, Upload } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 import { validateBlockedWordsFile } from "@/components/networking";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 import { Button } from "@/components/ui/button";
@@ -119,7 +120,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddPrebuiltPattern = () => {
     if (!selectedPatternName) {
-      NotificationsManager.error("Please select a pattern");
+      NotificationsManager.error(t("Please select a pattern"));
       return;
     }
 
@@ -140,7 +141,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddCustomPattern = () => {
     if (!customPatternName || !customPatternRegex) {
-      NotificationsManager.error("Please provide pattern name and regex");
+      NotificationsManager.error(t("Please provide pattern name and regex"));
       return;
     }
 
@@ -160,7 +161,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
 
   const handleAddKeyword = () => {
     if (!newKeyword) {
-      NotificationsManager.error("Please enter a keyword");
+      NotificationsManager.error(t("Please enter a keyword"));
       return;
     }
 
@@ -188,14 +189,14 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
           if (onFileUpload) {
             onFileUpload(content);
           }
-          NotificationsManager.success(result.message || "File uploaded successfully");
+          NotificationsManager.success(result.message || t("File uploaded successfully"));
         } else {
-          const errorMessage = result.error || (result.errors && result.errors.join(", ")) || "Invalid file";
-          NotificationsManager.error(`Validation failed: ${errorMessage}`);
+          const errorMessage = result.error || (result.errors && result.errors.join(", ")) || t("Invalid file");
+          NotificationsManager.error(t("Validation failed: {0}", errorMessage));
         }
       }
     } catch (error) {
-      NotificationsManager.error(`Failed to upload file: ${error}`);
+      NotificationsManager.error(t("Failed to upload file: {0}", error));
     } finally {
       setUploadValidating(false);
     }
@@ -220,8 +221,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
       {!showStep && (
         <div>
           <p className="text-muted-foreground">
-            Configure patterns, keywords, and content categories to detect and filter sensitive information in requests
-            and responses.
+            {t("Configure patterns, keywords, and content categories to detect and filter sensitive information in requests and responses.")}
           </p>
         </div>
       )}
@@ -230,9 +230,9 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Pattern Detection</CardTitle>
+              <CardTitle>{t("Pattern Detection")}</CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)
+                {t("Detect sensitive information using regex patterns (SSN, credit cards, API keys, etc.)")}
               </p>
             </div>
           </CardHeader>
@@ -240,11 +240,11 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setPatternModalVisible(true)}>
                 <Plus />
-                Add prebuilt pattern
+                {t("Add prebuilt pattern")}
               </Button>
               <Button variant="outline" onClick={() => setCustomPatternModalVisible(true)}>
                 <Plus />
-                Add custom regex
+                {t("Add custom regex")}
               </Button>
             </div>
             <PatternTable
@@ -260,9 +260,9 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
         <Card>
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle>Blocked Keywords</CardTitle>
+              <CardTitle>{t("Blocked Keywords")}</CardTitle>
               <p className="text-sm font-normal text-muted-foreground">
-                Block or mask specific sensitive terms and phrases
+                {t("Block or mask specific sensitive terms and phrases")}
               </p>
             </div>
           </CardHeader>
@@ -270,7 +270,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
             <div className="mb-4 flex flex-wrap gap-2">
               <Button onClick={() => setKeywordModalVisible(true)}>
                 <Plus />
-                Add keyword
+                {t("Add keyword")}
               </Button>
               <input
                 ref={fileInputRef}
@@ -286,7 +286,7 @@ const ContentFilterConfiguration: React.FC<ContentFilterConfigurationProps> = ({
                 onClick={() => fileInputRef.current?.click()}
               >
                 {uploadValidating ? <UiLoadingSpinner className="size-4" /> : <Upload />}
-                Upload YAML file
+                {t("Upload YAML file")}
               </Button>
             </div>
             <KeywordTable keywords={blockedWords} onActionChange={onBlockedWordUpdate} onRemove={onBlockedWordRemove} />

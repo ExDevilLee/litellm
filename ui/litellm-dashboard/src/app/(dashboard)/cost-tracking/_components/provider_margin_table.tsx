@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SimpleTable } from "@/components/common_components/simple_table";
 import { MarginConfig } from "./types";
+import { t } from "@/contexts/LanguageContext";
 import { getProviderLogoAndName } from "@/components/provider_info_helpers";
 import { Logo } from "@/components/molecules/logo/Logo";
 
@@ -19,7 +20,7 @@ interface ProviderMarginRow {
 }
 
 const marginRowDisplayName = (provider: string): string =>
-  provider === "global" ? "Global" : getProviderLogoAndName(provider).displayName;
+  provider === "global" ? t("Global") : getProviderLogoAndName(provider).displayName;
 
 const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
   marginConfig,
@@ -103,12 +104,12 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
       data={data}
       columns={[
         {
-          header: "Provider",
+          header: t("Provider"),
           cell: (row) => {
             if (row.provider === "global") {
               return (
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium">Global (All Providers)</span>
+                  <span className="font-medium">{t("Global (All Providers)")}</span>
                 </div>
               );
             }
@@ -122,7 +123,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           },
         },
         {
-          header: "Margin",
+          header: t("Margin"),
           cell: (row) => {
             const displayName = marginRowDisplayName(row.provider);
             return (
@@ -150,7 +151,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Save margin for ${displayName}`}
+                      aria-label={t("Save margin for {0}", displayName)}
                       onClick={() => handleSaveEdit(row.provider)}
                       className="cursor-pointer text-green-600 hover:text-green-700"
                     >
@@ -159,7 +160,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Cancel editing margin for ${displayName}`}
+                      aria-label={t("Cancel editing margin for {0}", displayName)}
                       onClick={handleCancelEdit}
                       className="cursor-pointer text-gray-600 hover:text-gray-700"
                     >
@@ -172,7 +173,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`Edit margin for ${displayName}`}
+                      aria-label={t("Edit margin for {0}", displayName)}
                       onClick={() => handleStartEdit(row.provider, row.margin)}
                       className="cursor-pointer text-blue-600 hover:text-blue-700"
                     >
@@ -186,14 +187,14 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
           width: "350px",
         },
         {
-          header: "Actions",
+          header: t("Actions"),
           cell: (row) => {
             const displayName = marginRowDisplayName(row.provider);
             return (
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label={`Remove margin for ${displayName}`}
+                aria-label={t("Remove margin for {0}", displayName)}
                 onClick={() => onRemoveProvider(row.provider, displayName)}
                 className="cursor-pointer hover:text-red-600"
               >
@@ -205,7 +206,7 @@ const ProviderMarginTable: React.FC<ProviderMarginTableProps> = ({
         },
       ]}
       getRowKey={(row) => row.provider}
-      emptyMessage="No provider margins configured"
+      emptyMessage={t("No provider margins configured")}
     />
   );
 };

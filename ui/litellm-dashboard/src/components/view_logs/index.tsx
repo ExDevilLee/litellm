@@ -6,6 +6,7 @@ import AuditLogsPanel from "./AuditLogsPanel";
 import RequestLogsPanel from "./RequestLogsPanel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
+import { t } from "@/contexts/LanguageContext";
 
 interface SpendLogsTableProps {
   accessToken: string | null;
@@ -22,29 +23,30 @@ interface LogsTab {
   label: string;
 }
 
-const REQUEST_LOGS_TAB: LogsTab = { id: "request logs", label: "Request Logs" };
-const AUDIT_LOGS_TAB: LogsTab = { id: "audit logs", label: "Audit Logs" };
-const DELETED_KEYS_TAB: LogsTab = { id: "deleted keys", label: "Deleted Keys" };
-const DELETED_TEAMS_TAB: LogsTab = { id: "deleted teams", label: "Deleted Teams" };
+// Built as functions so t() runs at render time, not at module import (language not ready then).
+const getRequestLogsTab = (): LogsTab => ({ id: "request logs", label: t("Request Logs") });
+const getAuditLogsTab = (): LogsTab => ({ id: "audit logs", label: t("Audit Logs") });
+const getDeletedKeysTab = (): LogsTab => ({ id: "deleted keys", label: t("Deleted Keys") });
+const getDeletedTeamsTab = (): LogsTab => ({ id: "deleted teams", label: t("Deleted Teams") });
 
 export default function SpendLogsTable({ accessToken, token, userRole, userID, premiumUser }: SpendLogsTableProps) {
-  const [activeTab, setActiveTab] = useState<LogsTabId>(REQUEST_LOGS_TAB.id);
+  const [activeTab, setActiveTab] = useState<LogsTabId>("request logs");
   const canViewAuditLogs = useCan("viewAuditLogs");
   const canViewDeletedTeams = useCan("viewDeletedTeams");
 
   if (!accessToken || !token || !userRole || !userID) {
     return (
-      <div role="status" aria-busy="true" aria-label="Loading" className="flex h-64 items-center justify-center">
+      <div role="status" aria-busy="true" aria-label={t("Loading")} className="flex h-64 items-center justify-center">
         <UiLoadingSpinner className="size-8 text-primary" />
       </div>
     );
   }
 
   const tabs: LogsTab[] = [
-    REQUEST_LOGS_TAB,
-    ...(canViewAuditLogs ? [AUDIT_LOGS_TAB] : []),
-    DELETED_KEYS_TAB,
-    ...(canViewDeletedTeams ? [DELETED_TEAMS_TAB] : []),
+    getRequestLogsTab(),
+    ...(canViewAuditLogs ? [getAuditLogsTab()] : []),
+    getDeletedKeysTab(),
+    ...(canViewDeletedTeams ? [getDeletedTeamsTab()] : []),
   ];
 
   const renderPanel = (tabId: LogsTabId) => {

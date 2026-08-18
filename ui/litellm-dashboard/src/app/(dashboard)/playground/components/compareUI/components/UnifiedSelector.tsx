@@ -12,6 +12,7 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { UiLoadingSpinner } from "@/components/ui/ui-loading-spinner";
+import { t } from "@/contexts/LanguageContext";
 import { SelectorOption, EndpointConfig } from "../endpoint_config";
 
 interface UnifiedSelectorProps {
@@ -39,7 +40,7 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
       filter={matchesQuery}
     >
       <ComboboxInput
-        placeholder={loading ? `Loading ${noun}s...` : config.selectorPlaceholder}
+        placeholder={loading ? t(`Loading ${noun}s...`) : config.selectorPlaceholder}
         className="w-48 md:w-64 lg:w-72"
       />
       <ComboboxContent>
@@ -49,7 +50,7 @@ export function UnifiedSelector({ value, options, loading, config, onChange }: U
               <UiLoadingSpinner className="size-4" />
             </span>
           ) : (
-            `No ${noun}s available`
+            t(`No ${noun}s available`)
           )}
         </ComboboxEmpty>
         <ComboboxList>

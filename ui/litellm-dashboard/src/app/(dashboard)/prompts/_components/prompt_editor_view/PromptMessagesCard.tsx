@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { PlusIcon, TrashIcon, GripVerticalIcon } from "lucide-react";
 import VariableTextArea from "../variable_textarea";
 import { Message } from "./types";
+import { t } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select as ShadcnSelect, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -50,9 +51,9 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
   return (
     <Card className="p-3">
       <div className="mb-2">
-        <p className="text-sm font-medium">Prompt messages</p>
+        <p className="text-sm font-medium">{t("Prompt messages")}</p>
         <p className="text-muted-foreground text-xs mt-1">
-          Use <code className="bg-muted px-1 rounded-sm text-xs">{"{{variable}}"}</code> syntax for template variables
+          {t("Use {0} syntax for template variables", "{{variable}}")}
         </p>
       </div>
       <div className="space-y-2">
@@ -76,14 +77,14 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 <SelectTrigger
                   size="sm"
                   className="w-[110px] border-0 shadow-none"
-                  aria-label={`Message ${index + 1} role`}
+                  aria-label={t("Message {0} role", index + 1)}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="user">User</SelectItem>
-                  <SelectItem value="assistant">Assistant</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  <SelectItem value="user">{t("User")}</SelectItem>
+                  <SelectItem value="assistant">{t("Assistant")}</SelectItem>
+                  <SelectItem value="system">{t("System")}</SelectItem>
                 </SelectContent>
               </ShadcnSelect>
               <div className="flex items-center gap-1">
@@ -91,7 +92,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label={`Remove message ${index + 1}`}
+                    aria-label={t("Remove message {0}", index + 1)}
                     onClick={() => onRemoveMessage(index)}
                   >
                     <TrashIcon size={14} />
@@ -107,7 +108,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
                 value={message.content}
                 onChange={(value) => onUpdateMessage(index, "content", value)}
                 rows={3}
-                placeholder="Enter prompt content..."
+                placeholder={t("Enter prompt content...")}
               />
             </div>
           </div>
@@ -115,7 +116,7 @@ const PromptMessagesCard: React.FC<PromptMessagesCardProps> = ({
       </div>
       <Button variant="ghost" size="sm" onClick={onAddMessage} className="mt-2">
         <PlusIcon size={14} className="mr-1" />
-        Add message
+        {t("Add message")}
       </Button>
     </Card>
   );

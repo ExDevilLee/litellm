@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { CircleCheck } from "lucide-react";
 import { GuardrailCardInfo } from "./guardrail_garden_data";
 import { Logo } from "@/components/molecules/logo/Logo";
@@ -20,7 +21,7 @@ const GuardrailCard: React.FC<{ card: GuardrailCardInfo; onClick: () => void }> 
         <div className="mt-2.5 flex items-center gap-1 text-emerald-600">
           <CircleCheck className="size-3" />
           <span className="text-[11px] font-medium">
-            F1: {card.eval.f1}% &middot; {card.eval.testCases} test cases
+            {t("F1: {0}% · {1} test cases", card.eval.f1, card.eval.testCases)}
           </span>
         </div>
       )}

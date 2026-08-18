@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ACTION_ITEMS } from "./action_options";
+import { t } from "@/contexts/LanguageContext";
 import { ABOVE_ANTD_MODAL } from "./dialog_layering";
 
 interface KeywordModalProps {
@@ -34,31 +35,31 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
     <Dialog open={visible} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className={`max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-[800px] ${ABOVE_ANTD_MODAL}`}>
         <DialogHeader>
-          <DialogTitle>Add blocked keyword</DialogTitle>
+          <DialogTitle>{t("Add blocked keyword")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           <div>
-            <p className="font-semibold">Keyword</p>
+            <p className="font-semibold">{t("Keyword")}</p>
             <Input
               className="mt-2"
-              placeholder="Enter sensitive keyword or phrase"
+              placeholder={t("Enter sensitive keyword or phrase")}
               value={keyword}
               onChange={(e) => onKeywordChange(e.target.value)}
             />
           </div>
 
           <div>
-            <p className="font-semibold">Action</p>
+            <p className="font-semibold">{t("Action")}</p>
             <p className="mt-1 mb-2 text-muted-foreground">
-              Choose what action the guardrail should take when this keyword is detected
+              {t("Choose what action the guardrail should take when this keyword is detected")}
             </p>
             <Select
               items={ACTION_ITEMS}
               value={action}
               onValueChange={(value: string | null) => value && onActionChange(value as "BLOCK" | "MASK")}
             >
-              <SelectTrigger className="w-full" aria-label="Action">
+              <SelectTrigger className="w-full" aria-label={t("Action")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent alignItemWithTrigger={false}>
@@ -72,10 +73,10 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
           </div>
 
           <div>
-            <p className="font-semibold">Description (optional)</p>
+            <p className="font-semibold">{t("Description (optional)")}</p>
             <Textarea
               className="mt-2 field-sizing-fixed"
-              placeholder="Explain why this keyword is sensitive"
+              placeholder={t("Explain why this keyword is sensitive")}
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
               rows={3}
@@ -85,9 +86,9 @@ const KeywordModal: React.FC<KeywordModalProps> = ({
 
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {t("Cancel")}
           </Button>
-          <Button onClick={onAdd}>Add</Button>
+          <Button onClick={onAdd}>{t("Add")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -5,6 +5,7 @@ import { DataTable } from "@/components/shared/DataTable";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ACTION_ITEMS } from "./action_options";
+import { t } from "@/contexts/LanguageContext";
 
 interface BlockedWord {
   id: string;
@@ -22,11 +23,11 @@ interface KeywordTableProps {
 const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, onRemove }) => {
   const columns: ColumnDef<BlockedWord>[] = [
     {
-      header: "Keyword",
+      header: t("Keyword"),
       accessorKey: "keyword",
     },
     {
-      header: "Action",
+      header: t("Action"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -35,7 +36,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, "action", value)}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger size="sm" className="w-[120px]" aria-label={t("Action")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent alignItemWithTrigger={false}>
@@ -49,7 +50,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
       ),
     },
     {
-      header: "Description",
+      header: t("Description"),
       accessorKey: "description",
       cell: ({ row }) => row.original.description || "-",
     },
@@ -67,7 +68,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ keywords, onActionChange, o
   ];
 
   if (keywords.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No keywords added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{t("No keywords added.")}</div>;
   }
 
   return <DataTable data={keywords} columns={columns} getRowId={(row) => row.id} size="compact" />;

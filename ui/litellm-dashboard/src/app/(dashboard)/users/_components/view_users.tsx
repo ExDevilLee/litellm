@@ -1,5 +1,6 @@
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 
 import BulkEditUserModal from "./BulkEditUsers";
 import BulkCreateUsersButton from "@/components/bulk_create_users_button";
@@ -162,16 +163,16 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
   const handleResetPassword = useCallback(
     async (userId: string) => {
       if (!accessToken) {
-        NotificationsManager.fromBackend("Access token not found");
+        NotificationsManager.fromBackend(t("Access token not found"));
         return;
       }
       try {
-        NotificationsManager.success("Generating password reset link...");
+        NotificationsManager.success(t("Generating password reset link..."));
         const data = await invitationCreateCall(accessToken, userId);
         setInvitationLinkData(data);
         setIsInvitationLinkModalVisible(true);
       } catch (error) {
-        NotificationsManager.fromBackend("Failed to generate password reset link");
+        NotificationsManager.fromBackend(t("Failed to generate password reset link"));
       }
     },
     [accessToken],
@@ -190,10 +191,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
           return { ...previousData, users: updatedUsers };
         });
 
-        NotificationsManager.success("User deleted successfully");
+        NotificationsManager.success(t("User deleted successfully"));
       } catch (error) {
         console.error("Error deleting user:", error);
-        NotificationsManager.fromBackend("Failed to delete user");
+        NotificationsManager.fromBackend(t("Failed to delete user"));
       } finally {
         setIsDeleteModalOpen(false);
         setUserToDelete(null);
@@ -231,7 +232,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         return { ...previousData, users: updatedUsers };
       });
 
-      NotificationsManager.success(`User ${editedUser.user_id} updated successfully`);
+      NotificationsManager.success(t("User {0} updated successfully", editedUser.user_id));
     } catch (error) {
       console.error("There was an error updating the user", error);
     }
@@ -380,7 +381,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   variant={selectionMode ? "default" : "outline"}
                   data-testid="toggle-user-selection"
                 >
-                  {selectionMode ? "Cancel Selection" : "Select Users"}
+                  {selectionMode ? t("Cancel Selection") : t("Select Users")}
                 </Button>
               )}
 
@@ -391,7 +392,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
                   disabled={selectedUsers.length === 0}
                   data-testid="bulk-edit-users"
                 >
-                  Bulk Edit ({selectedUsers.length} selected)
+                  {t("Bulk Edit ({0} selected)", selectedUsers.length)}
                 </Button>
               )}
             </>
@@ -403,10 +404,10 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
         <Tabs defaultValue="users" className="gap-0">
           <TabsList variant="line" className="mb-4">
             <TabsTrigger value="users" className="flex-none data-active:text-primary after:bg-primary">
-              Users
+              {t("Users")}
             </TabsTrigger>
             <TabsTrigger value="default-settings" className="flex-none data-active:text-primary after:bg-primary">
-              Default User Settings
+              {t("Default User Settings")}
             </TabsTrigger>
           </TabsList>
 
@@ -419,7 +420,7 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
               <div
                 className="flex h-64 items-center justify-center"
                 role="status"
-                aria-label="Loading default user settings"
+                aria-label={t("Loading default user settings")}
               >
                 <div className="w-full max-w-lg space-y-3">
                   <Skeleton className="h-5 w-1/3" />
@@ -448,18 +449,18 @@ const ViewUserDashboard: React.FC<ViewUserDashboardProps> = ({
 
       <DeleteResourceModal
         isOpen={isDeleteModalOpen}
-        title="Delete User?"
-        message="Are you sure you want to delete this user? This action cannot be undone."
-        resourceInformationTitle="User Information"
+        title={t("Delete User?")}
+        message={t("Are you sure you want to delete this user? This action cannot be undone.")}
+        resourceInformationTitle={t("User Information")}
         resourceInformation={[
-          { label: "Email", value: userToDelete?.user_email },
-          { label: "User ID", value: userToDelete?.user_id, code: true },
+          { label: t("Email"), value: userToDelete?.user_email },
+          { label: t("User ID"), value: userToDelete?.user_id, code: true },
           {
-            label: "Global Proxy Role",
+            label: t("Global Proxy Role"),
             value:
               (userToDelete && possibleUIRoles?.[userToDelete.user_role]?.ui_label) || userToDelete?.user_role || "-",
           },
-          { label: "Total Spend (USD)", value: userToDelete?.spend?.toFixed(2) },
+          { label: t("Total Spend (USD)"), value: userToDelete?.spend?.toFixed(2) },
         ]}
         onCancel={cancelDelete}
         onOk={confirmDelete}

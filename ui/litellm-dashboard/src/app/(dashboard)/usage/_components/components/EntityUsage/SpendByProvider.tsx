@@ -4,6 +4,7 @@ import { MoneyCell } from "@/components/shared/table_cells";
 import { formatNumberWithCommas } from "@/utils/dataUtils";
 import { Info } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
+import { t } from "@/contexts/LanguageContext";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -26,9 +27,9 @@ interface SpendByProviderProps {
   providerSpend: ProviderSpendData[];
 }
 
-const columns: ColumnDef<ProviderSpendData>[] = [
+const getColumns = (): ColumnDef<ProviderSpendData>[] => [
   {
-    header: "Provider",
+    header: t("Provider"),
     accessorKey: "provider",
     cell: ({ row }) => (
       <div className="flex items-center space-x-2">
@@ -38,25 +39,25 @@ const columns: ColumnDef<ProviderSpendData>[] = [
     ),
   },
   {
-    header: "Spend",
+    header: t("Spend"),
     accessorKey: "spend",
     meta: { numeric: true },
     cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
   },
   {
-    header: "Successful",
+    header: t("Successful"),
     accessorKey: "successful_requests",
     meta: { numeric: true, className: "text-green-600" },
     cell: ({ row }) => row.original.successful_requests.toLocaleString(),
   },
   {
-    header: "Failed",
+    header: t("Failed"),
     accessorKey: "failed_requests",
     meta: { numeric: true, className: "text-red-600" },
     cell: ({ row }) => row.original.failed_requests.toLocaleString(),
   },
   {
-    header: "Tokens",
+    header: t("Tokens"),
     accessorKey: "tokens",
     meta: { numeric: true },
     cell: ({ row }) => row.original.tokens.toLocaleString(),
@@ -87,18 +88,18 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Spend by Provider</CardTitle>
+        <CardTitle>{t("Spend by Provider")}</CardTitle>
         <CardAction className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-700">Show Zero Spend</label>
+            <label className="text-sm text-gray-700">{t("Show Zero Spend")}</label>
             <Switch checked={includeZeroSpend} onCheckedChange={setIncludeZeroSpend} />
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
-              <label className="text-sm text-gray-700">Show Unknown</label>
+              <label className="text-sm text-gray-700">{t("Show Unknown")}</label>
               <Tooltip>
                 <TooltipTrigger render={<Info className="size-4 text-gray-400 hover:text-gray-600" />} />
-                <TooltipContent>Requests that failed to route to a provider</TooltipContent>
+                <TooltipContent>{t("Requests that failed to route to a provider")}</TooltipContent>
               </Tooltip>
             </div>
             <Switch checked={includeUnknown} onCheckedChange={setIncludeUnknown} />
@@ -122,10 +123,10 @@ const SpendByProvider: React.FC<SpendByProviderProps> = ({ loading, isDateChangi
               endAngle={-270}
             />
             <DataTable
-              columns={columns}
+              columns={getColumns()}
               data={filteredProviderSpend}
               getRowId={(row) => row.provider}
-              noDataMessage="No provider usage data"
+              noDataMessage={t("No provider usage data")}
               size="compact"
             />
           </div>

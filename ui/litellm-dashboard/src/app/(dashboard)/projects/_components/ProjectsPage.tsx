@@ -4,6 +4,7 @@ import { Plus, SearchIcon, X } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { t } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { CreateProjectModal } from "./ProjectModals/CreateProjectModal";
@@ -57,12 +58,12 @@ export function ProjectsPage() {
     <div className="p-6 px-12">
       <div className="mb-4">
         <PageHeader
-          title="Projects"
-          subtitle="Manage projects within your teams"
+          title={t("Projects")}
+          subtitle={t("Manage projects within your teams")}
           actions={
             <Button onClick={() => setIsCreateModalVisible(true)}>
               <Plus className="size-4" />
-              Create Project
+              {t("Create Project")}
             </Button>
           }
         />
@@ -74,13 +75,13 @@ export function ProjectsPage() {
             <SearchIcon className="size-4 text-muted-foreground" />
           </InputGroupAddon>
           <InputGroupInput
-            placeholder="Search projects by name, ID, description, or team..."
+            placeholder={t("Search projects by name, ID, description, or team...")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           {searchText && (
             <InputGroupAddon align="inline-end">
-              <InputGroupButton size="icon-xs" aria-label="Clear search" onClick={() => setSearchText("")}>
+              <InputGroupButton size="icon-xs" aria-label={t("Clear search")} onClick={() => setSearchText("")}>
                 <X />
               </InputGroupButton>
             </InputGroupAddon>

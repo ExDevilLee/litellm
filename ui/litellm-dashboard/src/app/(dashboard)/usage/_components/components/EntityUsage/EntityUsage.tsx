@@ -36,6 +36,7 @@ import {
   userDailyActivityCall,
 } from "@/components/networking";
 import { Logo } from "@/components/molecules/logo/Logo";
+import { t } from "@/contexts/LanguageContext";
 import { usePaginatedDailyActivity } from "../../hooks/usePaginatedDailyActivity";
 import { EntityMetricWithMetadata } from "@/components/UsagePage/types";
 import { valueFormatterSpend } from "@/components/UsagePage/utils/value_formatters";
@@ -248,11 +249,11 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   };
 
   const getFilterLabel = (entityType: string) => {
-    return `Filter by ${entityType}`;
+    return t("Filter by {0}", entityType);
   };
 
   const getFilterPlaceholder = (entityType: string) => {
-    return `Select ${entityType} to filter...`;
+    return t("Select {0} to filter...", entityType);
   };
 
   const entityFilterSlots: Partial<Record<EntityType, ReactNode>> = {
@@ -274,25 +275,25 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         cell: ({ row }) => row.original.metadata.alias,
       },
       {
-        header: "Spend",
+        header: t("Spend"),
         accessorKey: "metrics.spend",
         meta: { numeric: true },
         cell: ({ row }) => <MoneyCell value={row.original.metrics.spend} decimals={4} />,
       },
       {
-        header: "Successful",
+        header: t("Successful"),
         accessorKey: "metrics.successful_requests",
         meta: { numeric: true, className: "text-green-600" },
         cell: ({ row }) => row.original.metrics.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: t("Failed"),
         accessorKey: "metrics.failed_requests",
         meta: { numeric: true, className: "text-red-600" },
         cell: ({ row }) => row.original.metrics.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: t("Tokens"),
         accessorKey: "metrics.total_tokens",
         meta: { numeric: true },
         cell: ({ row }) => row.original.metrics.total_tokens.toLocaleString(),
@@ -303,7 +304,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const providerSpendColumns = useMemo<ColumnDef<ProviderSpendRow>[]>(
     () => [
       {
-        header: "Provider",
+        header: t("Provider"),
         accessorKey: "provider",
         cell: ({ row }) => (
           <div className="flex items-center space-x-2">
@@ -313,25 +314,25 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         ),
       },
       {
-        header: "Spend",
+        header: t("Spend"),
         accessorKey: "spend",
         meta: { numeric: true },
         cell: ({ row }) => <MoneyCell value={row.original.spend} decimals={2} />,
       },
       {
-        header: "Successful",
+        header: t("Successful"),
         accessorKey: "successful_requests",
         meta: { numeric: true, className: "text-green-600" },
         cell: ({ row }) => row.original.successful_requests.toLocaleString(),
       },
       {
-        header: "Failed",
+        header: t("Failed"),
         accessorKey: "failed_requests",
         meta: { numeric: true, className: "text-red-600" },
         cell: ({ row }) => row.original.failed_requests.toLocaleString(),
       },
       {
-        header: "Tokens",
+        header: t("Tokens"),
         accessorKey: "tokens",
         meta: { numeric: true },
         cell: ({ row }) => row.original.tokens.toLocaleString(),
@@ -368,14 +369,15 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   const breakdownTiles = showFlatCost && showCostBreakdown ? buildCostBreakdownTiles(spendData.metadata) : [];
   const summaryTiles = [...buildSummaryTiles(spendData.metadata, showFlatCost), ...breakdownTiles];
 
-  const modelViewTitle = modelViewType === "groups" ? "Top Public Model Names" : "Top Litellm Models";
+  const modelViewTitle =
+    modelViewType === "groups" ? t("Top Public Model Names") : t("Top Litellm Models");
 
   const costPanel = (
     <div className="grid grid-cols-2 gap-2 w-full">
       <div className="col-span-2">
         <ShadcnCard>
           <CardContent>
-            <h3 className="text-lg font-medium text-foreground">{capitalizedEntityLabel} Spend Overview</h3>
+            <h3 className="text-lg font-medium text-foreground">{t("{0} Spend Overview", capitalizedEntityLabel)}</h3>
             <div className="grid grid-cols-5 gap-4 mt-4">{summaryTiles.map(renderSummaryTile)}</div>
           </CardContent>
         </ShadcnCard>
@@ -385,7 +387,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div className="col-span-2">
         <ShadcnCard>
           <CardHeader>
-            <CardTitle className="text-base font-semibold">Daily Spend</CardTitle>
+            <CardTitle className="text-base font-semibold">{t("Daily Spend")}</CardTitle>
           </CardHeader>
           <CardContent>
             <BarChart
@@ -414,24 +416,24 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                     <p className="font-bold">{data.date}</p>
                     {showFlatCost ? (
                       <>
-                        <p className="text-cyan-500">Request cost: ${formatNumberWithCommas(requestSpend, 2)}</p>
-                        <p className="text-violet-500">Flat cost: ${formatNumberWithCommas(flatCost, 2)}</p>
+                        <p className="text-cyan-500">{t("Request cost: ${0}", formatNumberWithCommas(requestSpend, 2))}</p>
+                        <p className="text-violet-500">{t("Flat cost: ${0}", formatNumberWithCommas(flatCost, 2))}</p>
                         <p className="font-semibold">
-                          Total cost: ${formatNumberWithCommas(requestSpend + flatCost, 2)}
+                          {t("Total cost: ${0}", formatNumberWithCommas(requestSpend + flatCost, 2))}
                         </p>
                       </>
                     ) : (
-                      <p className="text-cyan-500">Total Spend: ${formatNumberWithCommas(data.metrics.spend, 2)}</p>
+                      <p className="text-cyan-500">{t("Total Spend: ${0}", formatNumberWithCommas(data.metrics.spend, 2))}</p>
                     )}
-                    <p className="text-gray-600">Total Requests: {data.metrics.api_requests}</p>
-                    <p className="text-gray-600">Successful: {data.metrics.successful_requests}</p>
-                    <p className="text-gray-600">Failed: {data.metrics.failed_requests}</p>
-                    <p className="text-gray-600">Total Tokens: {data.metrics.total_tokens}</p>
+                    <p className="text-gray-600">{t("Total Requests: {0}", data.metrics.api_requests)}</p>
+                    <p className="text-gray-600">{t("Successful: {0}", data.metrics.successful_requests)}</p>
+                    <p className="text-gray-600">{t("Failed: {0}", data.metrics.failed_requests)}</p>
+                    <p className="text-gray-600">{t("Total Tokens: {0}", data.metrics.total_tokens)}</p>
                     <p className="text-gray-600">
-                      Total {capitalizedEntityLabel}s: {entityCount}
+                      {t("Total {0}s: {1}", capitalizedEntityLabel, entityCount)}
                     </p>
                     <div className="mt-2 border-t pt-2">
-                      <p className="font-semibold">Spend by {capitalizedEntityLabel}:</p>
+                      <p className="font-semibold">{t("Spend by {0}:", capitalizedEntityLabel)}</p>
                       {Object.entries(data.breakdown.entities || {})
                         .sort(([, a], [, b]) => {
                           const spendA = (a as EntityMetrics).metrics.spend;
@@ -448,7 +450,9 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                             </p>
                           );
                         })}
-                      {entityCount > 5 && <p className="text-sm text-gray-500 italic">...and {entityCount - 5} more</p>}
+                      {entityCount > 5 && (
+                        <p className="text-sm text-gray-500 italic">{t("...and {0} more", entityCount - 5)}</p>
+                      )}
                     </div>
                   </div>
                 );
@@ -463,15 +467,15 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <ShadcnCard>
           <CardContent className="flex flex-col space-y-4">
             <div className="flex flex-col space-y-2">
-              <h3 className="text-lg font-medium text-foreground">Spend Per {capitalizedEntityLabel}</h3>
-              <p className="text-xs text-muted-foreground">Showing Top 5 by Spend</p>
+              <h3 className="text-lg font-medium text-foreground">{t("Spend Per {0}", capitalizedEntityLabel)}</h3>
+              <p className="text-xs text-muted-foreground">{t("Showing Top 5 by Spend")}</p>
               <div className="flex items-center text-sm text-gray-500">
-                <span>Get Started by Tracking cost per {capitalizedEntityLabel} </span>
+                <span>{t("Get Started by Tracking cost per {0}", capitalizedEntityLabel)} </span>
                 <a
                   href="https://docs.litellm.ai/docs/proxy/enterprise#spend-tracking"
                   className="text-blue-500 hover:text-blue-700 ml-1"
                 >
-                  here
+                  {t("here")}
                 </a>
               </div>
             </div>
@@ -493,13 +497,17 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                     return (
                       <div className="bg-white p-4 shadow-lg rounded-lg border">
                         <p className="font-bold">{data.metadata.alias}</p>
-                        <p className="text-cyan-500">Spend: ${formatNumberWithCommas(data.metrics.spend, 4)}</p>
-                        <p className="text-gray-600">Requests: {data.metrics.api_requests.toLocaleString()}</p>
-                        <p className="text-green-600">
-                          Successful: {data.metrics.successful_requests.toLocaleString()}
+                        <p className="text-cyan-500">
+                          {t("Spend: ${0}", formatNumberWithCommas(data.metrics.spend, 4))}
                         </p>
-                        <p className="text-red-600">Failed: {data.metrics.failed_requests.toLocaleString()}</p>
-                        <p className="text-gray-600">Tokens: {data.metrics.total_tokens.toLocaleString()}</p>
+                        <p className="text-gray-600">{t("Requests: {0}", data.metrics.api_requests.toLocaleString())}</p>
+                        <p className="text-green-600">
+                          {t("Successful: {0}", data.metrics.successful_requests.toLocaleString())}
+                        </p>
+                        <p className="text-red-600">
+                          {t("Failed: {0}", data.metrics.failed_requests.toLocaleString())}
+                        </p>
+                        <p className="text-gray-600">{t("Tokens: {0}", data.metrics.total_tokens.toLocaleString())}</p>
                       </div>
                     );
                   }}
@@ -511,7 +519,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                   data={getEntityBreakdown().filter((entity) => entity.metrics.spend > 0)}
                   getRowId={(row) => row.metadata.id}
                   maxBodyHeight={208}
-                  noDataMessage={`No ${entityType} spend data`}
+                  noDataMessage={t("No {0} spend data", entityType)}
                   size="compact"
                 />
               </div>
@@ -524,7 +532,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div>
         <ShadcnCard>
           <CardContent>
-            <h3 className="text-lg font-medium text-foreground">Top Virtual Keys</h3>
+            <h3 className="text-lg font-medium text-foreground">{t("Top Virtual Keys")}</h3>
             <TopKeyView
               topKeys={getTopAPIKeys(spendData.results, topKeysLimit)}
               teams={null}
@@ -542,7 +550,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           <CardContent>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-foreground">
-                {entityType === "agent" ? "Top Agents" : modelViewTitle}
+                {entityType === "agent" ? t("Top Agents") : modelViewTitle}
               </h3>
               <ModelViewToggle value={modelViewType} onChange={setModelViewType} />
             </div>
@@ -559,7 +567,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
         <div className="col-span-2">
           <ShadcnCard>
             <CardContent>
-              <h3 className="text-lg font-medium text-foreground">Top Agents Driving Spend</h3>
+              <h3 className="text-lg font-medium text-foreground">{t("Top Agents Driving Spend")}</h3>
               <TopModelView
                 topModels={getTopAgents(agentSpendData.results, topAgentsLimit)}
                 topModelsLimit={topAgentsLimit}
@@ -574,7 +582,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       <div className="col-span-2">
         <ShadcnCard>
           <CardContent className="flex flex-col space-y-4">
-            <h3 className="text-lg font-medium text-foreground">Provider Usage</h3>
+            <h3 className="text-lg font-medium text-foreground">{t("Provider Usage")}</h3>
             <div className="grid grid-cols-2">
               <div>
                 <DonutChart
@@ -594,7 +602,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                   columns={providerSpendColumns}
                   data={providerSpend}
                   getRowId={(row) => row.provider}
-                  noDataMessage="No provider usage data"
+                  noDataMessage={t("No provider usage data")}
                   size="compact"
                 />
               </div>
@@ -606,10 +614,10 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
   );
 
   const tabs: readonly { key: string; label: string; content: ReactNode }[] = [
-    { key: "cost", label: "Cost", content: costPanel },
+    { key: "cost", label: t("Cost"), content: costPanel },
     {
       key: "models",
-      label: entityType === "agent" ? "Request / Token Consumption" : "Model Activity",
+      label: entityType === "agent" ? t("Request / Token Consumption") : t("Model Activity"),
       content: (
         <>
           <div className="flex justify-end mt-2 mb-4">
@@ -620,14 +628,20 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       ),
     },
     ...(showAgentBreakdown
-      ? [{ key: "agents", label: "Agent Activity", content: <ActivityMetrics modelMetrics={agentMetrics} /> }]
+      ? [
+          {
+            key: "agents",
+            label: t("Agent Activity"),
+            content: <ActivityMetrics modelMetrics={agentMetrics} />,
+          },
+        ]
       : []),
     {
       key: "keys",
-      label: "Key Activity",
+      label: t("Key Activity"),
       content: <ActivityMetrics modelMetrics={keyMetrics} hidePromptCachingMetrics={entityType === "agent"} />,
     },
-    { key: "endpoints", label: "Endpoint Activity", content: <EndpointUsage userSpendData={spendData} /> },
+    { key: "endpoints", label: t("Endpoint Activity"), content: <EndpointUsage userSpendData={spendData} /> },
   ];
 
   return (
@@ -637,16 +651,18 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           <AlertDescription className="flex items-center justify-between text-inherit">
             <span>
               <Loader2 className="mr-2 inline size-4 animate-spin align-text-bottom" />
-              Currently fetching spend data: fetched {progress.currentPage} / {progress.totalPages} pages. Charts will
-              update periodically as data loads. Moving off of this page will stop and reset this. To continue using the
-              UI in the meantime,{" "}
+              {t(
+                "Currently fetching spend data: fetched {0} / {1} pages. Charts will update periodically as data loads. Moving off of this page will stop and reset this. To continue using the UI in the meantime,",
+                progress.currentPage,
+                progress.totalPages,
+              )}{" "}
               <a href={window.location.href} target="_blank" rel="noopener noreferrer">
-                open a new tab <ExternalLink className="inline size-3.5 align-text-bottom" />
+                {t("open a new tab")} <ExternalLink className="inline size-3.5 align-text-bottom" />
               </a>
               .
             </span>
             <Button variant="destructive" onClick={cancel}>
-              Stop
+              {t("Stop")}
             </Button>
           </AlertDescription>
         </Alert>
@@ -654,7 +670,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       {cancelled && (
         <Alert variant="info" className="mb-2">
           <AlertDescription className="text-inherit">
-            Showing partial data ({progress.currentPage}/{progress.totalPages} pages loaded)
+            {t("Showing partial data ({0}/{1} pages loaded)", progress.currentPage, progress.totalPages)}
           </AlertDescription>
         </Alert>
       )}
@@ -663,16 +679,18 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
           <AlertDescription className="flex items-center justify-between text-inherit">
             <span>
               <Loader2 className="mr-2 inline size-4 animate-spin align-text-bottom" />
-              Currently fetching agent data: fetched {agentProgress.currentPage} / {agentProgress.totalPages} pages.
-              Charts will update periodically as data loads. Moving off of this page will stop and reset this. To
-              continue using the UI in the meantime,{" "}
+              {t(
+                "Currently fetching agent data: fetched {0} / {1} pages. Charts will update periodically as data loads. Moving off of this page will stop and reset this. To continue using the UI in the meantime,",
+                agentProgress.currentPage,
+                agentProgress.totalPages,
+              )}{" "}
               <a href={window.location.href} target="_blank" rel="noopener noreferrer">
-                open a new tab <ExternalLink className="inline size-3.5 align-text-bottom" />
+                {t("open a new tab")} <ExternalLink className="inline size-3.5 align-text-bottom" />
               </a>
               .
             </span>
             <Button variant="destructive" onClick={agentCancel}>
-              Stop
+              {t("Stop")}
             </Button>
           </AlertDescription>
         </Alert>
@@ -680,7 +698,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
       {agentCancelled && showAgentBreakdown && (
         <Alert variant="info" className="mb-2">
           <AlertDescription className="text-inherit">
-            Showing partial agent data ({agentProgress.currentPage}/{agentProgress.totalPages} pages loaded)
+            {t("Showing partial agent data ({0}/{1} pages loaded)", agentProgress.currentPage, agentProgress.totalPages)}
           </AlertDescription>
         </Alert>
       )}

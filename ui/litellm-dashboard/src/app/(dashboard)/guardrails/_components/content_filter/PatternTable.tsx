@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { Trash2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/DataTable";
@@ -25,18 +26,20 @@ interface PatternTableProps {
 const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, onRemove }) => {
   const columns: ColumnDef<Pattern>[] = [
     {
-      header: "Type",
+      header: t("Type"),
       accessorKey: "type",
       size: 100,
-      cell: ({ row }) => <Badge variant="secondary">{row.original.type === "prebuilt" ? "Prebuilt" : "Custom"}</Badge>,
+      cell: ({ row }) => (
+        <Badge variant="secondary">{row.original.type === "prebuilt" ? t("Prebuilt") : t("Custom")}</Badge>
+      ),
     },
     {
-      header: "Pattern name",
+      header: t("Pattern name"),
       accessorKey: "name",
       cell: ({ row }) => row.original.display_name || row.original.name,
     },
     {
-      header: "Regex pattern",
+      header: t("Regex pattern"),
       accessorKey: "pattern",
       cell: ({ row }) =>
         row.original.pattern ? (
@@ -46,7 +49,7 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
         ),
     },
     {
-      header: "Action",
+      header: t("Action"),
       accessorKey: "action",
       size: 150,
       cell: ({ row }) => (
@@ -55,13 +58,13 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
           value={row.original.action}
           onValueChange={(value: string | null) => value && onActionChange(row.original.id, value as "BLOCK" | "MASK")}
         >
-          <SelectTrigger size="sm" className="w-[120px]" aria-label="Action">
+          <SelectTrigger size="sm" className="w-[120px]" aria-label={t("Action")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent alignItemWithTrigger={false}>
             {ACTION_ITEMS.map((item) => (
               <SelectItem key={item.value} value={item.value}>
-                {item.label}
+                {t(item.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -75,14 +78,14 @@ const PatternTable: React.FC<PatternTableProps> = ({ patterns, onActionChange, o
       cell: ({ row }) => (
         <Button variant="ghost" size="sm" onClick={() => onRemove(row.original.id)}>
           <Trash2 />
-          Delete
+          {t("Delete")}
         </Button>
       ),
     },
   ];
 
   if (patterns.length === 0) {
-    return <div className="py-10 text-center text-muted-foreground">No patterns added.</div>;
+    return <div className="py-10 text-center text-muted-foreground">{t("No patterns added.")}</div>;
   }
 
   return <DataTable data={patterns} columns={columns} getRowId={(row) => row.id} size="compact" />;

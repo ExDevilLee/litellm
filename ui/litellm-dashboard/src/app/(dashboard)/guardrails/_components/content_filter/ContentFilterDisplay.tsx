@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { t } from "@/contexts/LanguageContext";
 import PatternTable from "./PatternTable";
 import KeywordTable from "./KeywordTable";
 import CategoryTable from "./CategoryTable";
@@ -69,8 +70,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Content Categories</p>
-              <Badge variant="secondary">{categories.length} categories configured</Badge>
+              <p className="text-lg font-semibold">{t("Content Categories")}</p>
+              <Badge variant="secondary">{t("{0} categories configured", categories.length)}</Badge>
             </div>
             <CategoryTable
               categories={categories}
@@ -87,8 +88,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Pattern Detection</p>
-              <Badge variant="secondary">{patterns.length} patterns configured</Badge>
+              <p className="text-lg font-semibold">{t("Pattern Detection")}</p>
+              <Badge variant="secondary">{t("{0} patterns configured", patterns.length)}</Badge>
             </div>
             <PatternTable
               patterns={patterns}
@@ -103,8 +104,8 @@ const ContentFilterDisplay: React.FC<ContentFilterDisplayProps> = ({
         <Card className="mt-6">
           <CardContent>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-lg font-semibold">Blocked Keywords</p>
-              <Badge variant="secondary">{blockedWords.length} keywords configured</Badge>
+              <p className="text-lg font-semibold">{t("Blocked Keywords")}</p>
+              <Badge variant="secondary">{t("{0} keywords configured", blockedWords.length)}</Badge>
             </div>
             <KeywordTable
               keywords={blockedWords}

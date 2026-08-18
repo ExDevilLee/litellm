@@ -5,6 +5,7 @@ import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { ChevronDown, ChevronRight, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { t } from "@/contexts/LanguageContext";
 
 interface ReasoningContentProps {
   reasoningContent: string;
@@ -24,7 +25,7 @@ const ReasoningContent: React.FC<ReasoningContentProps> = ({ reasoningContent })
           }
         >
           <Lightbulb className="size-3.5" />
-          {isExpanded ? "Hide reasoning" : "Show reasoning"}
+          {isExpanded ? t("Hide reasoning") : t("Show reasoning")}
           {isExpanded ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         </CollapsibleTrigger>
 

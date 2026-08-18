@@ -1,5 +1,6 @@
 import { FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { t } from "@/contexts/LanguageContext";
 
 interface FilePreviewCardProps {
   file: File;
@@ -21,20 +22,20 @@ function FilePreviewCard({ file, previewUrl, onRemove }: FilePreviewCardProps) {
           ) : (
             <img
               src={previewUrl || ""}
-              alt="Upload preview"
+              alt={t("Upload preview")}
               className="w-10 h-10 rounded-md border border-gray-200 object-cover"
             />
           )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-gray-900 truncate">{file.name}</div>
-          <div className="text-xs text-gray-500">{isPdf ? "PDF" : "Image"}</div>
+          <div className="text-xs text-gray-500">{isPdf ? t("PDF") : t("Image")}</div>
         </div>
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
-          aria-label={`Remove ${file.name}`}
+          aria-label={t("Remove {0}", file.name)}
           className="text-gray-400 hover:text-gray-600 hover:bg-gray-200"
           onClick={onRemove}
         >

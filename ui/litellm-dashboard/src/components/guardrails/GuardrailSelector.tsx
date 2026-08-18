@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Guardrail } from "./types";
 import { getGuardrailsList } from "../networking";
 import { MultiSelect } from "@/components/shared/MultiSelect";
+import { t } from "@/contexts/LanguageContext";
 
 interface GuardrailSelectorProps {
   onChange: (selectedGuardrails: string[]) => void;
@@ -43,7 +44,9 @@ const GuardrailSelector: React.FC<GuardrailSelectorProps> = ({ onChange, value, 
     <div className="min-w-0">
       <MultiSelect
         disabled={disabled}
-        placeholder={disabled ? "Setting guardrails is a premium feature." : "Select guardrails"}
+        placeholder={
+          disabled ? t("Setting guardrails is a premium feature.") : t("Select guardrails")
+        }
         onValueChange={handleGuardrailChange}
         value={value}
         loading={loading}

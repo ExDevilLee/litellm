@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { hasCapability, type Capability } from "@/utils/capabilities";
 import { all_admin_roles } from "@/utils/roles";
+import { t } from "@/contexts/LanguageContext";
 export type UsageOption =
   | "global"
   | "my-usage"
@@ -36,69 +37,69 @@ interface OptionConfig {
   descriptionForNonAdmin?: string;
   badgeText?: string;
 }
-const OPTIONS: OptionConfig[] = [
+const getOptions = (): OptionConfig[] => [
   {
     value: "global",
-    label: "Global Usage",
-    showForAdmin: "Global Usage",
-    showForNonAdmin: "Your Usage",
-    description: "View usage across all resources",
-    descriptionForAdmin: "View usage across all resources",
-    descriptionForNonAdmin: "View your usage",
+    label: t("Global Usage"),
+    showForAdmin: t("Global Usage"),
+    showForNonAdmin: t("Your Usage"),
+    description: t("View usage across all resources"),
+    descriptionForAdmin: t("View usage across all resources"),
+    descriptionForNonAdmin: t("View your usage"),
     icon: <Globe className="size-4" />,
   },
   {
     value: "my-usage",
-    label: "Your Usage",
-    description: "View your own usage",
+    label: t("Your Usage"),
+    description: t("View your own usage"),
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "organization",
-    label: "Organization Usage",
-    description: "View usage across all organizations",
+    label: t("Organization Usage"),
+    description: t("View usage across all organizations"),
     icon: <Building2 className="size-4" />,
     capability: "viewOrganizationUsage",
   },
   {
     value: "team",
-    label: "Team Usage",
-    description: "View usage by team",
+    label: t("Team Usage"),
+    description: t("View usage by team"),
     icon: <Users className="size-4" />,
   },
   {
     value: "customer",
-    label: "Customer Usage",
-    description: "View usage by customer accounts",
+    label: t("Customer Usage"),
+    description: t("View usage by customer accounts"),
     icon: <ShoppingCart className="size-4" />,
     adminOnly: true,
   },
   {
     value: "tag",
-    label: "Tag Usage",
-    description: "View usage grouped by tags",
+    label: t("Tag Usage"),
+    description: t("View usage grouped by tags"),
     icon: <Tags className="size-4" />,
     adminOnly: true,
   },
   {
     value: "agent",
-    label: "Agent Usage (A2A)",
-    description: "View usage by AI agents",
+    label: t("Agent Usage (A2A)"),
+    description: t("View usage by AI agents"),
     icon: <Bot className="size-4" />,
     capability: "viewAgentUsage",
   },
   {
     value: "user",
-    label: "User Usage",
-    description: "View usage by individual users",
+    label: t("User Usage"),
+    description: t("View usage by individual users"),
     icon: <User className="size-4" />,
     adminOnly: true,
   },
   {
     value: "user-agent-activity",
-    label: "User Agent Activity",
-    description: "View detailed user agent activity logs",
+    label: t("User Agent Activity"),
+    description: t("View detailed user agent activity logs"),
     icon: <LineChart className="size-4" />,
     adminOnly: true,
   },
@@ -108,13 +109,13 @@ export const UsageViewSelect: React.FC<UsageViewSelectProps> = ({
   onChange,
   userRole,
   canViewTagUsage = false,
-  title = "Usage View",
-  description = "Select the usage data you want to view",
+  title = t("Usage View"),
+  description = t("Select the usage data you want to view"),
   "data-id": dataId,
 }) => {
   const isAdmin = all_admin_roles.includes(userRole ?? "");
   const getFilteredOptions = () => {
-    return OPTIONS.filter((option) => {
+    return getOptions().filter((option) => {
       if (option.capability) {
         return hasCapability(userRole, option.capability);
       }

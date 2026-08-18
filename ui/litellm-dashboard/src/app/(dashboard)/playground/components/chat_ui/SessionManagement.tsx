@@ -5,6 +5,7 @@ import NotificationsManager from "@/components/molecules/notifications_manager";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { t } from "@/contexts/LanguageContext";
 
 interface SessionManagementProps {
   endpointType: string;
@@ -27,19 +28,19 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
     if (responsesSessionId) {
       try {
         await navigator.clipboard.writeText(responsesSessionId);
-        NotificationsManager.success("Response ID copied to clipboard!");
+        NotificationsManager.success(t("Response ID copied to clipboard!"));
       } catch {
-        NotificationsManager.error("Unable to copy response ID");
+        NotificationsManager.error(t("Unable to copy response ID"));
       }
     }
   };
 
   const getSessionDisplay = () => {
     if (!responsesSessionId) {
-      return useApiSessionManagement ? "API Session: Ready" : "UI Session: Ready";
+      return useApiSessionManagement ? t("API Session: Ready") : t("UI Session: Ready");
     }
 
-    const sessionPrefix = useApiSessionManagement ? "Response ID" : "UI Session";
+    const sessionPrefix = useApiSessionManagement ? t("Response ID") : t("UI Session");
     const truncatedId = responsesSessionId.slice(0, 10);
     return `${sessionPrefix}: ${truncatedId}...`;
   };
@@ -47,13 +48,13 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
   const getSessionDescription = () => {
     if (!responsesSessionId) {
       return useApiSessionManagement
-        ? "LiteLLM will manage session using previous_response_id"
-        : "UI will manage session using chat history";
+        ? t("LiteLLM will manage session using previous_response_id")
+        : t("UI will manage session using chat history");
     }
 
     return useApiSessionManagement
-      ? "LiteLLM API session active - context maintained server-side"
-      : "UI session active - context maintained client-side";
+      ? t("LiteLLM API session active - context maintained server-side")
+      : t("UI session active - context maintained client-side");
   };
 
   return (
@@ -61,14 +62,13 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
       {/* Session Management Toggle */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">Session Management</span>
+          <span className="text-sm font-medium text-gray-700">{t("Session Management")}</span>
           <Tooltip>
-            <TooltipTrigger aria-label="About session management">
+            <TooltipTrigger aria-label={t("About session management")}>
               <Info className="size-3 text-gray-400" />
             </TooltipTrigger>
             <TooltipContent>
-              Choose between LiteLLM API session management (using previous_response_id) or UI-based session management
-              (using chat history)
+              {t("Choose between LiteLLM API session management (using previous_response_id) or UI-based session management (using chat history)")}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -77,7 +77,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
           <Switch
             checked={useApiSessionManagement}
             onCheckedChange={onToggleSessionManagement}
-            aria-label="Use API session management"
+            aria-label={t("Use API session management")}
             size="sm"
           />
           <span aria-hidden="true">API</span>
@@ -106,7 +106,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
                     variant="ghost"
                     size="icon-xs"
                     onClick={handleCopySessionId}
-                    aria-label="Copy response ID"
+                    aria-label={t("Copy response ID")}
                     className="ml-2 hover:bg-green-100"
                   />
                 }
@@ -115,7 +115,7 @@ const SessionManagement: React.FC<SessionManagementProps> = ({
               </TooltipTrigger>
               <TooltipContent className="max-w-lg">
                 <div className="text-xs">
-                  <div className="mb-1">Copy response ID to continue session:</div>
+                  <div className="mb-1">{t("Copy response ID to continue session:")}</div>
                   <div className="bg-gray-800 text-gray-100 p-2 rounded-sm font-mono text-xs whitespace-pre-wrap">
                     {`curl -X POST "your-proxy-url/v1/responses" \\
   -H "Authorization: Bearer your-api-key" \\

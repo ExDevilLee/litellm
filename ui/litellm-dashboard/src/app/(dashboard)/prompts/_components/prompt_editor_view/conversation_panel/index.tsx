@@ -1,5 +1,6 @@
 import React from "react";
 import { Trash2 } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { ConversationPanelProps } from "./types";
 import { useConversation } from "./useConversation";
@@ -40,7 +41,7 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({ prompt, accessTok
         <div className="p-3 border-b border-border bg-background flex justify-end">
           <Button type="button" variant="outline" size="sm" onClick={handleClearConversation}>
             <Trash2 aria-hidden="true" />
-            Clear Chat
+            {t("Clear Chat")}
           </Button>
         </div>
       )}

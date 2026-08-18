@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tag } from "./types";
 import { tagListCall } from "../networking";
 import { MultiSelect } from "@/components/shared/MultiSelect";
+import { t } from "@/contexts/LanguageContext";
 
 interface TagSelectorProps {
   onChange: (selectedTags: string[]) => void;
@@ -33,7 +34,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({ onChange, value, className, a
 
   return (
     <MultiSelect
-      placeholder="Select or create tags"
+      placeholder={t("Select or create tags")}
       onValueChange={onChange}
       value={value}
       loading={loading}

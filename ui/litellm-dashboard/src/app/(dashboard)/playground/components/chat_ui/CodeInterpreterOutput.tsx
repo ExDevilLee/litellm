@@ -5,6 +5,7 @@ import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { getProxyBaseUrl, getGlobalLitellmHeaderName } from "@/components/networking";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { t } from "@/contexts/LanguageContext";
 
 interface ContainerFileCitation {
   type: "container_file_citation";
@@ -141,7 +142,7 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
             }
           >
             <Code className="size-4" />
-            Python Code Executed
+            {t("Python Code Executed")}
           </CollapsibleTrigger>
           <CollapsibleContent>
             <div className="border-t border-gray-200 p-2">
@@ -168,13 +169,13 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
           {loadingImages[annotation.file_id] ? (
             <div className="flex items-center justify-center bg-gray-50 p-8">
               <Loader2 className="size-4 animate-spin text-gray-500" aria-hidden="true" />
-              <span className="ml-2 text-sm text-gray-500">Loading image...</span>
+              <span className="ml-2 text-sm text-gray-500">{t("Loading image...")}</span>
             </div>
           ) : imageUrls[annotation.file_id] ? (
             <div>
               <img
                 src={imageUrls[annotation.file_id]}
-                alt={annotation.filename || "Generated chart"}
+                alt={annotation.filename || t("Generated chart")}
                 className="max-h-[400px] max-w-full"
               />
               <div className="flex items-center justify-between border-t border-gray-200 bg-gray-50 px-3 py-2">
@@ -190,13 +191,13 @@ const CodeInterpreterOutput: React.FC<CodeInterpreterOutputProps> = ({ code, ann
                   onClick={() => void handleDownload(annotation)}
                 >
                   <Download className="size-3" />
-                  Download
+                  {t("Download")}
                 </Button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center bg-gray-50 p-4">
-              <span className="text-sm text-gray-400">Image not available</span>
+              <span className="text-sm text-gray-400">{t("Image not available")}</span>
             </div>
           )}
         </div>

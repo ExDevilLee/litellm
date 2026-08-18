@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PencilIcon } from "lucide-react";
+import { t } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,7 +76,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
       {/* Variable Management - Clear and Functional */}
       {variables.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-muted-foreground mr-1">Detected variables:</span>
+          <span className="text-xs text-muted-foreground mr-1">{t("Detected variables:")}</span>
           {variables.map((variable, index) => (
             <Popover
               key={`${variable.start}-${index}`}
@@ -111,17 +112,17 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
               </PopoverTrigger>
               <PopoverContent className="w-[216px]">
                 <div className="p-2">
-                  <div className="text-xs text-muted-foreground mb-2">Edit variable name</div>
+                  <div className="text-xs text-muted-foreground mb-2">{t("Edit variable name")}</div>
                   <Input
                     value={newVariableName}
                     onChange={(e) => setNewVariableName(e.target.value)}
                     onKeyDown={(event) => event.key === "Enter" && handleVariableEdit()}
-                    placeholder="Variable name"
+                    placeholder={t("Variable name")}
                     autoFocus
                   />
                   <div className="flex gap-2 mt-2">
                     <Button size="sm" onClick={handleVariableEdit}>
-                      Save
+                      {t("Save")}
                     </Button>
                     <Button
                       variant="outline"
@@ -131,7 +132,7 @@ const VariableTextArea: React.FC<VariableTextAreaProps> = ({ value, onChange, pl
                         setNewVariableName("");
                       }}
                     >
-                      Cancel
+                      {t("Cancel")}
                     </Button>
                   </div>
                 </div>

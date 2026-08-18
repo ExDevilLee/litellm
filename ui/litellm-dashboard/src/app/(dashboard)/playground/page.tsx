@@ -7,6 +7,7 @@ import CompareUI from "@/app/(dashboard)/playground/components/compareUI/Compare
 import ComplianceUI from "@/app/(dashboard)/playground/components/complianceUI/ComplianceUI";
 import { DeprecationBanner } from "@/components/DeprecationBanner";
 import useAuthorized from "@/app/(dashboard)/hooks/useAuthorized";
+import { t } from "@/contexts/LanguageContext";
 import { fetchProxySettings } from "@/utils/proxyUtils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -38,9 +39,9 @@ export default function PlaygroundPage() {
   if (isViewOnly) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-8 text-center">
-        <h1 className="text-2xl font-semibold">Access Denied</h1>
+        <h1 className="text-2xl font-semibold">{t("Access Denied")}</h1>
         <p className="text-muted-foreground">
-          Your role does not have access to the Playground. Ask your proxy admin for access to test models.
+          {t("Your role does not have access to the Playground. Ask your proxy admin for access to test models.")}
         </p>
       </div>
     );
@@ -51,16 +52,16 @@ export default function PlaygroundPage() {
       <Tabs defaultValue="chat" className="flex min-h-0 min-w-0 flex-1 flex-col gap-0 overflow-hidden">
         <TabsList variant="line" className="w-full shrink-0 justify-start overflow-x-auto pb-1">
           <TabsTrigger value="chat" className="flex-none">
-            Chat
+            {t("Chat")}
           </TabsTrigger>
           <TabsTrigger value="compare" className="flex-none">
-            Compare
+            {t("Compare")}
           </TabsTrigger>
           <TabsTrigger value="compliance" className="flex-none">
-            Compliance
+            {t("Compliance")}
           </TabsTrigger>
           <TabsTrigger value="agent-builder" className="flex-none">
-            Agent Builder (Experimental)
+            {t("Agent Builder (Experimental)")}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="chat" className="mt-0 h-full min-h-0 min-w-0 overflow-hidden data-hidden:hidden">

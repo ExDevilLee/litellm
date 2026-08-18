@@ -3,6 +3,7 @@ import { VectorStoreSearchResponse } from "@/components/chat_ui/types";
 import { ChevronDown, ChevronRight, Database, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { t } from "@/contexts/LanguageContext";
 
 interface SearchResultsDisplayProps {
   searchResults: VectorStoreSearchResponse[];
@@ -35,7 +36,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
           }
         >
           <Database className="size-4" />
-          {isExpanded ? "Hide sources" : `Show sources (${totalResults})`}
+          {isExpanded ? t("Hide sources") : t("Show sources ({0})", totalResults)}
           {isExpanded ? <ChevronDown className="size-3" /> : <ChevronRight className="size-3" />}
         </CollapsibleTrigger>
 
@@ -45,11 +46,11 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
               {searchResults.map((resultPage, pageIndex) => (
                 <div key={pageIndex}>
                   <div className="text-xs text-gray-600 mb-2 flex items-center gap-2">
-                    <span className="font-medium">Query:</span>
+                    <span className="font-medium">{t("Query:")}</span>
                     <span className="italic">&quot;{resultPage.search_query}&quot;</span>
                     <span className="text-gray-400">•</span>
                     <span className="text-gray-500">
-                      {resultPage.data.length} result{resultPage.data.length !== 1 ? "s" : ""}
+                      {t(resultPage.data.length !== 1 ? "{0} results" : "{0} result", resultPage.data.length)}
                     </span>
                   </div>
 
@@ -71,7 +72,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
                               />
                               <FileText className="size-3 shrink-0 text-gray-400" />
                               <span className="text-xs font-medium text-gray-700 truncate">
-                                {result.filename || result.file_id || `Result ${resultIndex + 1}`}
+                                {result.filename || result.file_id || t("Result {0}", resultIndex + 1)}
                               </span>
                               <span className="text-xs px-2 py-0.5 rounded-sm bg-blue-100 text-blue-700 font-mono shrink-0">
                                 {result.score.toFixed(3)}
@@ -92,7 +93,7 @@ export function SearchResultsDisplay({ searchResults }: SearchResultsDisplayProp
 
                                 {result.attributes && Object.keys(result.attributes).length > 0 && (
                                   <div className="mt-2 pt-2 border-t border-gray-100">
-                                    <div className="text-xs text-gray-500 mb-1 font-medium">Metadata:</div>
+                                    <div className="text-xs text-gray-500 mb-1 font-medium">{t("Metadata:")}</div>
                                     <div className="space-y-1">
                                       {Object.entries(result.attributes).map(([key, value]) => (
                                         <div key={key} className="text-xs flex gap-2">
