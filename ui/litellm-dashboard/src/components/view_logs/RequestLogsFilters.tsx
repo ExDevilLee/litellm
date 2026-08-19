@@ -174,7 +174,7 @@ function UserIdFilterField({
   }, [data]);
 
   return (
-    <DataTableFilterField label="User ID">
+    <DataTableFilterField label={t("User ID")}>
       <PaginatedSearchSelect
         options={options}
         value={value}
@@ -184,8 +184,8 @@ function UserIdFilterField({
         hasNextPage={hasNextPage}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
-        placeholder="Search an internal user"
-        emptyText="No users found"
+        placeholder={t("Search an internal user")}
+        emptyText={t("No users found")}
       />
     </DataTableFilterField>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { t } from "@/contexts/LanguageContext";
 import { useDebouncedCallback } from "@tanstack/react-pacer/debouncer";
 import { Loader2 } from "lucide-react";
 import { useMemo, type UIEvent } from "react";
@@ -49,16 +50,19 @@ export function PaginatedSearchSelect({
   hasNextPage = false,
   isLoading = false,
   isFetchingNextPage = false,
-  placeholder = "Search…",
-  emptyText = "No results",
+  placeholder,
+  emptyText,
   errorText,
-  loadingText = "Loading…",
+  loadingText,
   disabled = false,
   className,
   inputId,
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
 }: PaginatedSearchSelectProps) {
+  const resolvedPlaceholder = placeholder ?? t("Search…");
+  const resolvedEmptyText = emptyText ?? t("No results");
+  const resolvedLoadingText = loadingText ?? t("Loading…");
   const selected = useMemo<SearchSelectOption | null>(() => {
     if (value === undefined || value === "") return null;
     return options.find((option) => option.value === value) ?? { label: value, value };
@@ -101,13 +105,13 @@ export function PaginatedSearchSelect({
         id={inputId}
         aria-invalid={ariaInvalid}
         aria-describedby={ariaDescribedBy}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         showClear={value !== undefined && value !== ""}
         className={`w-full ${className ?? ""}`}
       />
       <ComboboxContent>
         <ComboboxEmpty className={errorText == null ? undefined : "text-destructive"}>
-          {errorText ?? (isLoading ? loadingText : emptyText)}
+          {errorText ?? (isLoading ? resolvedLoadingText : resolvedEmptyText)}
         </ComboboxEmpty>
         <ComboboxList onScroll={handleScroll} data-testid="paginated-search-select-list">
           {(item: SearchSelectOption) => (

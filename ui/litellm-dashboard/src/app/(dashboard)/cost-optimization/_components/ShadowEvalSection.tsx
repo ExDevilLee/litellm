@@ -18,6 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ApiError } from "@/lib/http/client";
 
 import { usd } from "./costOptimizationUtils";
+import { t } from "@/contexts/LanguageContext";
 import {
   useShadowEvalJob,
   useShadowEvalJobs,
@@ -129,7 +130,6 @@ const SliceTable: React.FC<{
     </TableBody>
   </Table>
 );
-
 const VerdictBar: React.FC<{ direction: ShadowEvalDirection; results: NonNullable<ShadowEvalJob["results"]> }> = ({
   direction,
   results,
@@ -140,17 +140,17 @@ const VerdictBar: React.FC<{ direction: ShadowEvalDirection; results: NonNullabl
       ? Math.max(0, 100 - results.overall_shadow_win_rate_pct - ties)
       : results.overall_shadow_win_rate_pct;
   const segments = [
-    { label: "Router won", value: routerWins, fill: "bg-emerald-500" },
-    { label: "Tie", value: ties, fill: "bg-emerald-200" },
+    { label: t("Router won"), value: routerWins, fill: "bg-emerald-500" },
+    { label: t("Tie"), value: ties, fill: "bg-emerald-200" },
     {
-      label: `${otherArmLabel(direction)} won`,
+      label: t("{0} won", otherArmLabel(direction)),
       value: Math.max(0, 100 - routerWins - ties),
       fill: "bg-muted-foreground/30",
     },
   ];
   return (
     <div className="space-y-2 border-b px-6 py-4">
-      <div className="flex h-2 w-full overflow-hidden rounded-full" role="img" aria-label="Verdict breakdown">
+      <div className="flex h-2 w-full overflow-hidden rounded-full" role="img" aria-label={t("Verdict breakdown")}>
         {segments
           .filter((segment) => segment.value > 0)
           .map((segment) => (
@@ -170,10 +170,10 @@ const VerdictBar: React.FC<{ direction: ShadowEvalDirection; results: NonNullabl
 };
 
 const emptyResultsText = (job: ShadowEvalJob, resultsError: boolean): string => {
-  if (resultsError) return "Results could not be loaded. Retrying.";
-  if (isActive(job)) return "Collecting verdicts. Results appear as sampled requests are judged.";
-  if (job.judged_count === 0) return "No verdicts were recorded for this job.";
-  return "Loading results...";
+  if (resultsError) return t("Results could not be loaded. Retrying.");
+  if (isActive(job)) return t("Collecting verdicts. Results appear as sampled requests are judged.");
+  if (job.judged_count === 0) return t("No verdicts were recorded for this job.");
+  return t("Loading results...");
 };
 
 const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({ job, resultsError = false }) => {
@@ -185,22 +185,21 @@ const ResultsBody: React.FC<{ job: ShadowEvalJob; resultsError?: boolean }> = ({
     <>
       <div className="flex flex-col gap-1 border-b px-6 py-4">
         <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-          Router matched or beat {job.direction === "reverse" ? "the baseline" : "your current model"}
+          {t("Router matched or beat {0}", job.direction === "reverse" ? t("the baseline") : t("your current model"))}
         </p>
         <p className="text-3xl font-semibold text-foreground">{pct(routerMatchedOrBeatPct(job.direction, results))}</p>
-        <p className="text-xs text-muted-foreground">of {(job.judged_count ?? 0).toLocaleString()} judged responses</p>
+        <p className="text-xs text-muted-foreground">{t("of {0} judged responses", (job.judged_count ?? 0).toLocaleString())}</p>
       </div>
-      <VerdictBar direction={job.direction} results={results} />
       {results.by_current_model.length > 0 && (
         <SliceTable
-          groupHeader={job.direction === "reverse" ? "Router pick" : "Compared against"}
+          groupHeader={job.direction === "reverse" ? t("Router pick") : t("Compared against")}
           direction={job.direction}
           slices={results.by_current_model}
         />
       )}
       {results.by_tier.length > 0 && (
         <div className={results.by_current_model.length > 0 ? "border-t" : ""}>
-          <SliceTable groupHeader="Prompt difficulty" direction={job.direction} slices={results.by_tier} />
+          <SliceTable groupHeader={t("Prompt difficulty")} direction={job.direction} slices={results.by_tier} />
         </div>
       )}
     </>
@@ -353,9 +352,9 @@ const KeySelect: React.FC<{ value: string; onChange: (token: string) => void }> 
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       isLoading={isPending}
-      placeholder="Search keys by alias"
-      emptyText="No matching keys"
-      errorText={isError ? "Keys could not be loaded. Refresh the page to retry." : undefined}
+      placeholder={t("Search keys by alias")}
+      emptyText={t("No matching keys")}
+      errorText={isError ? t("Keys could not be loaded. Refresh the page to retry.") : undefined}
     />
   );
 };
@@ -408,41 +407,41 @@ const StartForm: React.FC = () => {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-sm font-medium text-foreground">Start a shadow eval</CardTitle>
-        <p className="text-xs text-muted-foreground">{START_FORM_DESCRIPTION[direction]}</p>
+        <CardTitle className="text-sm font-medium text-foreground">{t("Start a shadow eval")}</CardTitle>
+        <p className="text-xs text-muted-foreground">{t(START_FORM_DESCRIPTION[direction])}</p>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Direction">
+          <Field label={t("Direction")}>
             <Select
               value={direction}
               onValueChange={(v: string | null) => setDirection(v === "reverse" ? "reverse" : "forward")}
             >
               <SelectTrigger className="w-full">
-                <SelectValue>{DIRECTION_OPTIONS.find((o) => o.value === direction)?.label}</SelectValue>
+                <SelectValue>{t(DIRECTION_OPTIONS.find((o) => o.value === direction)?.label ?? direction)}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DIRECTION_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.label)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Key to shadow" htmlFor="shadow-eval-key">
+          <Field label={t("Key to shadow")} htmlFor="shadow-eval-key">
             <KeySelect value={apiKeyId} onChange={setApiKeyId} />
           </Field>
-          <Field label="Auto-router">
+          <Field label={t("Auto-router")}>
             <SearchSelect
               options={routerOptions}
               value={routerName}
               onValueChange={setRouterName}
-              placeholder="Select an auto-router"
-              emptyText="No auto-routers configured"
+              placeholder={t("Select an auto-router")}
+              emptyText={t("No auto-routers configured")}
             />
           </Field>
-          <Field label="Traffic sampled" htmlFor="shadow-eval-pct">
+          <Field label={t("Traffic sampled")} htmlFor="shadow-eval-pct">
             <div className="flex items-center gap-2">
               <Input
                 id="shadow-eval-pct"
@@ -454,29 +453,29 @@ const StartForm: React.FC = () => {
                 value={percentage}
                 onChange={(e) => setPercentage(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">% of traffic</span>
+              <span className="text-sm text-muted-foreground">{t("% of traffic")}</span>
             </div>
             <div>
               {percentage.trim() !== "" && !percentageValid && (
-                <p className="text-xs text-destructive">Enter a value from 0.1 to 100</p>
+                <p className="text-xs text-destructive">{t("Enter a value from 0.1 to 100")}</p>
               )}
             </div>
           </Field>
-          <Field label="Duration">
+          <Field label={t("Duration")}>
             <Select value={durationDays} onValueChange={(v: string | null) => setDurationDays(v ?? "7")}>
               <SelectTrigger className="w-full">
-                <SelectValue>{DURATION_OPTIONS.find((o) => o.value === durationDays)?.label}</SelectValue>
+                <SelectValue>{t(DURATION_OPTIONS.find((o) => o.value === durationDays)?.label ?? durationDays)}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DURATION_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.label)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Turn budget">
+          <Field label={t("Turn budget")}>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -486,35 +485,35 @@ const StartForm: React.FC = () => {
                 value={maxTurns}
                 onChange={(e) => setMaxTurns(e.target.value)}
               />
-              <span className="text-sm text-muted-foreground">turns judged, max</span>
+              <span className="text-sm text-muted-foreground">{t("turns judged, max")}</span>
             </div>
             {maxTurns.trim() !== "" && !maxTurnsValid && (
-              <p className="text-xs text-destructive">Enter a value from 1 to 2000</p>
+              <p className="text-xs text-destructive">{t("Enter a value from 1 to 2000")}</p>
             )}
           </Field>
           {direction === "reverse" && (
-            <Field label="Baseline model">
+            <Field label={t("Baseline model")}>
               <SearchSelect
                 options={baselineModelOptions}
                 value={baselineModel}
                 onValueChange={setBaselineModel}
-                placeholder="Select a baseline model"
-                emptyText="No chat models available"
+                placeholder={t("Select a baseline model")}
+                emptyText={t("No chat models available")}
               />
             </Field>
           )}
-          <Field label="Judge model" className="sm:col-span-2">
+          <Field label={t("Judge model")} className="sm:col-span-2">
             <SearchSelect
               options={judgeModelOptions}
               value={judgeModel}
               onValueChange={setJudgeModel}
-              placeholder="Select a judge model"
-              emptyText="No chat models available"
+              placeholder={t("Select a judge model")}
+              emptyText={t("No chat models available")}
             />
           </Field>
         </div>
         <Button disabled={!valid || start.isPending} onClick={handleStart}>
-          {start.isPending ? "Starting..." : "Start shadow eval"}
+          {start.isPending ? t("Starting...") : t("Start shadow eval")}
         </Button>
       </CardContent>
     </Card>
@@ -524,7 +523,7 @@ const StartForm: React.FC = () => {
 const previousSummary = (job: ShadowEvalJob): string => {
   const results = job.results;
   if (results) return pct(routerMatchedOrBeatPct(job.direction, results));
-  return job.judged_count === 0 ? "no verdicts" : "view results";
+  return job.judged_count === 0 ? t("no verdicts") : t("view results");
 };
 
 const PreviousJob: React.FC<{ job: ShadowEvalJob }> = ({ job }) => {
@@ -572,8 +571,8 @@ const PreviousJobs: React.FC<{ jobs: readonly ShadowEvalJob[] }> = ({ jobs }) =>
         onClick={() => setOpen((prev) => !prev)}
         className="flex w-full items-center justify-between gap-3 px-6 py-3 text-left hover:bg-muted/50"
       >
-        <span className="text-sm font-medium text-foreground">Previous evaluations ({jobs.length})</span>
-        <span className="text-xs text-muted-foreground">{open ? "Hide" : "Show"}</span>
+        <span className="text-sm font-medium text-foreground">{t("Previous evaluations ({0})", jobs.length)}</span>
+        <span className="text-xs text-muted-foreground">{open ? t("Hide") : t("Show")}</span>
       </button>
       {open && (
         <div className="border-t">
@@ -616,19 +615,17 @@ const ShadowEvalSection: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline gap-2">
-        <h2 className="text-xl font-semibold text-foreground">Shadow eval</h2>
+        <h2 className="text-xl font-semibold text-foreground">{t("Shadow eval")}</h2>
         <p className="text-sm text-muted-foreground">
-          Blind-judge the auto-router on your real traffic: against the models a key uses today before switching, or
-          against a fixed baseline after it has switched.
+          {t("Blind-judge the auto-router on your real traffic: against the models a key uses today before switching, or against a fixed baseline after it has switched.")}
         </p>
       </div>
 
       {error != null && (
-        <p className="text-sm text-destructive">Existing evaluations could not be loaded. Refresh the page to retry.</p>
+        <p className="text-sm text-destructive">{t("Existing evaluations could not be loaded. Refresh the page to retry.")}</p>
       )}
 
-      {isPending && error == null && <p className="text-sm text-muted-foreground">Loading evaluations...</p>}
-
+      {isPending && error == null && <p className="text-sm text-muted-foreground">{t("Loading evaluations...")}</p>}
       {showcased.map((job) => (
         <JobCard key={job.job_id} job={job} readOnly={isViewOnly} />
       ))}

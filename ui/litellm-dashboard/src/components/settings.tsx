@@ -77,7 +77,7 @@ const DynamicParamsFields: React.FC<DynamicParamsFieldsProps> = ({ params, callb
         const fieldId = `${fieldIdPrefix}-${param}`;
         const registration = register(
           param,
-          isRequired ? { required: `Please enter the ${fieldLabel.toLowerCase()}` } : undefined,
+          isRequired ? { required: t("Please enter the {0}", fieldLabel.toLowerCase()) } : undefined,
         );
 
         return (
@@ -459,11 +459,7 @@ const Settings: React.FC<SettingsPageProps> = ({ accessToken, userRole, userID, 
     }
 
     try {
-      setIsDeletingCallback(true);
-      await deleteCallback(accessToken, callbackToDelete.name);
-      NotificationsManager.success(`Callback ${callbackToDelete.name} deleted successfully`);
-
-      // Refresh the callbacks list
+      NotificationsManager.success(t("Callback {0} deleted successfully", callbackToDelete.name));
       if (userID && userRole) {
         const data = await getCallbacksCall(accessToken, userID, userRole);
         setCallbacks(data.callbacks);

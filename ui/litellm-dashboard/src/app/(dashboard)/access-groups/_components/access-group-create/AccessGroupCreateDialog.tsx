@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { t } from "@/contexts/LanguageContext";
 import { useZodForm } from "@/lib/forms/useZodForm";
 import { fetchClient } from "@/lib/http/api";
 
@@ -113,12 +114,12 @@ export const AccessGroupCreateDialog = ({
   const mutation = useMutation({
     mutationFn: (body: AccessGroupCreateBody) => createAccessGroup(body),
     onSuccess: () => {
-      NotificationsManager.success("Access group created successfully");
+      NotificationsManager.success(t("Access group created successfully"));
       queryClient.invalidateQueries({ queryKey: accessGroupKeys.all });
       closeAndReset();
     },
     onError: (error: unknown) =>
-      NotificationsManager.fromBackend(error instanceof Error ? error.message : "Failed to create access group"),
+      NotificationsManager.fromBackend(error instanceof Error ? error.message : t("Failed to create access group")),
   });
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -143,7 +144,7 @@ export const AccessGroupCreateDialog = ({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Access Group</DialogTitle>
+          <DialogTitle>{t("Create Access Group")}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={onSubmit} noValidate>
@@ -151,34 +152,34 @@ export const AccessGroupCreateDialog = ({
             <TabsList className="w-full">
               <TabsTrigger value={GENERAL_TAB}>
                 <InfoIcon />
-                General Info
+                {t("General Info")}
               </TabsTrigger>
               <TabsTrigger value="models">
                 <LayersIcon />
-                Models
+                {t("Models")}
               </TabsTrigger>
               <TabsTrigger value="mcp-servers">
                 <ServerIcon />
-                MCP Servers
+                {t("MCP Servers")}
               </TabsTrigger>
               <TabsTrigger value="agents">
                 <BotIcon />
-                Agents
+                {t("Agents")}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value={GENERAL_TAB} className="pt-4">
               <FieldGroup>
-                <FormField control={form.control} name="name" label="Group Name">
-                  {({ ref, ...field }) => <Input {...field} ref={ref} placeholder="e.g. Engineering Team" />}
+                <FormField control={form.control} name="name" label={t("Group Name")}>
+                  {({ ref, ...field }) => <Input {...field} ref={ref} placeholder={t("e.g. Engineering Team")} />}
                 </FormField>
-                <FormField control={form.control} name="description" label="Description">
+                <FormField control={form.control} name="description" label={t("Description")}>
                   {({ ref, ...field }) => (
                     <Textarea
                       {...field}
                       ref={ref}
                       rows={4}
-                      placeholder="Describe the purpose of this access group..."
+                      placeholder={t("Describe the purpose of this access group...")}
                     />
                   )}
                 </FormField>
@@ -186,20 +187,20 @@ export const AccessGroupCreateDialog = ({
             </TabsContent>
 
             <TabsContent value="models" className="pt-4">
-              <FormField control={form.control} name="modelIds" label="Allowed Models">
+              <FormField control={form.control} name="modelIds" label={t("Allowed Models")}>
                 {(field) => <ModelSelect context="global" value={field.value} onChange={field.onChange} />}
               </FormField>
             </TabsContent>
 
             <TabsContent value="mcp-servers" className="pt-4">
-              <FormField control={form.control} name="mcpServerIds" label="Allowed MCP Servers">
+              <FormField control={form.control} name="mcpServerIds" label={t("Allowed MCP Servers")}>
                 {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                   <MultiSelect
                     id={id}
                     value={value}
                     onChange={onChange}
                     options={mcpServerOptions}
-                    placeholder="Select MCP servers"
+                    placeholder={t("Select MCP servers")}
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                   />
@@ -208,14 +209,14 @@ export const AccessGroupCreateDialog = ({
             </TabsContent>
 
             <TabsContent value="agents" className="pt-4">
-              <FormField control={form.control} name="agentIds" label="Allowed Agents">
+              <FormField control={form.control} name="agentIds" label={t("Allowed Agents")}>
                 {({ id, value, onChange, "aria-invalid": ariaInvalid, "aria-describedby": ariaDescribedBy }) => (
                   <MultiSelect
                     id={id}
                     value={value}
                     onChange={onChange}
                     options={agentOptions}
-                    placeholder="Select agents"
+                    placeholder={t("Select agents")}
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                   />
@@ -231,10 +232,10 @@ export const AccessGroupCreateDialog = ({
               onClick={() => handleOpenChange(false)}
               disabled={mutation.isPending}
             >
-              Cancel
+              {t("Cancel")}
             </Button>
             <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Creating..." : "Create Group"}
+              {mutation.isPending ? t("Creating...") : t("Create Group")}
             </Button>
           </DialogFooter>
         </form>

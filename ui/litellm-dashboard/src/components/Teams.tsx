@@ -534,12 +534,12 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
           <Form form={form} onFinish={handleCreate} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} labelAlign="left">
             <>
               <Form.Item
-                label="Team Name"
+                label={t("Team Name")}
                 name="team_alias"
                 rules={[
                   {
                     required: true,
-                    message: "Please input a team name",
+                    message: t("Please input a team name"),
                   },
                 ]}
               >
@@ -556,11 +556,11 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     <Form.Item
                       label={
                         <span>
-                          Organization{" "}
+                          {t("Organization")}{" "}
                           <Tooltip
                             title={
                               <span>
-                                Organizations can have multiple teams. Learn more about{" "}
+                                {t("Organizations can have multiple teams. Learn more about ")}{" "}
                                 <a
                                   href="https://docs.litellm.ai/docs/proxy/user_management_heirarchy"
                                   target="_blank"
@@ -571,7 +571,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                                   }}
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  user management hierarchy
+                                  {t("user management hierarchy")}
                                 </a>
                               </span>
                             }
@@ -588,16 +588,16 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                           ? [
                               {
                                 required: true,
-                                message: "Please select an organization",
+                                message: t("Please select an organization"),
                               },
                             ]
                           : []
                       }
                       help={
                         isOrgAdmin && isSingleOrg
-                          ? "You can only create teams within this organization"
+                          ? t("You can only create teams within this organization")
                           : isOrgAdmin
-                            ? "required"
+                            ? t("required")
                             : ""
                       }
                     >
@@ -605,7 +605,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                         showSearch
                         allowClear={!isOrgAdmin}
                         disabled={isOrgAdmin && isSingleOrg}
-                        placeholder={hasNoOrgs ? "No organizations available" : "Search or select an Organization"}
+                        placeholder={hasNoOrgs ? t("No organizations available") : t("Search or select an Organization")}
                         onChange={(value) => {
                           form.setFieldValue("organization_id", value);
                           setCurrentOrgForCreateTeam(adminOrgs?.find((org) => org.organization_id === value) || null);
@@ -630,8 +630,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     {isOrgAdmin && !isSingleOrg && adminOrgs.length > 1 && (
                       <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-md">
                         <Text style={{ color: "#1e40af", fontSize: 14 }}>
-                          Please select an organization to create a team for. You can only create teams within
-                          organizations where you are an admin.
+                          {t("Please select an organization to create a team for. You can only create teams within organizations where you are an admin.")}
                         </Text>
                       </div>
                     )}
@@ -641,8 +640,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
               <Form.Item
                 label={
                   <span>
-                    Models{" "}
-                    <Tooltip title="These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups">
+                    {t("Models")}{" "}
+                    <Tooltip title={t("These are the models that your selected team has access to. Leave empty to grant no models directly, e.g. when the team gets its models from access groups")}>
                       <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                     </Tooltip>
                   </span>
@@ -662,21 +661,21 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                 />
               </Form.Item>
 
-              <Form.Item label="Max Budget (USD)" name="max_budget">
+              <Form.Item label={t("Max Budget (USD)")} name="max_budget">
                 <NumericalInput step={0.01} precision={2} width={200} />
               </Form.Item>
-              <Form.Item className="mt-8" label="Reset Budget" name="budget_duration">
+              <Form.Item className="mt-8" label={t("Reset Budget")} name="budget_duration">
                 <BudgetDurationDropdown showNeverResets placeholder={budgetDurationPlaceholder} />
               </Form.Item>
-              <Form.Item label="Tokens per minute Limit (TPM)" name="tpm_limit">
+              <Form.Item label={t("Tokens per minute Limit (TPM)")} name="tpm_limit">
                 <NumericalInput step={1} width={400} />
               </Form.Item>
-              <Form.Item label="Requests per minute Limit (RPM)" name="rpm_limit">
+              <Form.Item label={t("Requests per minute Limit (RPM)")} name="rpm_limit">
                 <NumericalInput step={1} width={400} />
               </Form.Item>
               <Form.Item
-                label="Metadata"
-                help='Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {"region": "us"}.'
+                label={t("Metadata")}
+                help={t('Values are saved as text. Enter JSON for typed values, e.g. 3, true, or {"region": "us"}.')}
               >
                 <MetadataKeyValueFields
                   form={form}
@@ -687,13 +686,13 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-20 mb-8">
                 <AccordionHeader>
-                  <b>Additional Settings</b>
+                  <b>{t("Additional Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <Form.Item
-                    label="Team ID"
+                    label={t("Team ID")}
                     name="team_id"
-                    help="ID of the team you want to create. If not provided, it will be generated automatically."
+                    help={t("ID of the team you want to create. If not provided, it will be generated automatically.")}
                   >
                     <TextInput
                       onChange={(e) => {
@@ -702,41 +701,41 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Team Member Budget (USD)"
+                    label={t("Team Member Budget (USD)")}
                     name="team_member_budget"
                     normalize={(value) => (value ? Number(value) : undefined)}
-                    tooltip="This is the individual budget for a user in the team."
+                    tooltip={t("This is the individual budget for a user in the team.")}
                   >
                     <NumericalInput step={0.01} precision={2} width={200} />
                   </Form.Item>
                   <Form.Item
-                    label="Team Member Key Duration (eg: 1d, 1mo)"
+                    label={t("Team Member Key Duration (eg: 1d, 1mo)")}
                     name="team_member_key_duration"
-                    tooltip="Set a limit to the duration of a team member's key. Format: 30s (seconds), 30m (minutes), 30h (hours), 30d (days), 1mo (month)"
+                    tooltip={t("Set a limit to the duration of a team member's key. Format: 30s (seconds), 30m (minutes), 30h (hours), 30d (days), 1mo (month)")}
                   >
-                    <TextInput placeholder="e.g., 30d" />
+                    <TextInput placeholder={t("e.g., 30d")} />
                   </Form.Item>
                   <Form.Item
-                    label="Team Member RPM Limit"
+                    label={t("Team Member RPM Limit")}
                     name="team_member_rpm_limit"
-                    tooltip="The RPM (Requests Per Minute) limit for individual team members"
+                    tooltip={t("The RPM (Requests Per Minute) limit for individual team members")}
                   >
                     <NumericalInput step={1} width={400} />
                   </Form.Item>
                   <Form.Item
-                    label="Team Member TPM Limit"
+                    label={t("Team Member TPM Limit")}
                     name="team_member_tpm_limit"
-                    tooltip="The TPM (Tokens Per Minute) limit for individual team members"
+                    tooltip={t("The TPM (Tokens Per Minute) limit for individual team members")}
                   >
                     <NumericalInput step={1} width={400} />
                   </Form.Item>
                   <Form.Item
-                    label="Secret Manager Settings"
+                    label={t("Secret Manager Settings")}
                     name="secret_manager_settings"
                     help={
                       premiumUser
-                        ? "Enter secret manager configuration as a JSON object."
-                        : "Premium feature - Upgrade to manage secret manager settings."
+                        ? t("Enter secret manager configuration as a JSON object.")
+                        : t("Premium feature - Upgrade to manage secret manager settings.")
                     }
                     rules={[
                       {
@@ -748,7 +747,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                             JSON.parse(value);
                             return Promise.resolve();
                           } catch (error) {
-                            return Promise.reject(new Error("Please enter valid JSON"));
+                            return Promise.reject(new Error(t("Please enter valid JSON")));
                           }
                         },
                       },
@@ -763,8 +762,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                   <Form.Item
                     label={
                       <span>
-                        Guardrails{" "}
-                        <Tooltip title="Setup your first guardrail">
+                        {t("Guardrails")}{" "}
+                        <Tooltip title={t("Setup your first guardrail")}>
                           <a
                             href="https://docs.litellm.ai/docs/proxy/guardrails/quick_start"
                             target="_blank"
@@ -778,12 +777,12 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     }
                     name="guardrails"
                     className="mt-8"
-                    help="Select existing guardrails or enter new ones"
+                    help={t("Select existing guardrails or enter new ones")}
                   >
                     <Select
                       mode="tags"
                       style={{ width: "100%" }}
-                      placeholder="Select or enter guardrails"
+                      placeholder={t("Select or enter guardrails")}
                       options={guardrailsList.map((name) => ({
                         value: name,
                         label: name,
@@ -793,8 +792,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                   <Form.Item
                     label={
                       <span>
-                        Disable Global Guardrails{" "}
-                        <Tooltip title="When enabled, this team will bypass any guardrails configured to run on every request (global guardrails)">
+                        {t("Disable Global Guardrails")}{" "}
+                        <Tooltip title={t("When enabled, this team will bypass any guardrails configured to run on every request (global guardrails)")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
@@ -802,15 +801,15 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     name="disable_global_guardrails"
                     className="mt-4"
                     valuePropName="checked"
-                    help="Bypass global guardrails for this team"
+                    help={t("Bypass global guardrails for this team")}
                   >
                     <Switch
                       disabled={!premiumUser}
                       checkedChildren={
-                        premiumUser ? "Yes" : "Premium feature - Upgrade to disable global guardrails by team"
+                        premiumUser ? "Yes" : t("Premium feature - Upgrade to disable global guardrails by team")
                       }
                       unCheckedChildren={
-                        premiumUser ? "No" : "Premium feature - Upgrade to disable global guardrails by team"
+                        premiumUser ? "No" : t("Premium feature - Upgrade to disable global guardrails by team")
                       }
                     />
                   </Form.Item>
@@ -818,8 +817,8 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                     <Form.Item
                       label={
                         <span>
-                          Policies{" "}
-                          <Tooltip title="Apply policies to this team to control guardrails and other settings">
+                          {t("Policies")}{" "}
+                          <Tooltip title={t("Apply policies to this team to control guardrails and other settings")}>
                             <a
                               href="https://docs.litellm.ai/docs/proxy/guardrails/guardrail_policies"
                               target="_blank"
@@ -833,12 +832,12 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                       }
                       name="policies"
                       className="mt-8"
-                      help="Select existing policies or enter new ones"
+                      help={t("Select existing policies or enter new ones")}
                     >
                       <Select
                         mode="tags"
                         style={{ width: "100%" }}
-                        placeholder="Select or enter policies"
+                        placeholder={t("Select or enter policies")}
                         options={policiesList.map((name) => ({
                           value: name,
                           label: name,
@@ -849,53 +848,53 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
                   <Form.Item
                     label={
                       <span>
-                        Access Groups{" "}
-                        <Tooltip title="Assign access groups to this team. Access groups control which models, MCP servers, and agents this team can use">
+                        {t("Access Groups")}{" "}
+                        <Tooltip title={t("Assign access groups to this team. Access groups control which models, MCP servers, and agents this team can use")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
                     }
                     name="access_group_ids"
                     className="mt-8"
-                    help="Select access groups to assign to this team"
+                    help={t("Select access groups to assign to this team")}
                   >
-                    <AccessGroupSelector placeholder="Select access groups (optional)" />
+                    <AccessGroupSelector placeholder={t("Select access groups (optional)")} />
                   </Form.Item>
                   <Form.Item
                     label={
                       <span>
-                        Allowed Vector Stores{" "}
-                        <Tooltip title="Select which vector stores this team can access by default. Leave empty for access to all vector stores">
+                        {t("Allowed Vector Stores")}{" "}
+                        <Tooltip title={t("Select which vector stores this team can access by default. Leave empty for access to all vector stores")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
                     }
                     name="allowed_vector_store_ids"
                     className="mt-8"
-                    help="Select vector stores this team can access. Leave empty for access to all vector stores"
+                    help={t("Select vector stores this team can access. Leave empty for access to all vector stores")}
                   >
                     <VectorStoreSelector
                       onChange={(values: string[]) => form.setFieldValue("allowed_vector_store_ids", values)}
                       value={form.getFieldValue("allowed_vector_store_ids")}
                       accessToken={accessToken || ""}
-                      placeholder="Select vector stores (optional)"
+                      placeholder={t("Select vector stores (optional)")}
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Allowed Pass Through Routes"
+                    label={t("Allowed Pass Through Routes")}
                     name="allowed_passthrough_routes"
                     className="mt-8"
                     tooltip={
                       !premiumUser
-                        ? "Premium feature - Upgrade to set allowed pass through routes"
+                        ? t("Premium feature - Upgrade to set allowed pass through routes")
                         : !isProxyAdminRole(userRole || "")
-                          ? "Only proxy admins can set allowed pass through routes"
+                          ? t("Only proxy admins can set allowed pass through routes")
                           : undefined
                     }
                   >
                     <PassThroughRoutesSelector
                       accessToken={accessToken || ""}
-                      placeholder="Select pass through routes (optional)"
+                      placeholder={t("Select pass through routes (optional)")}
                       disabled={!premiumUser || !isProxyAdminRole(userRole || "")}
                     />
                   </Form.Item>
@@ -904,27 +903,27 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>MCP Settings</b>
+                  <b>{t("MCP Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <Form.Item
                     label={
                       <span>
-                        Allowed MCP Servers{" "}
-                        <Tooltip title="Select which MCP servers or access groups this team can access">
+                        {t("Allowed MCP Servers")}{" "}
+                        <Tooltip title={t("Select which MCP servers or access groups this team can access")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
                     }
                     name="allowed_mcp_servers_and_groups"
                     className="mt-4"
-                    help="Select MCP servers or access groups this team can access"
+                    help={t("Select MCP servers or access groups this team can access")}
                   >
                     <MCPServerSelector
                       onChange={(val: any) => form.setFieldValue("allowed_mcp_servers_and_groups", val)}
                       value={form.getFieldValue("allowed_mcp_servers_and_groups")}
                       accessToken={accessToken || ""}
-                      placeholder="Select MCP servers or access groups (optional)"
+                      placeholder={t("Select MCP servers or access groups (optional)")}
                       allowAllProxyMcpServers={isProxyAdminRole(userRole || "")}
                     />
                   </Form.Item>
@@ -957,27 +956,27 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>Agent Settings</b>
+                  <b>{t("Agent Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <Form.Item
                     label={
                       <span>
-                        Allowed Agents{" "}
-                        <Tooltip title="Select which agents or access groups this team can access">
+                        {t("Allowed Agents")}{" "}
+                        <Tooltip title={t("Select which agents or access groups this team can access")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
                     }
                     name="allowed_agents_and_groups"
                     className="mt-4"
-                    help="Select agents or access groups this team can access"
+                    help={t("Select agents or access groups this team can access")}
                   >
                     <AgentSelector
                       onChange={(val: any) => form.setFieldValue("allowed_agents_and_groups", val)}
                       value={form.getFieldValue("allowed_agents_and_groups")}
                       accessToken={accessToken || ""}
-                      placeholder="Select agents or access groups (optional)"
+                      placeholder={t("Select agents or access groups (optional)")}
                     />
                   </Form.Item>
                 </AccordionBody>
@@ -985,27 +984,27 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>Search Tool Settings</b>
+                  <b>{t("Search Tool Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <Form.Item
                     label={
                       <span>
-                        Allowed Search Tools{" "}
-                        <Tooltip title="Select which search tools this team can access. Leave empty to allow all search tools.">
+                        {t("Allowed Search Tools")}{" "}
+                        <Tooltip title={t("Select which search tools this team can access. Leave empty to allow all search tools.")}>
                           <InfoCircleOutlined style={{ marginLeft: "4px" }} />
                         </Tooltip>
                       </span>
                     }
                     name="object_permission_search_tools"
                     className="mt-4"
-                    help="Restrict which configured search tools keys on this team may call."
+                    help={t("Restrict which configured search tools keys on this team may call.")}
                   >
                     <SearchToolSelector
                       onChange={(vals: string[]) => form.setFieldValue("object_permission_search_tools", vals)}
                       value={form.getFieldValue("object_permission_search_tools")}
                       accessToken={accessToken || ""}
-                      placeholder="Select search tools (optional, empty = all allowed)"
+                      placeholder={t("Select search tools (optional, empty = all allowed)")}
                     />
                   </Form.Item>
                 </AccordionBody>
@@ -1013,7 +1012,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>Logging Settings</b>
+                  <b>{t("Logging Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <div className="mt-4">
@@ -1028,7 +1027,7 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion key={`router-settings-accordion-${routerSettingsKey}`} className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>Router Settings</b>
+                  <b>{t("Router Settings")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <div className="mt-4 w-full">
@@ -1047,13 +1046,12 @@ const Teams: React.FC<TeamProps> = ({ accessToken, userID, userRole, premiumUser
 
               <Accordion className="mt-8 mb-8">
                 <AccordionHeader>
-                  <b>Model Aliases</b>
+                  <b>{t("Model Aliases")}</b>
                 </AccordionHeader>
                 <AccordionBody>
                   <div className="mt-4">
                     <Text type="secondary" style={{ fontSize: 14, marginBottom: 16, display: "block" }}>
-                      Create custom aliases for models that can be used by team members in API calls. This allows you to
-                      create shortcuts for specific models.
+                      {t("Create custom aliases for models that can be used by team members in API calls. This allows you to create shortcuts for specific models.")}
                     </Text>
                     <ModelAliasManager
                       accessToken={accessToken || ""}

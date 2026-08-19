@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 
 import type { AutoRouterDeployment } from "@/app/(dashboard)/hooks/models/useModels";
 import { hydrateTierLabels } from "@/components/add_model/build_complexity_router_config";
@@ -103,10 +104,9 @@ const TierTurnsChart: React.FC<TierTurnsChartProps> = ({ view, autoRouters }) =>
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Routing by tier</CardTitle>
+        <CardTitle>{t("Routing by tier")}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted
-          here, so this can total less than the router&apos;s turns.
+          {t("Turns each tier served. Turns the classifier sent to the default model belong to no tier and are not counted here, so this can total less than the router's turns.")}
         </p>
       </CardHeader>
       <CardContent>

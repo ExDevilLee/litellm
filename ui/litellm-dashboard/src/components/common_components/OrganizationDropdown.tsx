@@ -1,4 +1,5 @@
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { SearchSelect } from "@/components/shared/SearchSelect";
 import { Organization } from "../networking";
 
@@ -20,9 +21,10 @@ const OrganizationDropdown: React.FC<OrganizationDropdownProps> = ({
   disabled,
   loading,
   style,
-  placeholder = "All Organizations",
+  placeholder,
   id,
 }) => {
+  const resolvedPlaceholder = placeholder ?? t("All Organizations");
   return (
     <div style={{ minWidth: 280, ...style }}>
       <SearchSelect
@@ -33,8 +35,8 @@ const OrganizationDropdown: React.FC<OrganizationDropdownProps> = ({
         }))}
         value={value}
         onValueChange={(organizationId) => onChange?.(organizationId)}
-        placeholder={placeholder}
-        emptyText={loading ? "Loading organizations…" : "No organizations found"}
+        placeholder={resolvedPlaceholder}
+        emptyText={loading ? t("Loading organizations…") : t("No organizations found")}
         disabled={disabled}
         inputId={id}
       />

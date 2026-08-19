@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/combobox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { t } from "@/contexts/LanguageContext";
 import { Organization, Team } from "../networking";
 import { splitWildcardModels } from "./modelUtils";
 
@@ -169,7 +170,7 @@ export const ModelSelect = (props: ModelSelectProps) => {
     ...(includeSpecialOptions
       ? [
           {
-            label: "Special Options",
+            label: t("Special Options"),
             items: [
               ...(shouldShowAllProxyModels
                 ? [
@@ -198,13 +199,13 @@ export const ModelSelect = (props: ModelSelectProps) => {
     ...(wildcard.length > 0
       ? [
           {
-            label: "Wildcard Options",
+            label: t("Wildcard Options"),
             items: wildcard.map((model) => {
               const provider = model.replace("/*", "");
               const capitalizedProvider = provider.charAt(0).toUpperCase() + provider.slice(1);
 
               return {
-                label: `All ${capitalizedProvider} models`,
+                label: t("All {0} models", capitalizedProvider),
                 value: model,
                 disabled: hasSpecialOptionSelected,
               };
@@ -213,7 +214,7 @@ export const ModelSelect = (props: ModelSelectProps) => {
         ]
       : []),
     {
-      label: "Models",
+      label: t("Models"),
       items: regular.map((model) => ({
         label: model,
         value: model,
@@ -249,17 +250,17 @@ export const ModelSelect = (props: ModelSelectProps) => {
                   <Tooltip>
                     <TooltipTrigger
                       render={<span className="px-1 text-xs text-muted-foreground" />}
-                    >{`+${overflowOptions.length} more`}</TooltipTrigger>
+                    >{t("+{0} more", String(overflowOptions.length))}</TooltipTrigger>
                     <TooltipContent>{overflowOptions.map((option) => option.value).join(", ")}</TooltipContent>
                   </Tooltip>
                 )}
               </>
             )}
           </ComboboxValue>
-          <ComboboxChipsInput placeholder="Select Models" aria-label="Select Models" className="min-w-24" />
+          <ComboboxChipsInput placeholder={t("Select Models")} aria-label={t("Select Models")} className="min-w-24" />
         </ComboboxChips>
         <ComboboxContent anchor={anchor}>
-          <ComboboxEmpty>No models found</ComboboxEmpty>
+          <ComboboxEmpty>{t("No models found")}</ComboboxEmpty>
           <ComboboxList>
             {(group: ModelOptionGroup) => (
               <ComboboxGroup key={group.label} items={group.items}>

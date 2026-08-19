@@ -158,9 +158,9 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                       https://github.com/BerriAI/litellm-pgvector
                     </a>
                   </li>
-                  <li>Configure your PostgreSQL database with pgvector extension</li>
-                  <li>Start the server and note the API base URL and API key</li>
-                  <li>Enter those details in the fields below</li>
+                  <li>{t("Configure your PostgreSQL database with pgvector extension")}</li>
+                  <li>{t("Start the server and note the API base URL and API key")}</li>
+                  <li>{t("Enter those details in the fields below")}</li>
                 </ol>
               </div>
             }
@@ -191,11 +191,11 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                       Vertex AI RAG Engine Overview
                     </a>
                   </li>
-                  <li>Create a corpus in your Google Cloud project</li>
+                  <li>{t("Create a corpus in your Google Cloud project")}</li>
                   <li>
                     Note the corpus ID from the Vertex AI console (now labeled &quot;RAG Engine&quot; in Google Cloud)
                   </li>
-                  <li>Enter the corpus ID in the Vector Store ID field below</li>
+                  <li>{t("Enter the corpus ID in the Vector Store ID field below")}</li>
                 </ol>
               </div>
             }
@@ -228,13 +228,12 @@ const VectorStoreForm: React.FC<VectorStoreFormProps> = ({
                       Create a Vertex AI Search data store
                     </a>
                   </li>
-                  <li>Pick a supported location: global, us, or eu</li>
+                  <li>{t("Pick a supported location: global, us, or eu")}</li>
                   <li>
-                    For most data store types (Cloud Storage, BigQuery, Media): copy the data store ID and enter it in
-                    the Vector Store ID field below.
+                    {t("For most data store types (Cloud Storage, BigQuery, Media): copy the data store ID and enter it in the Vector Store ID field below.")}
                   </li>
                   <li>
-                    For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a
+                    {t("For website, healthcare, and connector-based sources (Drive, Gmail, Slack, Jira, etc.): create a")}
                     search app on top of the data store, then copy the <strong>Engine ID</strong> and enter it in the
                     Engine ID field. The Vector Store ID is still required as the LiteLLM-side name for this record, but
                     it isn't used in the GCP URL when Engine ID is set.

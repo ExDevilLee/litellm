@@ -8,6 +8,7 @@ import { DataTable } from "@/components/shared/DataTable";
 
 import type { VectorStoreIndex } from "./IndexesTab";
 import { getIndexesTableColumns } from "./IndexesTableColumns";
+import { t } from "@/contexts/LanguageContext";
 
 interface IndexesTableProps {
   data: VectorStoreIndex[];
@@ -24,8 +25,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Inbox className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No indexes registered yet</div>
-      <div className="text-sm text-muted-foreground">Indexes registered on this proxy will appear here.</div>
+      <div className="text-sm font-medium text-foreground">{t("No indexes registered yet")}</div>
+      <div className="text-sm text-muted-foreground">{t("Indexes registered on this proxy will appear here.")}</div>
     </div>
   );
 }
@@ -52,7 +53,7 @@ const IndexesTable: React.FC<IndexesTableProps> = ({
       sorting={sorting}
       onSortingChange={setSorting}
       isLoading={isLoading}
-      loadingMessage="Loading indexes…"
+      loadingMessage={t("Loading indexes…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

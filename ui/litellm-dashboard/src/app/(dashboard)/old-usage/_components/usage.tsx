@@ -508,11 +508,11 @@ const UsagePage: React.FC<UsagePageProps> = ({ accessToken, token, userRole, use
       <div className="w-full p-8">
         <Card>
           <CardHeader>
-            <CardTitle>Usage</CardTitle>
+            <CardTitle>{t("Usage")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Proxy-wide usage is only available to admin users. Your own usage is on the Usage page.
+              {t("Proxy-wide usage is only available to admin users. Your own usage is on the Usage page.")}
             </p>
           </CardContent>
         </Card>

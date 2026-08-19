@@ -3,6 +3,7 @@ import { TextInput, Accordion, AccordionHeader, AccordionBody } from "@tremor/re
 import { Button as Button2, Modal, Form, InputNumber, Select } from "antd";
 import { useUpdateBudget } from "@/app/(dashboard)/hooks/budgets/useBudgets";
 import { budgetItem } from "@/app/(dashboard)/hooks/budgets/useBudgets";
+import { t } from "@/contexts/LanguageContext";
 import NotificationsManager from "@/components/molecules/notifications_manager";
 
 interface EditBudgetModalProps {
@@ -42,7 +43,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
   };
 
   return (
-    <Modal title="Edit Budget" open={isModalVisible} width={800} footer={null} onOk={handleOk} onCancel={handleCancel}>
+    <Modal title={t("Edit Budget")} open={isModalVisible} width={800} footer={null} onOk={handleOk} onCancel={handleCancel}>
       <Form
         form={form}
         onFinish={handleUpdate}
@@ -52,29 +53,29 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
         initialValues={existingBudget}
       >
         <>
-          <Form.Item label="Budget ID" name="budget_id" help="Budget ID cannot be changed after creation">
+          <Form.Item label={t("Budget ID")} name="budget_id" help={t("Budget ID cannot be changed after creation")}>
             <TextInput placeholder="" disabled={true} />
           </Form.Item>
-          <Form.Item label="Max Tokens per minute" name="tpm_limit" help="Default is model limit.">
+          <Form.Item label={t("Max Tokens per minute")} name="tpm_limit" help={t("Default is model limit.")}>
             <InputNumber step={1} precision={2} width={200} />
           </Form.Item>
-          <Form.Item label="Max Requests per minute" name="rpm_limit" help="Default is model limit.">
+          <Form.Item label={t("Max Requests per minute")} name="rpm_limit" help={t("Default is model limit.")}>
             <InputNumber step={1} precision={2} width={200} />
           </Form.Item>
 
           <Accordion className="mt-20 mb-8">
             <AccordionHeader>
-              <b>Optional Settings</b>
+              <b>{t("Optional Settings")}</b>
             </AccordionHeader>
             <AccordionBody>
-              <Form.Item label="Max Budget (USD)" name="max_budget">
+              <Form.Item label={t("Max Budget (USD)")} name="max_budget">
                 <InputNumber step={0.01} precision={2} width={200} />
               </Form.Item>
-              <Form.Item className="mt-8" label="Reset Budget" name="budget_duration">
-                <Select defaultValue={null} placeholder="n/a">
-                  <Select.Option value="24h">daily</Select.Option>
-                  <Select.Option value="7d">weekly</Select.Option>
-                  <Select.Option value="30d">monthly</Select.Option>
+              <Form.Item className="mt-8" label={t("Reset Budget")} name="budget_duration">
+                <Select defaultValue={null} placeholder={t("n/a")}>
+                  <Select.Option value="24h">{t("daily")}</Select.Option>
+                  <Select.Option value="7d">{t("weekly")}</Select.Option>
+                  <Select.Option value="30d">{t("monthly")}</Select.Option>
                 </Select>
               </Form.Item>
             </AccordionBody>
@@ -82,7 +83,7 @@ const EditBudgetModal: React.FC<EditBudgetModalProps> = ({ isModalVisible, setIs
         </>
 
         <div style={{ textAlign: "right", marginTop: "10px" }}>
-          <Button2 htmlType="submit">Save</Button2>
+          <Button2 htmlType="submit">{t("Save")}</Button2>
         </div>
       </Form>
     </Modal>

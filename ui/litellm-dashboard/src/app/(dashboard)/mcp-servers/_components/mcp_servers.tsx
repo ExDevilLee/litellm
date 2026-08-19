@@ -46,12 +46,11 @@ import { listMCPUserEnvVarStatus } from "@/components/networking";
 import { t } from "@/contexts/LanguageContext";
 
 type SortKey = "created_desc" | "updated_desc" | "name_asc" | "health";
-
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "created_desc", label: "Recently created" },
-  { value: "updated_desc", label: "Recently updated" },
-  { value: "name_asc", label: "Name (A→Z)" },
-  { value: "health", label: "Health (unhealthy first)" },
+const getSortOptions = (): { value: SortKey; label: string }[] => [
+  { value: "created_desc", label: t("Recently created") },
+  { value: "updated_desc", label: t("Recently updated") },
+  { value: "name_asc", label: t("Name (A→Z)") },
+  { value: "health", label: t("Health (unhealthy first)") },
 ];
 
 const HEALTH_RANK: Record<string, number> = {
@@ -595,7 +594,7 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID })
                               render={
                                 <CircleHelp
                                   className="ml-1 size-3.5 text-muted-foreground"
-                                  aria-label="About access groups"
+                                  aria-label={t("About access groups")}
                                 />
                               }
                             />
@@ -637,9 +636,8 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID })
                     />
                   </InputGroup>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium whitespace-nowrap text-muted-foreground">{t("Sort")}</p>
                     <Select
-                      items={SORT_OPTIONS}
+                      items={getSortOptions()}
                       value={sortKey}
                       onValueChange={(v: string | null) => setSortKey((v ?? "created_desc") as SortKey)}
                     >
@@ -647,9 +645,9 @@ const MCPServers: React.FC<MCPServerProps> = ({ accessToken, userRole, userID })
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {SORT_OPTIONS.map((opt) => (
+                        {getSortOptions().map((opt) => (
                           <SelectItem key={opt.value} value={opt.value}>
-                            {t(opt.label)}
+                            {opt.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
