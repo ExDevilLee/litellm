@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { KeywordTierRule } from "./KeywordTierRules";
 import { emptyKeywordTierRuleIndexes, serializeKeywordTierRules } from "./complexity_router_keywords";
 import {
@@ -150,12 +151,12 @@ export const getTierLabelsError = (tierLabels: ComplexityTierLabels | undefined)
     return label !== "" && label !== tier && (TIER_KEYS as string[]).includes(label);
   });
   if (shadowing.length > 0) {
-    return `A tier's display name can't be another tier's name: ${shadowing.join(", ")}`;
+    return t("A tier's display name can't be another tier's name: {0}", shadowing.join(", "));
   }
   const labels = TIER_KEYS.map((tier) => effectiveTierLabel(tier, tierLabels).toLowerCase());
   const duplicates = Array.from(new Set(labels.filter((label, index) => labels.indexOf(label) !== index)));
   if (duplicates.length > 0) {
-    return `Tier display names must be unique. Repeated: ${duplicates.join(", ")}`;
+    return t("Tier display names must be unique. Repeated: {0}", duplicates.join(", "));
   }
   return null;
 };
@@ -165,17 +166,16 @@ export const getTierLabelsError = (tierLabels: ComplexityTierLabels | undefined)
 // populated. The edit modal has no equivalent of this check (it allows saving with only some
 // tiers filled), which is why it needs its own explicit `!defaultModel` guard after deriving —
 // see edit_auto_router_modal.tsx's save handler. A future contributor copying this form's submit
-// handler elsewhere should not assume the same guarantee holds without this check.
 export const getMissingTiersError = (tiers: ComplexityTiers): string | null => {
   const missing = TIER_KEYS.filter((tier) => tiers[tier].length === 0);
   if (missing.length === 0) return null;
-  return `Select a model for the following tier(s): ${missing.join(", ")}`;
+  return t("Select a model for the following tier(s): {0}", missing.join(", "));
 };
 
 export const getKeywordTierRulesError = (keywordTierRules: KeywordTierRule[]): string | null => {
   const emptyRows = emptyKeywordTierRuleIndexes(keywordTierRules);
   if (emptyRows.length === 0) return null;
-  return `Add at least one keyword to keyword rule(s): ${emptyRows.map((index) => index + 1).join(", ")}`;
+  return t("Add at least one keyword to keyword rule(s): {0}", emptyRows.map((index) => index + 1).join(", "));
 };
 
 export const getSemanticConfigError = ({
@@ -186,8 +186,8 @@ export const getSemanticConfigError = ({
   | string
   | null => {
   if (!semanticMatchingEnabled) return null;
-  if (!embeddingModel) return "Select an embedding model to use semantic keyword matching";
-  if (keywordTierRules.length === 0) return "Add at least one keyword tier rule to use semantic keyword matching";
+  if (!embeddingModel) return t("Select an embedding model to use semantic keyword matching");
+  if (keywordTierRules.length === 0) return t("Add at least one keyword tier rule to use semantic keyword matching");
   return null;
 };
 

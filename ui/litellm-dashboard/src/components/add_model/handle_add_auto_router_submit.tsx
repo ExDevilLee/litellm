@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { modelCreateCall, Model } from "../networking";
 import NotificationManager from "../molecules/notifications_manager";
 
@@ -42,7 +43,7 @@ export const handleAddAutoRouterSubmit = async (values: any, accessToken: string
     await modelCreateCall(accessToken, autoRouterConfig as Model);
 
     const routerTypeName = values.model_type === "complexity_router" ? "Auto Router" : "Semantic Router";
-    NotificationManager.success(`Successfully created ${routerTypeName}: ${values.auto_router_name}`);
+    NotificationManager.success(t("Successfully created {0}: {1}", routerTypeName, values.auto_router_name));
 
     form.resetFields();
 
@@ -51,6 +52,6 @@ export const handleAddAutoRouterSubmit = async (values: any, accessToken: string
     }
   } catch (error) {
     console.error("Failed to add auto router:", error);
-    NotificationManager.fromBackend("Failed to add auto router: " + error);
+    NotificationManager.fromBackend(t("Failed to add auto router: {0}", String(error)));
   }
 };

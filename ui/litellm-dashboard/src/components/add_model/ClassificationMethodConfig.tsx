@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Select as AntdSelect, Card, InputNumber, Radio, Space, Switch, Tooltip, Typography } from "antd";
 import React from "react";
@@ -43,10 +44,10 @@ const CUSTOM_PROMPT_WITH_DEFAULT_MODEL_FALLBACK =
 const scoringExplanation = (value: ComplexityRouterConfigValue): string => {
   const usesCustomPrompt =
     value.classifier_type === "llm" && Boolean(value.classifier_llm_config?.system_prompt?.trim());
-  if (!usesCustomPrompt) return DEFAULT_SCORING_EXPLANATION;
-  return value.classifier_fallback === "default_model"
+  if (!usesCustomPrompt) return t(DEFAULT_SCORING_EXPLANATION);
+  return t(value.classifier_fallback === "default_model"
     ? CUSTOM_PROMPT_WITH_DEFAULT_MODEL_FALLBACK
-    : CUSTOM_PROMPT_WITH_HEURISTIC_FALLBACK;
+    : CUSTOM_PROMPT_WITH_HEURISTIC_FALLBACK);
 };
 
 /**
@@ -72,7 +73,7 @@ const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> =
   return (
     <Card className="bg-gray-50 mt-4">
       <Text strong style={{ display: "block", marginBottom: 8 }}>
-        How Classification Works
+        {t("How Classification Works")}
       </Text>
       <Text type="secondary" style={{ fontSize: 13 }}>
         {scoringExplanation(value)}
@@ -80,25 +81,22 @@ const HowClassificationWorks: React.FC<{ value: ComplexityRouterConfigValue }> =
       {ranges && (
         <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 20, fontSize: 13, color: "rgba(0, 0, 0, 0.45)" }}>
           <li>
-            <strong>{effectiveTierLabel("SIMPLE", value.tier_labels)}</strong>: Score &lt; {ranges.simpleMedium}
+            <strong>{t(effectiveTierLabel("SIMPLE", value.tier_labels))}</strong>: {t("Score < {0}", ranges.simpleMedium)}
           </li>
           <li>
-            <strong>{effectiveTierLabel("MEDIUM", value.tier_labels)}</strong>: Score {ranges.simpleMedium} -{" "}
-            {ranges.mediumComplex}
+            <strong>{t(effectiveTierLabel("MEDIUM", value.tier_labels))}</strong>: {t("Score {0} - {1}", ranges.simpleMedium, ranges.mediumComplex)}
           </li>
           <li>
-            <strong>{effectiveTierLabel("COMPLEX", value.tier_labels)}</strong>: Score {ranges.mediumComplex} -{" "}
-            {ranges.complexReasoning}
+            <strong>{t(effectiveTierLabel("COMPLEX", value.tier_labels))}</strong>: {t("Score {0} - {1}", ranges.mediumComplex, ranges.complexReasoning)}
           </li>
           <li>
-            <strong>{effectiveTierLabel("REASONING", value.tier_labels)}</strong>: Score &gt; {ranges.complexReasoning}{" "}
-            (or 2+ reasoning markers)
+            <strong>{t(effectiveTierLabel("REASONING", value.tier_labels))}</strong>: {t("Score > {0} (or 2+ reasoning markers)", ranges.complexReasoning)}
           </li>
         </ul>
       )}
       {!ranges && isError && (
         <Text type="secondary" style={{ fontSize: 13, display: "block", marginTop: 8 }}>
-          The tier score ranges could not be loaded from the proxy.
+          {t("The tier score ranges could not be loaded from the proxy.")}
         </Text>
       )}
     </Card>
@@ -238,12 +236,12 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       >
         <Space direction="vertical" className="w-full">
           <Radio value="heuristic">
-            <Text strong>Heuristic</Text>{" "}
-            <Text type="secondary">(default) — rule-based scoring, no API calls, &lt;1ms latency</Text>
+            <Text strong>{t("Heuristic")}</Text>{" "}
+            <Text type="secondary">{t("(default) — rule-based scoring, no API calls, <1ms latency")}</Text>
           </Radio>
           <Radio value="llm">
-            <Text strong>LLM Classifier</Text>{" "}
-            <Text type="secondary">— use a model to decide the tier (e.g. a small/fast model)</Text>
+            <Text strong>{t("LLM Classifier")}</Text>{" "}
+            <Text type="secondary">{t("— use a model to decide the tier (e.g. a small/fast model)")}</Text>
           </Radio>
         </Space>
       </Radio.Group>
@@ -252,12 +250,12 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
         <div className="mt-4 space-y-3">
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              Classifier Model
+              {t("Classifier Model")}
             </Text>
             <AntdSelect
               value={value.classifier_llm_config?.model || undefined}
               onChange={handleClassifierModelChange}
-              placeholder="Select the model that will classify request complexity"
+              placeholder={t("Select the model that will classify request complexity")}
               showSearch
               style={{ width: "100%" }}
               options={modelOptions}
@@ -265,13 +263,13 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             />
             {classifierModelMissing && (
               <Text type="danger" style={{ fontSize: 12 }}>
-                A classifier model is required
+                {t("A classifier model is required")}
               </Text>
             )}
           </div>
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              Timeout (ms)
+              {t("Timeout (ms)")}
             </Text>
             <InputNumber
               value={value.classifier_llm_config?.timeout_ms ?? DEFAULT_CLASSIFIER_TIMEOUT_MS}
@@ -280,38 +278,38 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               style={{ width: "100%" }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              How long the classifier call has before it fails and the fallback below takes over.
+              {t("How long the classifier call has before it fails and the fallback below takes over.")}
             </Text>
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Text strong>Classification Rubric</Text>
-              <Tooltip title="Every rubric uses the same four tiers and the same tier definitions. They differ only in the worked examples that show the classifier where the boundary between tiers sits.">
+              <Text strong>{t("Classification Rubric")}</Text>
+              <Tooltip title={t("Every rubric uses the same four tiers and the same tier definitions. They differ only in the worked examples that show the classifier where the boundary between tiers sits.")}>
                 <InfoCircleOutlined className="text-gray-400" />
               </Tooltip>
             </div>
-            <Tooltip title={usesCustomPrompt ? "Your custom prompt replaces the built-in rubric entirely" : undefined}>
+            <Tooltip title={usesCustomPrompt ? t("Your custom prompt replaces the built-in rubric entirely") : undefined}>
               <AntdSelect
                 value={classificationRubric}
                 onChange={handleClassificationRubricChange}
                 disabled={usesCustomPrompt}
                 style={{ width: "100%" }}
-                aria-label="Classification Rubric"
+                aria-label={t("Classification Rubric")}
                 options={CLASSIFICATION_RUBRIC_KEYS.map((preset) => ({
                   value: preset,
-                  label: CLASSIFICATION_RUBRIC_DESCRIPTIONS[preset].label,
+                  label: t(CLASSIFICATION_RUBRIC_DESCRIPTIONS[preset].label),
                 }))}
               />
             </Tooltip>
             <Text type="secondary" style={{ display: "block", fontSize: 12 }}>
               {usesCustomPrompt
-                ? "Not in use: the custom prompt below is the classifier's entire rubric."
-                : CLASSIFICATION_RUBRIC_DESCRIPTIONS[classificationRubric].description}
+                ? t("Not in use: the custom prompt below is the classifier\u0027s entire rubric.")
+                : t(CLASSIFICATION_RUBRIC_DESCRIPTIONS[classificationRubric].description)}
             </Text>
           </div>
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              Classifier Prompt
+              {t("Classifier Prompt")}
             </Text>
             <ClassifierPromptEditor
               systemPrompt={value.classifier_llm_config?.system_prompt}
@@ -323,7 +321,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
           </div>
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              If the classifier fails
+              {t("If the classifier fails")}
             </Text>
             <Radio.Group
               value={value.classifier_fallback ?? DEFAULT_CLASSIFIER_FALLBACK}
@@ -331,32 +329,32 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
             >
               <Space direction="vertical">
                 <Radio value="heuristic">
-                  <Text>Score with the heuristic</Text>{" "}
-                  <Text type="secondary">— right when the classifier grades complexity too</Text>
+                  <Text>{t("Score with the heuristic")}</Text>{" "}
+                  <Text type="secondary">{t("— right when the classifier grades complexity too")}</Text>
                 </Radio>
                 <Radio value="default_model" disabled={!hasDefaultModel}>
                   <Tooltip
                     title={
                       hasDefaultModel
-                        ? "Change it from the Default Model select."
-                        : "Set a default model on this router to use this option"
+                        ? t("Change it from the Default Model select.")
+                        : t("Set a default model on this router to use this option")
                     }
                   >
                     <span>
-                      <Text>Route to the default model{defaultModel ? ` (${defaultModel})` : ""}</Text>{" "}
-                      <Text type="secondary">— right when your prompt grades something other than complexity</Text>
+                      <Text>{defaultModel ? t("Route to the default model ({0})", defaultModel) : t("Route to the default model")}</Text>{" "}
+                      <Text type="secondary">{t("— right when your prompt grades something other than complexity")}</Text>
                     </span>
                   </Tooltip>
                 </Radio>
               </Space>
             </Radio.Group>
             <Text type="secondary" style={{ display: "block", fontSize: 12 }}>
-              Applies when the classifier call errors, times out, or returns an unparseable response.
+              {t("Applies when the classifier call errors, times out, or returns an unparseable response.")}
             </Text>
           </div>
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              Context Window Size
+              {t("Context Window Size")}
             </Text>
             <InputNumber
               value={value.classifier_context_window_size ?? DEFAULT_CLASSIFIER_CONTEXT_WINDOW_SIZE}
@@ -365,14 +363,12 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               style={{ width: "100%" }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Number of prior user turns (tool output and harness reminders excluded) sent to the classifier as context,
-              so a referring follow-up like &quot;now do the same for the streaming path&quot; is classified against
-              what it refers to. Set to 0 to send only the current message.
+              {t("Number of prior user turns (tool output and harness reminders excluded) sent to the classifier as context, so a referring follow-up like \"now do the same for the streaming path\" is classified against what it refers to. Set to 0 to send only the current message.")}
             </Text>
           </div>
           <div>
             <Text strong style={{ display: "block", marginBottom: 4 }}>
-              Context Per-Turn Character Limit
+              {t("Context Per-Turn Character Limit")}
             </Text>
             <InputNumber
               value={value.classifier_context_per_turn_chars ?? DEFAULT_CLASSIFIER_CONTEXT_PER_TURN_CHARS}
@@ -381,7 +377,7 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
               style={{ width: "100%" }}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Prior turns longer than this are truncated.
+              {t("Prior turns longer than this are truncated.")}
             </Text>
           </div>
           <div>
@@ -390,18 +386,15 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
                 checked={value.classifier_context_include_assistant_turns ?? false}
                 onChange={handleClassifierContextIncludeAssistantTurnsChange}
                 size="small"
-                aria-label="Include Assistant Turns"
+                aria-label={t("Include Assistant Turns")}
               />
-              <Text strong>Include Assistant Turns</Text>
-              <Tooltip title="Off by default. Enabling it changes tier decisions, and therefore spend, for an existing router, and sends assistant text to the classifier model, which may be a different provider than the routed model.">
+              <Text strong>{t("Include Assistant Turns")}</Text>
+              <Tooltip title={t("Off by default. Enabling it changes tier decisions, and therefore spend, for an existing router, and sends assistant text to the classifier model, which may be a different provider than the routed model.")}>
                 <InfoCircleOutlined className="text-gray-400" />
               </Tooltip>
             </div>
             <Text type="secondary" style={{ fontSize: 12 }}>
-              Let the classifier read the assistant&apos;s replies, so difficulty the model stated rather than the user
-              stays visible: a plan the assistant calls complex, approved with &quot;yes&quot;, is classified on the
-              work being approved. Context Window Size then counts the last N turns across both roles rather than the
-              last N user turns.
+              {t("Let the classifier read the assistant\u0027s replies, so difficulty the model stated rather than the user stays visible: a plan the assistant calls complex, approved with \"yes\", is classified on the work being approved. Context Window Size then counts the last N turns across both roles rather than the last N user turns.")}
             </Text>
           </div>
         </div>
@@ -410,20 +403,19 @@ const ClassificationMethodConfig: React.FC<ClassificationMethodConfigProps> = ({
       {value.classifier_type === "heuristic" && (
         <div className="mt-4">
           <div className="flex items-center gap-2 mb-1">
-            <Text strong>Custom Technical Keywords</Text>
-            <Tooltip title="Domain-specific terms appended to the built-in technical keyword list. Prompts containing these terms score higher on the technical dimension and route to more capable models.">
+            <Text strong>{t("Custom Technical Keywords")}</Text>
+            <Tooltip title={t("Domain-specific terms appended to the built-in technical keyword list. Prompts containing these terms score higher on the technical dimension and route to more capable models.")}>
               <InfoCircleOutlined className="text-gray-400" />
             </Tooltip>
           </div>
           <Text type="secondary" style={{ display: "block", marginBottom: 8, fontSize: 12 }}>
-            Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension.
-            (e.g., udp, kafka, terraform).
+            {t("Optional: Add terms to the built-in list to improve classification accuracy on the technical dimension. (e.g., udp, kafka, terraform).")}
           </Text>
           <AntdSelect
             mode="tags"
             value={customTechnicalKeywords ?? []}
             onChange={(keywords: string[]) => onCustomTechnicalKeywordsChange?.(keywords)}
-            placeholder="Type a keyword and press Enter, or paste a comma-separated list"
+            placeholder={t("Type a keyword and press Enter, or paste a comma-separated list")}
             tokenSeparators={[","]}
             open={false}
             suffixIcon={null}

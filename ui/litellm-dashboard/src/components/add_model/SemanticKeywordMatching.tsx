@@ -1,6 +1,7 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { InputNumber, Select as AntdSelect, Switch, Tooltip, Typography } from "antd";
 import React from "react";
+import { t } from "@/contexts/LanguageContext";
 import { ModelGroup } from "@/components/llm_calls/fetch_models";
 
 const { Text } = Typography;
@@ -40,27 +41,26 @@ const SemanticKeywordMatching: React.FC<SemanticKeywordMatchingProps> = ({
       <div className="flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Text className="font-medium">Semantic keyword matching</Text>
-            <Tooltip title="Recognize related phrasing beyond exact keyword matches by comparing embeddings instead of plain text. Overrides direct keyword matching">
+            <Text className="font-medium">{t("Semantic keyword matching")}</Text>
+            <Tooltip title={t("Recognize related phrasing beyond exact keyword matches by comparing embeddings instead of plain text. Overrides direct keyword matching")}>
               <InfoCircleOutlined className="text-gray-400" />
             </Tooltip>
           </div>
           <Text className="text-gray-500 text-sm">
-            Uses same keyword-tier pairs as above and overrides direct keyword matching. Adds latency based on embedding
-            model network request.
+            {t("Uses same keyword-tier pairs as above and overrides direct keyword matching. Adds latency based on embedding model network request.")}
           </Text>
         </div>
-        <Switch checked={enabled} onChange={onEnabledChange} aria-label="Semantic keyword matching" />
+        <Switch checked={enabled} onChange={onEnabledChange} aria-label={t("Semantic keyword matching")} />
       </div>
 
       {enabled && (
         <div className="grid gap-4 md:grid-cols-2 mt-4 pt-4 border-t border-gray-200">
           <div>
-            <Text className="text-sm font-medium mb-1 block">Embedding model</Text>
+            <Text className="text-sm font-medium mb-1 block">{t("Embedding model")}</Text>
             <AntdSelect
               value={embeddingModel}
               onChange={onEmbeddingModelChange}
-              placeholder="Select an embedding model"
+              placeholder={t("Select an embedding model")}
               showSearch
               style={{ width: "100%" }}
               options={modelOptions}
@@ -68,12 +68,12 @@ const SemanticKeywordMatching: React.FC<SemanticKeywordMatchingProps> = ({
             />
             {embeddingModelMissing && (
               <Text type="danger" style={{ fontSize: 12 }}>
-                An embedding model is required
+                {t("An embedding model is required")}
               </Text>
             )}
           </div>
           <div>
-            <Text className="text-sm font-medium mb-1 block">Minimum match score</Text>
+            <Text className="text-sm font-medium mb-1 block">{t("Minimum match score")}</Text>
             <InputNumber
               value={matchThreshold}
               onChange={(value) => onMatchThresholdChange(value ?? DEFAULT_MATCH_THRESHOLD)}
@@ -82,7 +82,7 @@ const SemanticKeywordMatching: React.FC<SemanticKeywordMatchingProps> = ({
               step={0.05}
               style={{ width: "100%" }}
             />
-            <Text className="text-gray-500 text-xs mt-1 block">Match only at or above this similarity score.</Text>
+            <Text className="text-gray-500 text-xs mt-1 block">{t("Match only at or above this similarity score.")}</Text>
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import { Waypoints } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cva.config";
+import { t } from "@/contexts/LanguageContext";
 
 export interface RoutingDecisionTierBoundaries {
   simple_medium?: number;
@@ -52,11 +53,11 @@ function describeScoreAgainstBoundaries(
   } = boundaries;
   if (simpleMedium === undefined || mediumComplex === undefined || complexReasoning === undefined) return null;
 
-  const named = (range: string, tier: string): string => (renamed ? range : `${range}, ${tier}`);
-  if (score < simpleMedium) return named(`below ${simpleMedium}`, "SIMPLE");
-  if (score < mediumComplex) return named(`${simpleMedium} to ${mediumComplex}`, "MEDIUM");
-  if (score < complexReasoning) return named(`${mediumComplex} to ${complexReasoning}`, "COMPLEX");
-  return named(`at or above ${complexReasoning}`, "REASONING");
+  const named = (range: string, tier: string): string => (renamed ? range : t("{0}, {1}", range, tier));
+  if (score < simpleMedium) return named(t("below {0}", simpleMedium), "SIMPLE");
+  if (score < mediumComplex) return named(t("{0} to {1}", simpleMedium, mediumComplex), "MEDIUM");
+  if (score < complexReasoning) return named(t("{0} to {1}", mediumComplex, complexReasoning), "COMPLEX");
+  return named(t("at or above {0}", complexReasoning), "REASONING");
 }
 
 function describeCause(decision: RoutingDecision): string {
@@ -64,33 +65,33 @@ function describeCause(decision: RoutingDecision): string {
 
   switch (cause) {
     case "heuristic_scorer":
-      return "Heuristic scorer";
+      return t("Heuristic scorer");
     case "reasoning_override":
-      return `Heuristic, ${tierLabel ?? "REASONING"} override (2 or more reasoning markers)`;
+      return t("Heuristic, {0} override (2 or more reasoning markers)", tierLabel ?? "REASONING");
     case "llm_classifier":
-      return classifierModel ? `LLM classifier (${classifierModel})` : "LLM classifier";
+      return classifierModel ? t("LLM classifier ({0})", classifierModel) : t("LLM classifier");
     case "literal_keyword_match":
-      return matchedKeyword ? `Keyword match: "${matchedKeyword}"` : "Keyword match";
+      return matchedKeyword ? t("Keyword match: \"{0}\"", matchedKeyword) : t("Keyword match");
     case "semantic_keyword_match":
-      return "Semantic keyword match";
+      return t("Semantic keyword match");
     case "session_affinity_pin":
-      return "Pinned to session";
+      return t("Pinned to session");
     case "session_affinity_escalation":
-      return "Escalated from session pin";
+      return t("Escalated from session pin");
     case "quality_tier":
-      return "Quality tier mapping";
+      return t("Quality tier mapping");
     case "keyword":
-      return matchedKeyword ? `Keyword match: "${matchedKeyword}"` : "Keyword match";
+      return matchedKeyword ? t("Keyword match: \"{0}\"", matchedKeyword) : t("Keyword match");
     case "bandit":
-      return "Adaptive bandit";
+      return t("Adaptive bandit");
     case "default_fallback":
-      return "Default model, no route matched";
+      return t("Default model, no route matched");
     case "classifier_fallback":
-      return "Fallback tier, LLM classifier failed";
+      return t("Fallback tier, LLM classifier failed");
     case "default_model_fallback":
-      return "Default model, LLM classifier failed";
+      return t("Default model, LLM classifier failed");
     default:
-      return cause ?? "Unknown";
+      return cause ?? t("Unknown");
   }
 }
 
@@ -101,8 +102,8 @@ function describeCause(decision: RoutingDecision): string {
  * the request escalated or asked to, so there is no "did not escalate" case.
  */
 function describeEscalation(escalated: boolean, keyword: string | undefined): string {
-  if (escalated) return keyword ? `Yes, keyword "${keyword}"` : "Yes";
-  return keyword ? `Requested via "${keyword}"; already at the highest tier` : "Requested; already at the highest tier";
+  if (escalated) return keyword ? t("Yes, keyword \"{0}\"", keyword) : t("Yes");
+  return keyword ? t("Requested via \"{0}\"; already at the highest tier", keyword) : t("Requested; already at the highest tier");
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -147,7 +148,7 @@ export function RoutingDecisionCard({
 
   return (
     <div className={cn("mb-6 w-full max-w-full overflow-hidden rounded-lg bg-white shadow-sm", className)}>
-      <div className="border-b px-4 py-2.5 text-sm font-medium">Routing</div>
+      <div className="border-b px-4 py-2.5 text-sm font-medium">{t("Routing")}</div>
       <div className="px-4 py-3">
         {routerModelName && (
           <div className="mb-2 flex items-center gap-2 text-sm font-medium">
@@ -155,37 +156,37 @@ export function RoutingDecisionCard({
             <span>{routerModelName}</span>
             {routerType && (
               <span className="font-normal text-muted-foreground">
-                ({ROUTER_TYPE_LABELS[routerType] ?? routerType})
+                ({ROUTER_TYPE_LABELS[routerType] ? t(ROUTER_TYPE_LABELS[routerType]) : routerType})
               </span>
             )}
           </div>
         )}
 
         {tier && (
-          <Row label="Tier">
+          <Row label={t("Tier")}>
             <Badge variant="secondary" className="font-normal">
               {tierLabel ?? tier}
             </Badge>
           </Row>
         )}
 
-        {requestType && <Row label="Request type">{requestType}</Row>}
+        {requestType && <Row label={t("Request type")}>{requestType}</Row>}
 
-        <Row label="Decided by">{describeCause(decision)}</Row>
+        <Row label={t("Decided by")}>{describeCause(decision)}</Row>
 
         {score !== undefined && (
-          <Row label="Score">
+          <Row label={t("Score")}>
             <span className="tabular-nums">{score.toFixed(2)}</span>
             {scoreExplanation && <span className="ml-2 text-muted-foreground">({scoreExplanation})</span>}
           </Row>
         )}
 
-        {routedModel && <Row label="Routed to">{routedModel}</Row>}
+        {routedModel && <Row label={t("Routed to")}>{routedModel}</Row>}
 
-        {escalated !== undefined && <Row label="Escalated">{describeEscalation(escalated, escalationKeyword)}</Row>}
+        {escalated !== undefined && <Row label={t("Escalated")}>{describeEscalation(escalated, escalationKeyword)}</Row>}
 
         {signals && signals.length > 0 && (
-          <Row label="Signals">
+          <Row label={t("Signals")}>
             <span className="flex flex-wrap gap-1">
               {signals.map((signal) => (
                 <Badge key={signal} variant="outline" className="font-normal">

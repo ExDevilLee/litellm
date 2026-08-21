@@ -1,4 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { t } from "@/contexts/LanguageContext";
 import { Select as AntdSelect, Card, Collapse, Divider, Input, Space, Switch, Tooltip, Typography } from "antd";
 import React from "react";
 import { ModelGroup } from "@/components/llm_calls/fetch_models";
@@ -240,23 +241,20 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
     <div className="w-full max-w-none">
       <Space align="center" style={{ marginBottom: 16 }}>
         <Typography.Title level={4} style={{ margin: 0 }}>
-          Complexity Tier Configuration
+          {t("Complexity Tier Configuration")}
         </Typography.Title>
-        <Tooltip title="Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.">
+        <Tooltip title={t("Map each complexity tier to one or more models. Simple queries use cheaper/faster models, complex queries use more capable models.")}>
           <InfoCircleOutlined className="text-gray-400" />
         </Tooltip>
       </Space>
 
       <Text type="secondary" style={{ display: "block", marginBottom: 24 }}>
-        The complexity router automatically classifies requests by complexity using rule-based scoring (no API calls,
-        &lt;1ms latency). Configure which model(s) handle each tier.
+        {t("The complexity router automatically classifies requests by complexity using rule-based scoring (no API calls, <1ms latency). Configure which model(s) handle each tier.")}
       </Text>
 
       <Text type="secondary" style={{ display: "block", marginBottom: 16, fontSize: 12 }}>
-        Rename a tier to use your own vocabulary in the dashboard and your spend logs. Renaming doesn&apos;t change how
-        requests are classified, and callers never see these names.
-        {value.classifier_type === "llm" &&
-          " Your classifier model reads these names, so clearer ones can sharpen its choices."}
+        {t("Rename a tier to use your own vocabulary in the dashboard and your spend logs. Renaming doesn\u0027t change how requests are classified, and callers never see these names.")}
+        {value.classifier_type === "llm" && t(" Your classifier model reads these names, so clearer ones can sharpen its choices.")}
       </Text>
 
       <Card>
@@ -270,23 +268,23 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Text strong style={{ fontSize: 16 }}>
-                    {label} Tier
+                    {t("{0} Tier", label)}
                   </Text>
-                  <Tooltip title={tierInfo.description}>
+                  <Tooltip title={t(tierInfo.description)}>
                     <InfoCircleOutlined className="text-gray-400" />
                   </Tooltip>
                   <Text type="secondary" style={{ fontSize: 12 }}>
-                    Tier {index + 1} of {TIER_KEYS.length} &middot; {tier}
+                    {t("Tier {0} of {1} \u00b7 {2}", index + 1, TIER_KEYS.length, tier)}
                   </Text>
                 </div>
                 <Text type="secondary" style={{ display: "block", marginBottom: 8, fontSize: 12 }}>
-                  Examples: {tierInfo.examples}
+                  {t("Examples: {0}", t(tierInfo.examples))}
                 </Text>
                 <Input
                   value={value.tier_labels?.[tier] ?? ""}
                   onChange={(event) => handleTierLabelChange(tier, event.target.value)}
-                  placeholder={`Display name (default: ${tierInfo.label})`}
-                  aria-label={`Display name for the ${tierInfo.label} tier`}
+                  placeholder={t("Display name (default: {0})", t(tierInfo.label))}
+                  aria-label={t("Display name for the {0} tier", t(tierInfo.label))}
                   style={{ marginBottom: 8 }}
                   allowClear
                 />
@@ -294,7 +292,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                   mode="multiple"
                   value={value.tiers[tier]}
                   onChange={(models) => handleTierChange(tier, models)}
-                  placeholder={`Select model(s) for ${label.toLowerCase()} queries`}
+                  placeholder={t("Select model(s) for {0} queries", label.toLowerCase())}
                   showSearch
                   style={{ width: "100%" }}
                   options={modelOptions}
@@ -302,13 +300,12 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                 />
                 {value.tiers[tier].length > 1 && (
                   <Text type="secondary" style={{ fontSize: 12 }}>
-                    Multiple models selected — the router randomly picks among them per request (or Thompson-samples
-                    within the pool when adaptive routing is on).
+                    {t("Multiple models selected \u2014 the router randomly picks among them per request (or Thompson-samples within the pool when adaptive routing is on).")}
                   </Text>
                 )}
                 {tierMissing && (
                   <Text type="danger" style={{ fontSize: 12 }}>
-                    The {label} tier is required
+                    {t("The {0} tier is required", label)}
                   </Text>
                 )}
               </div>
@@ -320,9 +317,9 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
         <div className="mb-2">
           <div className="flex items-center gap-2 mb-2">
             <Text strong style={{ fontSize: 16 }}>
-              Default Model
+              {t("Default Model")}
             </Text>
-            <Tooltip title="Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.">
+            <Tooltip title={t("Leave empty to follow the tiers. A model chosen here is pinned: it stays the default however the tiers change.")}>
               <InfoCircleOutlined className="text-gray-400" />
             </Tooltip>
           </div>
@@ -331,18 +328,17 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             onChange={handleDefaultModelChange}
             placeholder={
               derivedDefaultModel
-                ? `Derived from tiers: ${derivedDefaultModel}`
-                : "Add a model to the Simple or Medium tier"
+                ? t("Derived from tiers: {0}", derivedDefaultModel)
+                : t("Add a model to the Simple or Medium tier")
             }
-            aria-label="Default model"
+            aria-label={t("Default model")}
             showSearch
             allowClear
             style={{ width: "100%" }}
             options={modelOptions}
           />
           <Text type="secondary" style={{ display: "block", marginTop: 4, fontSize: 12 }}>
-            Used when the tier the request lands in has no model, and when the classifier fails with &quot;Route to the
-            default model&quot; selected.
+            {t('Used when the tier the request lands in has no model, and when the classifier fails with "Route to the default model" selected.')}
           </Text>
         </div>
       </Card>
@@ -357,7 +353,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             key: "classifier",
             label: (
               <Text strong style={{ color: "#374151" }}>
-                Advanced: Classification Method
+                {t("Advanced: Classification Method")}
               </Text>
             ),
             children: (
@@ -376,7 +372,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             key: "adaptive",
             label: (
               <Text strong style={{ color: "#374151" }}>
-                Advanced: Adaptive Routing
+                {t("Advanced: Adaptive Routing")}
               </Text>
             ),
             children: <AdaptiveRoutingConfig value={value} onChange={onChange} />,
@@ -385,7 +381,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             key: "affinity",
             label: (
               <Text strong style={{ color: "#374151" }}>
-                Advanced: Affinity
+                {t("Advanced: Affinity")}
               </Text>
             ),
             children: (
@@ -394,25 +390,23 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                   <Switch
                     checked={value.deployment_affinity ?? DEFAULT_DEPLOYMENT_AFFINITY}
                     onChange={(deploymentAffinity) => onChange({ ...value, deployment_affinity: deploymentAffinity })}
-                    aria-label="Pin a session to one deployment per model group"
+                    aria-label={t("Pin a session to one deployment per model group")}
                   />
-                  <Text strong>Pin a session to one deployment per model group</Text>
+                  <Text strong>{t("Pin a session to one deployment per model group")}</Text>
                 </div>
                 <Text type="secondary" style={{ display: "block", fontSize: 12, marginBottom: 12 }}>
-                  Keeps a session on the same deployment within a group, so provider prompt caches stay warm. Turn off
-                  to load-balance every turn.
+                  {t("Keeps a session on the same deployment within a group, so provider prompt caches stay warm. Turn off to load-balance every turn.")}
                 </Text>
                 <div className="flex items-center gap-2 mb-2">
                   <Switch
                     checked={value.session_affinity ?? DEFAULT_SESSION_AFFINITY}
                     onChange={(sessionAffinity) => onChange({ ...value, session_affinity: sessionAffinity })}
-                    aria-label="Pin a session to its first model"
+                    aria-label={t("Pin a session to its first model")}
                   />
-                  <Text strong>Pin a session to its first model</Text>
+                  <Text strong>{t("Pin a session to its first model")}</Text>
                 </div>
                 <Text type="secondary" style={{ display: "block", fontSize: 12 }}>
-                  Keeps a session on its first turn&apos;s model instead of re-classifying each turn. Also pins the
-                  deployment.
+                  {t("Keeps a session on its first turn\u0027s model instead of re-classifying each turn. Also pins the deployment.")}
                 </Text>
               </>
             ),
@@ -421,7 +415,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
             key: "response",
             label: (
               <Text strong style={{ color: "#374151" }}>
-                Advanced: Response Format
+                {t("Advanced: Response Format")}
               </Text>
             ),
             children: (
@@ -431,10 +425,10 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                     checked={value.return_raw_model_name ?? false}
                     onChange={(returnRawModelName) => onChange({ ...value, return_raw_model_name: returnRawModelName })}
                   />
-                  <Text strong>Return raw model name</Text>
+                  <Text strong>{t("Return raw model name")}</Text>
                 </div>
                 <Text type="secondary" style={{ display: "block", fontSize: 12 }}>
-                  Return the resolved underlying model name in responses instead of the autorouter alias.
+                  {t("Return the resolved underlying model name in responses instead of the autorouter alias.")}
                 </Text>
               </>
             ),
@@ -445,7 +439,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                   key: "escalation",
                   label: (
                     <Text strong style={{ color: "#374151" }}>
-                      Advanced: Escalation Keywords
+                      {t("Advanced: Escalation Keywords")}
                     </Text>
                   ),
                   children: <EscalationKeywords keywords={escalationKeywords} onChange={onEscalationKeywordsChange} />,
@@ -458,7 +452,7 @@ const ComplexityRouterConfig: React.FC<ComplexityRouterConfigProps> = ({
                   key: "keyword-semantic",
                   label: (
                     <Text strong style={{ color: "#374151" }}>
-                      Advanced: Keyword/Semantic Matching
+                      {t("Advanced: Keyword/Semantic Matching")}
                     </Text>
                   ),
                   children: (

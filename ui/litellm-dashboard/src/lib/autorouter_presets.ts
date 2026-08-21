@@ -1,3 +1,4 @@
+import { t } from "@/contexts/LanguageContext";
 import {
   ComplexityRouterConfigPayload,
   hydrateTierLabels,
@@ -209,7 +210,7 @@ export const getReferencedModelsError = (
     },
     availability,
   );
-  return missing.length > 0 ? `Model(s) no longer available: ${missing.join(", ")}` : null;
+  return missing.length > 0 ? t("Model(s) no longer available: {0}", missing.join(", ")) : null;
 };
 
 // Every piece of AddAutoRouterTab's config state that a preset (or a reset to Custom) prefills in

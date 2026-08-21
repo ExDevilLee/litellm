@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { t } from "@/contexts/LanguageContext";
 import { type ComplexityRouterConfigValue, heuristicScoringRole } from "./ComplexityRouterConfig";
 import { dimensionLabel, weightTotal } from "./heuristic_scoring_knobs";
 
@@ -68,9 +69,9 @@ const warn = (group: KnobGroup, values: Record<string, number>): string | null =
     group === "tier_boundaries" &&
     (values.simple_medium > values.medium_complex || values.medium_complex > values.complex_reasoning)
   )
-    return "These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere.";
+    return t("These boundaries decrease, so every tier between them is unreachable and its traffic routes elsewhere.");
   if (group === "token_thresholds" && values.simple >= values.complex)
-    return "The short threshold is not below the long one, so no prompt length scores neutral on length.";
+    return t("The short threshold is not below the long one, so no prompt length scores neutral on length.");
   return null;
 };
 
@@ -110,10 +111,10 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
         <ChevronDown
           className={`size-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
-        <span className="text-sm font-medium">Advanced scoring</span>
+        <span className="text-sm font-medium">{t("Advanced scoring")}</span>
         {overrides > 0 && (
           <Badge variant="secondary" data-testid="advanced-scoring-override-count">
-            {overrides} {overrides === 1 ? "override" : "overrides"}
+            {overrides} {overrides === 1 ? t("override") : t("overrides")}
           </Badge>
         )}
       </CollapsibleTrigger>
@@ -121,22 +122,20 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
       <CollapsibleContent>
         <div className="mt-3 space-y-6 pl-6">
           <p className="text-xs text-muted-foreground">
-            Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any
-            recalibration of them rather than staying pinned to the numbers shown here.
+            {t("Every knob below is optional. Left untouched, the router follows the shipped defaults, so it picks up any recalibration of them rather than staying pinned to the numbers shown here.")}
           </p>
 
           {isPending ? (
-            <p className="text-xs text-muted-foreground">Loading the shipped defaults...</p>
+            <p className="text-xs text-muted-foreground">{t("Loading the shipped defaults...")}</p>
           ) : (
             <>
               {isError && (
                 <div className="flex items-start gap-2" role="alert">
                   <p className="text-xs font-medium text-destructive">
-                    Could not load the shipped defaults, so only values this router already overrides are shown. Saving
-                    still works, and an untouched knob keeps following the defaults.
+                    {t("Could not load the shipped defaults, so only values this router already overrides are shown. Saving still works, and an untouched knob keeps following the defaults.")}
                   </p>
                   <Button type="button" variant="link" size="xs" onClick={() => void refetch()}>
-                    Retry
+                    {t("Retry")}
                   </Button>
                 </div>
               )}
@@ -148,12 +147,12 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                   <section key={spec.group} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">{spec.title}</span>
+                        <span className="text-sm font-medium">{t(spec.title)}</span>
                         {/* Only a known dimension set has a meaningful total; summing the overrides
                             alone would state a total that is not the router's. */}
                         {spec.withSlider && defaults !== undefined && (
                           <span className="text-xs text-muted-foreground" data-testid="dimension-weight-total">
-                            total {weightTotal(effective).toFixed(2)}
+                            {t("total {0}", weightTotal(effective).toFixed(2))}
                           </span>
                         )}
                       </div>
@@ -164,11 +163,11 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                           size="xs"
                           onClick={() => onChange({ ...value, [spec.group]: undefined })}
                         >
-                          Reset to defaults
+                          {t("Reset to defaults")}
                         </Button>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground">{spec.blurb}</p>
+                    <p className="text-xs text-muted-foreground">{t(spec.blurb)}</p>
 
                     {Object.keys(effective).map((key) => {
                       const id = `${spec.group}-${key}`;
@@ -176,7 +175,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                       return (
                         <div key={key} className="flex items-center gap-3">
                           <Label htmlFor={id} className="w-44 text-xs font-normal">
-                            {label}
+                            {t(label)}
                           </Label>
                           {spec.withSlider && (
                             <Slider
@@ -188,7 +187,7 @@ const HeuristicScoringConfig: React.FC<HeuristicScoringConfigProps> = ({ value, 
                                 commit(spec, effective, key, String(Array.isArray(next) ? next[0] : next))
                               }
                               className="flex-1"
-                              aria-label={`${label} weight`}
+                              aria-label={t("{0} weight", label)}
                             />
                           )}
                           <Input

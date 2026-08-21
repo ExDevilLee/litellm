@@ -2,6 +2,7 @@ import { DeleteOutlined, InfoCircleOutlined, PlusOutlined } from "@ant-design/ic
 import { Button, Card, Empty, Select as AntdSelect, Tooltip, Typography } from "antd";
 import React from "react";
 
+import { t } from "@/contexts/LanguageContext";
 import { emptyKeywordTierRuleIndexes } from "./complexity_router_keywords";
 
 const { Text } = Typography;
@@ -32,7 +33,7 @@ const TIER_ORDER: ComplexityTier[] = ["SIMPLE", "MEDIUM", "COMPLEX", "REASONING"
 export const tierOptions = (
   tierLabels: Partial<Record<ComplexityTier, string>> | undefined,
 ): { value: ComplexityTier; label: string }[] =>
-  TIER_ORDER.map((tier) => ({ value: tier, label: tierLabels?.[tier]?.trim() || DEFAULT_TIER_LABELS[tier] }));
+  TIER_ORDER.map((tier) => ({ value: tier, label: t(tierLabels?.[tier]?.trim() || DEFAULT_TIER_LABELS[tier]) }));
 
 // A row exists only because the caller asked for it, so it reports its own gap straight away
 // rather than waiting for a submit; the submit button is disabled while one is outstanding, so
@@ -81,24 +82,23 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Typography.Title level={4} style={{ margin: 0 }}>
-            Keyword Tier Overrides
+            {t("Keyword Tier Overrides")}
           </Typography.Title>
-          <Tooltip title="Match known terms and force the request straight to a chosen complexity tier, bypassing rule-based scoring.">
+          <Tooltip title={t("Match known terms and force the request straight to a chosen complexity tier, bypassing rule-based scoring.")}>
             <InfoCircleOutlined className="text-gray-400" />
           </Tooltip>
         </div>
         <Button icon={<PlusOutlined />} onClick={addRule}>
-          Add keyword rule
+          {t("Add keyword rule")}
         </Button>
       </div>
       <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>
-        Optional: route requests containing specific keywords directly to a tier, e.g. route &quot;invoice, refund,
-        billing&quot; to the medium tier.
+        {t("Optional: route requests containing specific keywords directly to a tier, e.g. route \"invoice, refund, billing\" to the medium tier.")}
       </Text>
 
       {rules.length === 0 ? (
         <Card className="bg-gray-50">
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No keyword tier overrides configured" />
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("No keyword tier overrides configured")} />
         </Card>
       ) : (
         <div className="flex flex-col gap-3">
@@ -107,7 +107,7 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
               <div className="flex items-end gap-3">
                 <div className="flex-1">
                   <Text strong style={{ display: "block", marginBottom: 8 }}>
-                    Keywords {index + 1}
+                    {t("Keywords {0}", index + 1)}
                   </Text>
                   <AntdSelect
                     mode="tags"
@@ -117,7 +117,7 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
                     onSearch={(text) => setDraft(rule.id, text)}
                     onInputKeyDown={commitDraftOnEnter(rule)}
                     onBlur={() => commitDraft(rule)}
-                    placeholder="e.g., invoice, refund, billing"
+                    placeholder={t("e.g., invoice, refund, billing")}
                     tokenSeparators={[","]}
                     open={false}
                     suffixIcon={null}
@@ -127,13 +127,13 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
                   />
                   {emptyRuleIndexes.has(index) && (
                     <Text type="danger" style={{ fontSize: 12 }}>
-                      At least one keyword is required
+                      {t("At least one keyword is required")}
                     </Text>
                   )}
                 </div>
                 <div style={{ width: 220 }}>
                   <Text strong style={{ display: "block", marginBottom: 8 }}>
-                    Route to tier
+                    {t("Route to tier")}
                   </Text>
                   <AntdSelect
                     value={rule.tier}
@@ -146,7 +146,7 @@ const KeywordTierRules: React.FC<KeywordTierRulesProps> = ({ rules, onChange, ti
                   danger
                   type="text"
                   icon={<DeleteOutlined />}
-                  aria-label={`Remove keyword rule ${index + 1}`}
+                  aria-label={t("Remove keyword rule {0}", index + 1)}
                   onClick={() => removeRule(rule.id)}
                 />
               </div>
