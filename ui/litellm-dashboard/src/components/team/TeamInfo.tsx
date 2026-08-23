@@ -34,6 +34,7 @@ import { Button, Form, Input, InputNumber, Select, Space, Switch, Tabs, Tag, Too
 import MessageManager from "@/components/molecules/message_manager";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
+import { t } from "@/contexts/LanguageContext";
 import { copyToClipboard as utilCopyToClipboard } from "../../utils/dataUtils";
 import AccessGroupSelector from "../common_components/AccessGroupSelector";
 import BudgetDurationDropdown from "../common_components/budget_duration_dropdown";
@@ -778,11 +779,11 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 </Card>
 
                 <Card>
-                  <Text>Rate Limits</Text>
+                  <Text>{t("Rate Limits")}</Text>
                   <div className="mt-2">
-                    <Text>TPM: {info.tpm_limit || "Unlimited"}</Text>
-                    <Text>RPM: {info.rpm_limit || "Unlimited"}</Text>
-                    {info.max_parallel_requests && <Text>Max Parallel Requests: {info.max_parallel_requests}</Text>}
+                    <Text>{t("TPM: {0}", info.tpm_limit || t("Unlimited"))}</Text>
+                    <Text>{t("RPM: {0}", info.rpm_limit || t("Unlimited"))}</Text>
+                    {info.max_parallel_requests && <Text>{t("Max Parallel Requests: {0}", info.max_parallel_requests)}</Text>}
                     {(() => {
                       const modelTpm = (info.metadata?.model_tpm_limit ?? {}) as Record<string, number>;
                       const modelRpm = (info.metadata?.model_rpm_limit ?? {}) as Record<string, number>;
@@ -790,7 +791,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                       if (models.length === 0) return null;
                       return (
                         <div className="mt-3">
-                          <Text className="text-gray-500">Per-model limits:</Text>
+                          <Text className="text-gray-500">{t("Per-model limits:")}</Text>
                           {models.map((m) => (
                             <Text key={m} className="text-xs">
                               {m}: TPM {modelTpm[m] ?? "—"}, RPM {modelRpm[m] ?? "—"}
@@ -799,18 +800,18 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                         </div>
                       );
                     })()}
-                    <Text>Estimated Output Tokens: {info.metadata?.default_estimated_output_tokens ?? "Default"}</Text>
+                    <Text>{t("Estimated Output Tokens: {0}", info.metadata?.default_estimated_output_tokens ?? t("Default"))}</Text>
                     <Text>
-                      Estimated Output Tokens Per Model:{" "}
+                      {t("Estimated Output Tokens Per Model: ")}
                       {info.metadata?.default_estimated_output_tokens_per_model
                         ? JSON.stringify(info.metadata.default_estimated_output_tokens_per_model)
-                        : "Default"}
+                        : t("Default")}
                     </Text>
                   </div>
                 </Card>
 
                 <Card>
-                  <Text>Models</Text>
+                  <Text>{t("Models")}</Text>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {computeTeamModelBadges(info.models, info.access_group_models || [], info.access_group_details).map(
                       (badge, index) => (
@@ -825,11 +826,11 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 </Card>
 
                 <Card>
-                  <Text className="font-semibold text-gray-900">Virtual Keys</Text>
+                  <Text className="font-semibold text-gray-900">{t("Virtual Keys")}</Text>
                   <div className="mt-2">
-                    <Text>User Keys: {teamData.keys.filter((key) => key.user_id).length}</Text>
-                    <Text>Service Account Keys: {teamData.keys.filter((key) => !key.user_id).length}</Text>
-                    <Text className="text-gray-500">Total: {teamData.keys.length}</Text>
+                    <Text>{t("User Keys: {0}", teamData.keys.filter((key) => key.user_id).length)}</Text>
+                    <Text>{t("Service Account Keys: {0}", teamData.keys.filter((key) => !key.user_id).length)}</Text>
+                    <Text className="text-gray-500">{t("Total: {0}", teamData.keys.length)}</Text>
                   </div>
                 </Card>
 
@@ -1256,7 +1257,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     </Form.Item>
 
                     <Form.Item
-                      label="Estimated Output Tokens Per Model"
+                      label={t("Estimated Output Tokens Per Model")}
                       name="default_estimated_output_tokens_per_model"
                       tooltip={teamEstimateTooltip.perModel}
                       rules={[estimateRules.perModel]}
@@ -1264,7 +1265,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                       <Input.TextArea rows={4} placeholder='{"gpt-4": 4096}' disabled={!canEditTeamEstimates} />
                     </Form.Item>
 
-                    <Form.Item label="Router Settings">
+                    <Form.Item label={t("Router Settings")}>
                       <RouterSettingsAccordion
                         ref={routerSettingsRef}
                         accessToken={accessToken || ""}

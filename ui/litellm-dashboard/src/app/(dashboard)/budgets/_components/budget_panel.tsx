@@ -99,7 +99,7 @@ const BudgetPanel: React.FC<BudgetSettingsPageProps> = ({ accessToken }) => {
           )}
           <TabsList variant="line">
             <TabsTrigger value="budgets" className="flex-none px-4">
-              Budgets
+              {t("Budgets")}
             </TabsTrigger>
             <TabsTrigger value="examples" className="flex-none px-4">
               {t("Examples")}

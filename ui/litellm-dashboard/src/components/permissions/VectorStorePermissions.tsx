@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DatabaseIcon } from "@heroicons/react/outline";
 import { Badge } from "@/components/ui/badge";
 import { vectorStoreListCall } from "../networking";
-
+import { t } from "@/contexts/LanguageContext";
 interface VectorStoreDetails {
   vector_store_id: string;
   vector_store_name?: string;
@@ -52,7 +52,7 @@ export function VectorStorePermissions({ vectorStores, accessToken }: VectorStor
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <DatabaseIcon className="h-4 w-4 text-blue-600" />
-        <p className="text-sm font-semibold text-gray-900">Vector Stores</p>
+        <p className="text-sm font-semibold text-gray-900">{t("Vector Stores")}</p>
         <Badge variant="secondary">{vectorStores.length}</Badge>
       </div>
 
@@ -70,7 +70,7 @@ export function VectorStorePermissions({ vectorStores, accessToken }: VectorStor
       ) : (
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 border border-gray-200">
           <DatabaseIcon className="h-4 w-4 text-gray-400" />
-          <p className="text-gray-500 text-sm">No vector stores configured</p>
+          <p className="text-gray-500 text-sm">{t("No vector stores configured")}</p>
         </div>
       )}
     </div>

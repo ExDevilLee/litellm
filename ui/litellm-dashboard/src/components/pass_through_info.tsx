@@ -20,7 +20,7 @@ import RoutePreview from "./route_preview";
 import NotificationsManager from "./molecules/notifications_manager";
 import PassThroughSecuritySection from "./common_components/PassThroughSecuritySection";
 import PassThroughGuardrailsSection from "./common_components/PassThroughGuardrailsSection";
-
+import { t } from "@/contexts/LanguageContext";
 const HTTP_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 const { Option } = Select;
 
@@ -138,16 +138,16 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
       }
     } catch (error) {
       console.error("Error deleting endpoint:", error);
-      NotificationsManager.fromBackend("Failed to delete pass through endpoint");
+      NotificationsManager.fromBackend(t("Failed to delete pass through endpoint"));
     }
   };
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return <div className="p-4">{t("Loading...")}</div>;
   }
 
   if (!endpointData) {
-    return <div className="p-4">Pass through endpoint not found</div>;
+    return <div className="p-4">{t("Pass through endpoint not found")}</div>;
   }
 
   return (
@@ -155,9 +155,9 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
       <div className="flex justify-between items-center mb-6">
         <div>
           <Button onClick={onClose} className="mb-4">
-            ← Back
+            {t("← Back")}
           </Button>
-          <Title>Pass Through Endpoint: {endpointData.path}</Title>
+          <Title>{t("Pass Through Endpoint: {0}", endpointData.path)}</Title>
           <Text className="text-gray-500 font-mono">{endpointData.id}</Text>
         </div>
       </div>
@@ -249,8 +249,8 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
             {endpointData.guardrails && Object.keys(endpointData.guardrails).length > 0 && (
               <Card className="mt-6">
                 <div className="flex justify-between items-center">
-                  <Text className="font-medium">Guardrails</Text>
-                  <Badge color="purple">{Object.keys(endpointData.guardrails).length} guardrails configured</Badge>
+                  <Text className="font-medium">{t("Guardrails")}</Text>
+                  <Badge color="purple">{t("{0} guardrails configured", Object.keys(endpointData.guardrails).length)}</Badge>
                 </div>
                 <div className="mt-4 space-y-2">
                   {Object.entries(endpointData.guardrails).map(([name, settings]) => (
@@ -379,8 +379,8 @@ const PassThroughInfoView: React.FC<PassThroughInfoProps> = ({
                     </div>
 
                     <div className="flex justify-end gap-2 mt-6">
-                      <Button onClick={() => setIsEditing(false)}>Cancel</Button>
-                      <TremorButton>Save Changes</TremorButton>
+                      <Button onClick={() => setIsEditing(false)}>{t("Cancel")}</Button>
+                      <TremorButton>{t("Save Changes")}</TremorButton>
                     </div>
                   </Form>
                 ) : (

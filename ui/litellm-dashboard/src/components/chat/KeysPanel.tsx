@@ -15,7 +15,7 @@ import MessageManager from "@/components/molecules/message_manager";
 import { keyListCall, regenerateKeyCall } from "../networking";
 import { KeyResponse } from "../key_team_helpers/key_list";
 import { formatExpiresUtc, isKeyExpired, calculateExpiryPreviewFromDuration } from "@/utils/keyExpiryUtils";
-
+import { t } from "@/contexts/LanguageContext";
 const KEYS_QUERY_KEY = "chat-user-keys";
 
 const DURATION_RE = /^(\d+(s|m|h|d|w|mo))?$/;
@@ -175,10 +175,10 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Key</TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Spend</TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Expires</TableHead>
-                <TableHead className="text-xs font-semibold uppercase tracking-wide">Created</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">{t("Key")}</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">{t("Spend")}</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">{t("Expires")}</TableHead>
+                <TableHead className="text-xs font-semibold uppercase tracking-wide">{t("Created")}</TableHead>
                 {premiumUser && (
                   <TableHead className="text-xs font-semibold uppercase tracking-wide text-right w-[80px]" />
                 )}
@@ -280,9 +280,9 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           {regeneratedKey ? (
             <div>
               <div className="rounded-lg border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950 px-3 py-2 text-sm text-amber-800 dark:text-amber-300 mb-4">
-                Save this key now; you will not see it again
+                {t("Save this key now; you will not see it again")}
               </div>
-              <div className="text-xs text-muted-foreground mb-1">New Key</div>
+              <div className="text-xs text-muted-foreground mb-1">{t("New Key")}</div>
               <div className="bg-muted border rounded-md px-4 py-3 font-mono text-sm break-all text-foreground">
                 {regeneratedKey}
               </div>
@@ -290,12 +290,12 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
           ) : (
             <div className="flex flex-col gap-4 mt-1">
               <div className="flex flex-col gap-1.5">
-                <Label>Key Alias</Label>
+                <Label>{t("Key Alias")}</Label>
                 <Input value={formState.key_alias} disabled />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>Max Budget (USD)</Label>
+                  <Label>{t("Max Budget (USD)")}</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -304,7 +304,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>TPM Limit</Label>
+                  <Label>{t("TPM Limit")}</Label>
                   <Input
                     type="number"
                     value={formState.tpm_limit}
@@ -312,7 +312,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label>RPM Limit</Label>
+                  <Label>{t("RPM Limit")}</Label>
                   <Input
                     type="number"
                     value={formState.rpm_limit}
@@ -322,7 +322,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <Label>Expire Key</Label>
+                  <Label>{t("Expire Key")}</Label>
                   <Input
                     placeholder="e.g. 30s, 30h, 30d"
                     value={formState.duration}
@@ -330,7 +330,7 @@ const KeysPanel: React.FC<Props> = ({ accessToken, userId, premiumUser }) => {
                   />
                   {formErrors.duration && <p className="text-xs text-destructive">{formErrors.duration}</p>}
                   <p className={`text-xs ${keyIsExpired ? "text-destructive" : "text-muted-foreground"}`}>
-                    Current: {rotateTarget?.expires ? formatExpiresUtc(rotateTarget.expires) : "Never"}
+                    {t("Current: {0}", rotateTarget?.expires ? formatExpiresUtc(rotateTarget.expires) : t("Never"))}
                     {keyIsExpired && " (expired)"}
                   </p>
                   {newExpiryTime && (
