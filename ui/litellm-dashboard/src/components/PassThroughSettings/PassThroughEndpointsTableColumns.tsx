@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/cva.config";
-
+import { t } from "@/contexts/LanguageContext";
 import type { passThroughItem } from "./PassThroughSettings";
 
 function HeaderWithTooltip({ title, tooltip }: { title: string; tooltip: string }) {
@@ -37,7 +37,7 @@ function HeadersCell({ value }: { value: object }) {
       <button
         type="button"
         onClick={() => setShowHeaders(!showHeaders)}
-        aria-label={showHeaders ? "Hide headers" : "Show headers"}
+        aria-label={showHeaders ? t("Hide headers") : t("Show headers")}
         className="rounded-sm p-1 hover:bg-muted"
       >
         {showHeaders ? (
@@ -76,7 +76,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Open endpoint actions"
+        aria-label={t("Open endpoint actions")}
         data-testid={`endpoint-actions-${endpointId || endpoint.path}`}
         className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-muted-foreground")}
       >
@@ -89,7 +89,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
           onClick={() => endpointId && onEndpointClick(endpointId)}
         >
           <Pencil />
-          Edit
+          {t("Edit")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -99,7 +99,7 @@ function EndpointRowActions({ endpoint, onEndpointClick, onDeleteClick }: Endpoi
           onClick={() => endpointId && onDeleteClick(endpointId)}
         >
           <Trash2 />
-          Delete
+          {t("Delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -118,8 +118,8 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "id",
     accessorKey: "id",
-    meta: { title: "ID" },
-    header: "ID",
+    meta: { title: t("ID") },
+    header: t("ID"),
     size: 190,
     enableSorting: false,
     cell: ({ row }) => {
@@ -137,8 +137,8 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "path",
     accessorKey: "path",
-    meta: { title: "Path" },
-    header: "Path",
+    meta: { title: t("Path") },
+    header: t("Path"),
     size: 200,
     enableSorting: false,
     cell: ({ row }) => (
@@ -150,8 +150,8 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "target",
     accessorKey: "target",
-    meta: { title: "Target" },
-    header: "Target",
+    meta: { title: t("Target") },
+    header: t("Target"),
     size: 240,
     enableSorting: false,
     cell: ({ row }) => (
@@ -162,8 +162,8 @@ export const getPassThroughEndpointsTableColumns = ({
   },
   {
     id: "methods",
-    meta: { title: "Methods", skeleton: "chips" },
-    header: () => <HeaderWithTooltip title="Methods" tooltip="HTTP methods supported by this endpoint" />,
+    meta: { title: t("Methods"), skeleton: "chips" },
+    header: () => <HeaderWithTooltip title={t("Methods")} tooltip={t("HTTP methods supported by this endpoint")} />,
     size: 150,
     enableSorting: false,
     cell: ({ row }) => <MethodsCell methods={row.original.methods} />,
@@ -171,18 +171,18 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "auth",
     accessorKey: "auth",
-    meta: { title: "Authentication", skeleton: "badge" },
-    header: () => <HeaderWithTooltip title="Authentication" tooltip="LiteLLM Virtual Key required to call endpoint" />,
+    meta: { title: t("Authentication"), skeleton: "badge" },
+    header: () => <HeaderWithTooltip title={t("Authentication")} tooltip={t("LiteLLM Virtual Key required to call endpoint")} />,
     size: 140,
     enableSorting: false,
     cell: ({ row }) => (
-      <StatusBadge tone={row.original.auth ? "success" : "neutral"} label={row.original.auth ? "Yes" : "No"} />
+      <StatusBadge tone={row.original.auth ? "success" : "neutral"} label={row.original.auth ? t("Yes") : t("No")} />
     ),
   },
   {
     id: "headers",
-    meta: { title: "Headers" },
-    header: "Headers",
+    meta: { title: t("Headers") },
+    header: t("Headers"),
     size: 180,
     enableSorting: false,
     cell: ({ row }) => <HeadersCell value={row.original.headers || {}} />,
@@ -190,7 +190,7 @@ export const getPassThroughEndpointsTableColumns = ({
   {
     id: "actions",
     meta: { className: "text-right", headerClassName: "text-right" },
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">{t("Actions")}</span>,
     size: 64,
     enableSorting: false,
     enableHiding: false,

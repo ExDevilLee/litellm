@@ -4,6 +4,7 @@ import { Waypoints } from "lucide-react";
 import { useMemo } from "react";
 
 import { DataTable } from "@/components/shared/DataTable";
+import { t } from "@/contexts/LanguageContext";
 
 import { getPassThroughEndpointsTableColumns } from "./PassThroughEndpointsTableColumns";
 import type { passThroughItem } from "./PassThroughSettings";
@@ -21,8 +22,8 @@ function EmptyState() {
       <div className="mb-1 flex size-10 items-center justify-center rounded-lg bg-muted">
         <Waypoints className="size-5 text-muted-foreground" />
       </div>
-      <div className="text-sm font-medium text-foreground">No pass-through endpoints configured</div>
-      <div className="text-sm text-muted-foreground">Add a pass-through endpoint to route custom paths.</div>
+      <div className="text-sm font-medium text-foreground">{t("No pass-through endpoints configured")}</div>
+      <div className="text-sm text-muted-foreground">{t("Add a pass-through endpoint to route custom paths.")}</div>
     </div>
   );
 }
@@ -44,7 +45,7 @@ export function PassThroughEndpointsTable({
       columns={columns}
       getRowId={(endpoint, index) => endpoint.id || endpoint.path || String(index)}
       isLoading={isLoading}
-      loadingMessage="Loading pass-through endpoints…"
+      loadingMessage={t("Loading pass-through endpoints…")}
       noDataMessage={<EmptyState />}
       size="compact"
     />

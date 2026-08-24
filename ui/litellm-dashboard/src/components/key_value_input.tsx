@@ -3,6 +3,7 @@ import { Minus, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { t } from "@/contexts/LanguageContext";
 
 interface KeyValueInputProps {
   value?: Record<string, string>;
@@ -33,14 +34,14 @@ const KeyValueInput: React.FC<KeyValueInputProps> = ({ value = {}, onChange }) =
     <div className="space-y-2">
       {pairs.map(([key, val], index) => (
         <div key={index} className="flex items-center gap-2">
-          <Input placeholder="Header Name" value={key} onChange={(e) => handleChange(index, e.target.value, val)} />
-          <Input placeholder="Header Value" value={val} onChange={(e) => handleChange(index, key, e.target.value)} />
+          <Input placeholder={t("Header Name")} value={key} onChange={(e) => handleChange(index, e.target.value, val)} />
+          <Input placeholder={t("Header Value")} value={val} onChange={(e) => handleChange(index, key, e.target.value)} />
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
             onClick={() => handleRemove(index)}
-            aria-label={`Remove header ${index + 1}`}
+            aria-label={t("Remove header {0}", String(index + 1))}
           >
             <Minus />
           </Button>
@@ -48,7 +49,7 @@ const KeyValueInput: React.FC<KeyValueInputProps> = ({ value = {}, onChange }) =
       ))}
       <Button type="button" variant="outline" onClick={handleAdd}>
         <Plus />
-        Add Header
+        {t("Add Header")}
       </Button>
     </div>
   );
